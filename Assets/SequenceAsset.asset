@@ -1,0 +1,182 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e0d983d07aae244b4199260a850e12, type: 3}
+  m_Name: SequenceAsset
+  m_EditorClassIdentifier: 
+  inited: 0
+  root: {fileID: 0}
+  nodes: []
+--- !u!114 &114000010078789012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 548e5e0d049bc4d4693000a78d1e305f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  fragments:
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  options:
+  - text: 
+    parameter: 
+  - text: 
+    parameter: 
+  - text: 
+    parameter: 
+--- !u!114 &114000010094084170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Option 2
+  m_EditorClassIdentifier: 
+  childs: []
+  content: {fileID: 0}
+  secuence: {fileID: 0}
+  position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 300
+    height: 0
+  collapsed: 0
+--- !u!114 &114000010458943586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Option 3
+  m_EditorClassIdentifier: 
+  childs: []
+  content: {fileID: 0}
+  secuence: {fileID: 0}
+  position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 300
+    height: 0
+  collapsed: 0
+--- !u!114 &114000010617913508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childs: []
+  content: {fileID: 0}
+  secuence: {fileID: 11400000}
+  position:
+    x: 339
+    y: 310
+    width: 300
+    height: 74
+  collapsed: 0
+--- !u!114 &114000010682184010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 0}
+  - {fileID: 114000010094084170}
+  - {fileID: 114000010458943586}
+  content: {fileID: 114000010078789012}
+  secuence: {fileID: 11400000}
+  position:
+    x: 103
+    y: 91
+    width: 300
+    height: 508
+  collapsed: 0
+--- !u!114 &114000012930337190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childs: []
+  content: {fileID: 0}
+  secuence: {fileID: 11400000}
+  position:
+    x: 0
+    y: 0
+    width: 300
+    height: 0
+  collapsed: 0
+--- !u!114 &114000014017851330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childs: []
+  content: {fileID: 0}
+  secuence: {fileID: 0}
+  position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 300
+    height: 0
+  collapsed: 0

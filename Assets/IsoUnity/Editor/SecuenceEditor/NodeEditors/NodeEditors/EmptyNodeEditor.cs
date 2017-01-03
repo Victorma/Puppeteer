@@ -4,7 +4,7 @@ using System.Collections;
 
 public class EmptyNodeEditor : NodeEditor {
 
-	private SecuenceNode node;
+	private SequenceNode node;
 
 	public void draw(){
 		EditorGUILayout.HelpBox("Select a content for this node" +
@@ -15,12 +15,12 @@ public class EmptyNodeEditor : NodeEditor {
 		}
 	}
 
-	public SecuenceNode Result { get{ return node; } }
+	public SequenceNode Result { get{ return node; } }
 	public string NodeName{ get { return "Empty node"; } }
 	public NodeEditor clone(){ return new EmptyNodeEditor(); }
 
-	public bool manages(SecuenceNode c) { return c.Content == null; }
-	public void useNode(SecuenceNode c) {
+	public bool manages(SequenceNode c) { return c.Content == null; }
+	public void useNode(SequenceNode c) {
 		if(c.Content != null)	
 			c.Content = null;
 

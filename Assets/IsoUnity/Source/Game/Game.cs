@@ -33,8 +33,14 @@ public class Game : MonoBehaviour {
 		get{
 			if (m == null) {
 				m = FindObjectOfType<Game> ();
-				m.Awake ();
-			}
+                if (!m && !quitting)
+                {
+                    var g = new GameObject();
+                    m = g.AddComponent<Game>();
+                }
+                if(!quitting)
+                    m.Awake();
+            }
 			return m;
 		}
 	}
@@ -84,6 +90,7 @@ public class Game : MonoBehaviour {
 	public void enqueueEvent(IGameEvent ge){
 		if(ge == null)
 			return;
+        Debug.Log(ge.Name);
 		this.events.Enqueue(ge);
 	}
     
@@ -114,7 +121,6 @@ public class Game : MonoBehaviour {
 	public void tick(){
 
         // Main Tick
-		CameraManager.Update();
 
         // Events launch
 		while(events.Count > 0)
@@ -133,13 +139,30 @@ public class Game : MonoBehaviour {
 	 **/
 
 	public void RegisterEventManager(EventManager em){
+        if (em == null)
+            return;
+
 		if(!this.eventManagers.Contains(em))
 			this.eventManagers.Add (em);
 	}
 
 	public void DeRegisterEventManager(EventManager em){
-		if(this.eventManagers.Contains(em))
+        if (em == null)
+            return;
+
+        if (this.eventManagers.Contains(em))
 			this.eventManagers.Remove (em);
 	}
+
+    static bool quitting = false;
+    void OnApplicationQuit()
+    {
+        quitting = true;
+    }
+
+    void OnDestroy()
+    {
+
+    }
 
 }

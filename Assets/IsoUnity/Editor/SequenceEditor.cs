@@ -2,10 +2,10 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(Secuence))]
+[CustomEditor(typeof(SequenceAsset))]
 public class SequenceEditor : Editor {
 
-    SecuenceWindow editor = null;
+    SequenceWindow editor = null;
     public override void OnInspectorGUI()
     {
 
@@ -13,8 +13,10 @@ public class SequenceEditor : Editor {
         {
             if (editor == null)
             {
-                editor = EditorWindow.GetWindow<SecuenceWindow>();
-                editor.Secuence = (target as Secuence);
+                editor = EditorWindow.GetWindow<SequenceWindow>();
+                editor.Sequence = (target as Sequence);
+                if (editor.Sequence.Root == null)
+                    editor.Sequence.init();
             }
         }
         if (GUILayout.Button("Close editor"))
@@ -23,7 +25,7 @@ public class SequenceEditor : Editor {
             {
                 editor.Close();
 
-                foreach (var node in editor.Secuence.Nodes)
+                /*foreach (var node in editor.Sequence.Nodes)
                 {
                     if (!AssetDatabase.IsSubAsset(node))
                     {
@@ -31,7 +33,7 @@ public class SequenceEditor : Editor {
                         if (node.Content != null)
                             AssetDatabase.AddObjectToAsset(node.Content, AssetDatabase.GetAssetPath(target));
                     }
-                }
+                }*/
 
                 AssetDatabase.SaveAssets();
             }

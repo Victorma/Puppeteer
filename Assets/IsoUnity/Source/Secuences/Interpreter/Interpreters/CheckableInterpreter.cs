@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CheckableInterpreter : ISecuenceInterpreter {
+public class CheckableInterpreter : ISequenceInterpreter
+{
 
 	private bool finished = false;
-	private SecuenceNode node;
+	private SequenceNode node;
 	private bool evalResult;
 	
-	public bool CanHandle(SecuenceNode node)
+	public bool CanHandle(SequenceNode node)
 	{
 		return node!= null && node.Content != null && node.Content is Checkable;
 	}
 	
-	public void UseNode(SecuenceNode node){
+	public void UseNode(SequenceNode node){
 		this.node = node;
 	}
 	
@@ -21,7 +22,7 @@ public class CheckableInterpreter : ISecuenceInterpreter {
 		return finished;
 	}
 	
-	public SecuenceNode NextNode()
+	public SequenceNode NextNode()
 	{
 		return (evalResult)?this.node.Childs[0]:this.node.Childs[1];
 	}
@@ -32,7 +33,7 @@ public class CheckableInterpreter : ISecuenceInterpreter {
 		finished = true;
 	}
 
-	public ISecuenceInterpreter Clone(){
+	public ISequenceInterpreter Clone(){
 		return new CheckableInterpreter();
 	}
 		

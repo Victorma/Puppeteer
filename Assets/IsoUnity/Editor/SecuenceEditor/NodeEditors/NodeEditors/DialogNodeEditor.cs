@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class DialogNodeEditor : NodeEditor {
 
-	private SecuenceNode myNode;
+	private SequenceNode myNode;
 	private Vector2 scroll = new Vector2(0,0);
 
     private ReorderableList fragmentsReorderableList, optionsReorderableList;
@@ -55,12 +55,12 @@ public class DialogNodeEditor : NodeEditor {
 			}
 	}
 	
-	public SecuenceNode Result { get{ return myNode; } }
+	public SequenceNode Result { get{ return myNode; } }
 	public string NodeName{ get { return "Dialog"; } }
 	public NodeEditor clone(){ return new DialogNodeEditor(); }
 	
-	public bool manages(SecuenceNode c) { return c.Content != null && c.Content is Dialog; }
-	public void useNode(SecuenceNode c) {
+	public bool manages(SequenceNode c) { return c.Content != null && c.Content is Dialog; }
+	public void useNode(SequenceNode c) {
 		if(c.Content == null || !(c.Content is Dialog))
 			c.Content = ScriptableObject.CreateInstance<Dialog>();
 
@@ -74,7 +74,7 @@ public class DialogNodeEditor : NodeEditor {
 
         // Add listeners to draw events
 
-        fragmentsReorderableList = new ReorderableList(new ArrayList(), typeof(Dialog.Fragment), true, true, true, true);
+        fragmentsReorderableList = new ReorderableList(new ArrayList(), typeof(Fragment), true, true, true, true);
         fragmentsReorderableList.drawHeaderCallback  += DrawFragmentsHeader;
         fragmentsReorderableList.drawElementCallback += DrawFragment;
         fragmentsReorderableList.onAddCallback       += AddFragment;
@@ -82,7 +82,7 @@ public class DialogNodeEditor : NodeEditor {
         fragmentsReorderableList.onReorderCallback   += ReorderFragments;
 
 
-        optionsReorderableList = new ReorderableList(new ArrayList(), typeof(Dialog.DialogOption), true, true, true, true);
+        optionsReorderableList = new ReorderableList(new ArrayList(), typeof(DialogOption), true, true, true, true);
         //optionsReorderableList.elementHeight = 70;
         optionsReorderableList.drawHeaderCallback  += DrawOptionsHeader;
         optionsReorderableList.drawElementCallback += DrawOption;
@@ -120,7 +120,7 @@ public class DialogNodeEditor : NodeEditor {
 
     private void DrawFragment(Rect rect, int index, bool active, bool focused)
     {
-        Dialog.Fragment frg = (Dialog.Fragment)fragmentsReorderableList.list[index];
+        Fragment frg = (Fragment)fragmentsReorderableList.list[index];
 
         EditorGUI.LabelField(moveRect(entityRect, rect), "Target: ");
         frg.Character = EditorGUI.TextField(moveRect(characterRect, rect), frg.Character);
@@ -146,7 +146,7 @@ public class DialogNodeEditor : NodeEditor {
 
     private void ReorderFragments(ReorderableList list)
     {
-        List<Dialog.Fragment> l = (List<Dialog.Fragment>)fragmentsReorderableList.list;
+        List<Fragment> l = (List<Fragment>)fragmentsReorderableList.list;
         dialog.Fragments = l;
     }
 
@@ -164,13 +164,13 @@ public class DialogNodeEditor : NodeEditor {
 
     private void DrawOption(Rect rect, int index, bool active, bool focused)
     {
-        Dialog.DialogOption opt = (Dialog.DialogOption)optionsReorderableList.list[index];
+        DialogOption opt = (DialogOption)optionsReorderableList.list[index];
 
         EditorGUI.LabelField(moveRect(labelRect, rect), "Text: ");
         opt.Text = EditorGUI.TextField(moveRect(optionRect, rect), opt.Text);
-  
+
         if (myNode.Childs[index] != null)
-            myNode.Childs[index].Name = "Option " + (index + 1);
+            myNode.Childs[index].Name = dialog.Options[index].Text;
     }
 
     private void AddOption(ReorderableList list)
@@ -191,7 +191,7 @@ public class DialogNodeEditor : NodeEditor {
 
     private void ReorderOptions(ReorderableList list)
     {
-        List<Dialog.DialogOption> l = (List<Dialog.DialogOption>)optionsReorderableList.list;
+        List<DialogOption> l = (List<DialogOption>)optionsReorderableList.list;
         dialog.Options = l;
     }
 }

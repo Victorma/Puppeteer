@@ -6,10 +6,6 @@ public class AddItemEditor : EventEditor {
 
 	private SerializableGameEvent ge;
 	public AddItemEditor() {
-		this.ge = ScriptableObject.CreateInstance<SerializableGameEvent> ();
-		ge.Name = this.EventName;
-		ge.setParameter ("item", null);
-		ge.setParameter ("inventory", null);
 	}
 	
 	public SerializableGameEvent Result { 

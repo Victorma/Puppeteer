@@ -1,24 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class DialogInterpreter : ScriptableObject, ISecuenceInterpreter {
+public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
+{
 
 	private bool launched = false;
 	private bool finished = false;
-	private SecuenceNode node;
-	private SecuenceNode nextNode;
-	private GameObject wasLooking;
-	private Queue<Dialog.Fragment> fragments;
+	private SequenceNode node;
+	private SequenceNode nextNode;
+	private Queue<Fragment> fragments;
 	private int chosen;
 	private bool next;
 
 	
-	public bool CanHandle(SecuenceNode node)
+	public bool CanHandle(SequenceNode node)
 	{
 		return node!= null && node.Content != null && node.Content is Dialog;
 	}
 	
-	public void UseNode(SecuenceNode node){
+	public void UseNode(SequenceNode node){
 		this.node = node;
 	}
 	
@@ -27,7 +27,7 @@ public class DialogInterpreter : ScriptableObject, ISecuenceInterpreter {
 		return finished;
 	}
 	
-	public SecuenceNode NextNode()
+	public SequenceNode NextNode()
 	{
 		return nextNode;
 	}
@@ -54,8 +54,7 @@ public class DialogInterpreter : ScriptableObject, ISecuenceInterpreter {
 		Dialog dialog = node.Content as Dialog;
 
 		if(!launched){
-			wasLooking = CameraManager.Target;
-			fragments = new Queue<Dialog.Fragment>(dialog.Fragments);
+			fragments = new Queue<Fragment>(dialog.Fragments);
 			launched = true;
 			next = true;
 			chosen = -1;
@@ -70,17 +69,18 @@ public class DialogInterpreter : ScriptableObject, ISecuenceInterpreter {
                 ge.setParameter("fragment", nextFragment);
                 ge.setParameter("launcher", this);
                 ge.setParameter("synchronous", true);
+                eventLaunched = ge;
                 Game.main.enqueueEvent(ge);
 			}else{
 				if(dialog.Options != null && dialog.Options.Count>1){
                     // Launch options event
-                    var nextFragment = fragments.Dequeue();
                     var ge = new GameEvent();
                     ge.name = "show dialog options";
                     ge.setParameter("options", dialog.Options);
                     ge.setParameter("message", dialog.Fragments[dialog.Fragments.Count - 1]);
                     ge.setParameter("launcher", this);
                     ge.setParameter("synchronous", true);
+                    eventLaunched = ge;
                     Game.main.enqueueEvent(ge);
                 }
 				else chosen = 0;
@@ -96,7 +96,7 @@ public class DialogInterpreter : ScriptableObject, ISecuenceInterpreter {
 		}
 	}
 
-	public ISecuenceInterpreter Clone(){
+	public ISequenceInterpreter Clone(){
 		return ScriptableObject.CreateInstance<DialogInterpreter>();
 	}
 }

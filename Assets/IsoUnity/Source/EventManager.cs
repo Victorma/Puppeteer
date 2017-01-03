@@ -8,7 +8,8 @@ public abstract class EventManager : MonoBehaviour{
 	}
 
 	void OnDisable(){
-		Game.main.DeRegisterEventManager (this);
+		if(Game.main)
+            Game.main.DeRegisterEventManager (this);
 	}
 
 	public abstract void ReceiveEvent (IGameEvent ev);

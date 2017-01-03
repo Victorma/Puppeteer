@@ -4,7 +4,7 @@ using System.Collections;
 
 public class EventNodeEditor : NodeEditor {
 
-	private SecuenceNode node;
+	private SequenceNode node;
     private EventEditor currentEditor;
 
 	public void draw(){
@@ -13,7 +13,7 @@ public class EventNodeEditor : NodeEditor {
 		int editorSelected = 0;
 
 		for (int i = 1; i< editors.Length; i++)
-			if (editors [i].ToLower () == ge.Name.ToLower ())
+			if (ge != null && editors [i].ToLower () == ge.Name.ToLower ())
 				editorSelected = i;
 
 		int was = editorSelected;
@@ -21,10 +21,12 @@ public class EventNodeEditor : NodeEditor {
 		editorSelected = EditorGUILayout.Popup (editorSelected, EventEditorFactory.Intance.CurrentEventEditors);
         if (currentEditor == null || was != editorSelected)
         {
-            if(currentEditor != null)
+            if(currentEditor != null && ge != null)
                 currentEditor.detachEvent(ge);
 
-            ge.Name = "";
+            if(ge != null)
+                ge.Name = "";
+
             currentEditor = EventEditorFactory.Intance.createEventEditorFor(editors[editorSelected]);
             currentEditor.useEvent(ge);
         }
@@ -52,12 +54,12 @@ public class EventNodeEditor : NodeEditor {
 		}
 	}
 	
-	public SecuenceNode Result { get{ return node; } }
+	public SequenceNode Result { get{ return node; } }
 	public string NodeName{ get { return "GameEvent"; } }
 	public NodeEditor clone(){ return new EventNodeEditor(); }
 	
-	public bool manages(SecuenceNode c) { return c.Content != null && c.Content is SerializableGameEvent; }
-	public void useNode(SecuenceNode c) {
+	public bool manages(SequenceNode c) { return c.Content != null && c.Content is SerializableGameEvent; }
+	public void useNode(SequenceNode c) {
 		if (c.Content == null || !(c.Content is SerializableGameEvent)) {
 			c.Content = ScriptableObject.CreateInstance<SerializableGameEvent> ();
 		}

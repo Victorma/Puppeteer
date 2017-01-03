@@ -6,10 +6,6 @@ public class ChangeSwitchEventEditor : EventEditor {
 
 	private SerializableGameEvent ge;
 	public ChangeSwitchEventEditor() {
-		this.ge =  ScriptableObject.CreateInstance<SerializableGameEvent>();
-		ge.Name = this.EventName;
-		ge.setParameter ("switch", "");
-		ge.setParameter ("value", true);
 	}
 	
 	public SerializableGameEvent Result { 
@@ -39,7 +35,7 @@ public class ChangeSwitchEventEditor : EventEditor {
 
 	public void detachEvent(SerializableGameEvent ge)
     {
-        if (ge.getParameter("switch") == "")
+        if ((string)ge.getParameter("switch") == "")
         {
             ge.removeParameter("switch");
             ge.removeParameter("value");

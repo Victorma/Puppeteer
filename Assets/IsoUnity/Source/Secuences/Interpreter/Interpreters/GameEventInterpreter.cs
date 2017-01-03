@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameEventInterpreter : ISecuenceInterpreter {
+public class GameEventInterpreter : ISequenceInterpreter
+{
 
 	private bool launched = false;
 	private bool finished = false;
-	private SecuenceNode node;
+	private SequenceNode node;
 	private bool waitTillEventFinished;
 
-	public bool CanHandle(SecuenceNode node)
+	public bool CanHandle(SequenceNode node)
 	{
-		return node!= null && node.Content != null && node.Content is SerializableGameEvent;
+		return node!= null && node.Content != null && node.Content is IGameEvent;
 	}
 
-	public void UseNode(SecuenceNode node){
+	public void UseNode(SequenceNode node){
 		this.node = node;
 	}
 
@@ -22,7 +23,7 @@ public class GameEventInterpreter : ISecuenceInterpreter {
 		return finished;
 	}
 
-	public SecuenceNode NextNode()
+	public SequenceNode NextNode()
 	{
 		return (this.node.Childs.Length>0)?this.node.Childs[0]:null;
 	}
@@ -38,7 +39,7 @@ public class GameEventInterpreter : ISecuenceInterpreter {
 	private IGameEvent ge;
 	public void Tick()
 	{
-		ge = (node.Content as SerializableGameEvent);
+		ge = (node.Content as IGameEvent);
 		if(!launched){
 			Game.main.enqueueEvent(ge);
 			if(ge.getParameter("synchronous")!=null && (bool)ge.getParameter("synchronous") == true)
@@ -49,7 +50,7 @@ public class GameEventInterpreter : ISecuenceInterpreter {
 			finished = true;
 	}
 
-	public ISecuenceInterpreter Clone(){
+	public ISequenceInterpreter Clone(){
 		return new GameEventInterpreter();
 	}
 }

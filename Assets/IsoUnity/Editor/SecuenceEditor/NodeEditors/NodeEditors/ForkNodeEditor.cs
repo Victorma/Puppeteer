@@ -4,7 +4,7 @@ using System.Collections;
 
 public class ForkNodeEditor : NodeEditor {
 
-	private SecuenceNode myNode;
+	private SequenceNode myNode;
 
 	public void draw(){
 		Checkable c = (Checkable) myNode.Content;
@@ -41,12 +41,12 @@ public class ForkNodeEditor : NodeEditor {
 		}
 	}
 	
-	public SecuenceNode Result { get{ return myNode; } }
+	public SequenceNode Result { get{ return myNode; } }
 	public string NodeName{ get { return "Fork"; } }
 	public NodeEditor clone(){ return new ForkNodeEditor(); }
 	
-	public bool manages(SecuenceNode c) { return c.Content != null && c.Content is Checkable; }
-	public void useNode(SecuenceNode c) {
+	public bool manages(SequenceNode c) { return c.Content != null && c.Content is Checkable; }
+	public void useNode(SequenceNode c) {
 		if(!(c.Content is Checkable))
 			c.Content = null;
 		myNode = c;

@@ -57,7 +57,8 @@ GameObject:
   - 223: {fileID: 223000014096142026}
   - 114: {fileID: 114000010156380026}
   - 114: {fileID: 114000010774314274}
-  - 114: {fileID: 114000011236231138}
+  - 114: {fileID: 114000012523886810}
+  - 114: {fileID: 114000012491467678}
   m_Layer: 5
   m_Name: DialogGUI
   m_TagString: Untagged
@@ -231,7 +232,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
---- !u!114 &114000011236231138
+--- !u!114 &114000012491467678
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -239,11 +240,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000011727863774}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b53b1e79a20c4e42a1f88168c112eac, type: 3}
+  m_Script: {fileID: 11500000, guid: 311120921dbcf1445ba88d901d3a72a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  s: {fileID: 0}
+  check:
+    boolValue: 0
+--- !u!114 &114000012523886810
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011727863774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc33401622a6b8346a2c365b057f8e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timePerCharacter: 0.02
-  fadeSpeed: 0.5
+  fadeTime: 0.2
   textHolder: {fileID: 114000011197749684}
   optionsMessage: {fileID: 114000010505744582}
   dialogGroup: {fileID: 225000010409650558}

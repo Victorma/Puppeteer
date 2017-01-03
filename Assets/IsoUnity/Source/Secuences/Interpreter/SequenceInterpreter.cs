@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SecuenceInterpreter  {
+public class SequenceInterpreter  {
 
-	private ISecuenceInterpreter currentInterpreter;
-	private SecuenceNode currentNode;
+	private ISequenceInterpreter currentInterpreter;
+	private SequenceNode currentNode;
 
-	public SecuenceInterpreter(Secuence secuence){
-		currentNode = secuence.Root;
+	public SequenceInterpreter(Sequence sequence){
+		currentNode = sequence.Root;
 	}
 
-	public bool SecuenceFinished {
+	public bool SequenceFinished {
 		get { return currentNode == null || currentNode.Content == null; }
 	}
 
@@ -20,9 +20,10 @@ public class SecuenceInterpreter  {
 	}
 
 	public void Tick(){
-		if(!SecuenceFinished){
+		if(!SequenceFinished)
+        {
 			if(currentInterpreter == null){
-				currentInterpreter = SecuenceInterpreterFactory.Intance.createSecuenceInterpreterFor(currentNode);
+				currentInterpreter = SequenceInterpreterFactory.Intance.createSequenceInterpreterFor(currentNode);
 				currentInterpreter.UseNode(currentNode);
 			}
 

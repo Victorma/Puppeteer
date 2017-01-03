@@ -1,68 +1,28 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 [System.Serializable]
 public class Dialog : ScriptableObject
 {
-	[System.Serializable]
-	public class Fragment{
-		[SerializeField]
-		private string name;
-		[SerializeField]
-		private string msg;
-		[SerializeField]
-		private string character;
-        [SerializeField]
-        private string parameter;
+    public Dialog()
+    {
 
-		public string Name {
-			get { return name; }
-            set { this.name = value; }
-		}
-
-		public string Msg{
-			get { return msg; }
-			set { msg = value; }
-        }
-
-        public string Character
-        {
-            get { return character; }
-            set { character = value; }
-        }
-
-        public string Parameter
-        {
-            get { return parameter; }
-            set { parameter = value; }
-        }
-
-        public Fragment(string name = "", string msg = "", string character = "", string parameter = "")
-        {
-            this.name = name;
-            this.msg = msg;
-            this.character = character;
-            this.parameter = parameter;
-        }
     }
 
-	[System.Serializable]
-	public class DialogOption{
-        
-		[SerializeField]
-		private string text;
-        [SerializeField]
-        private string parameter;
-		
-		public DialogOption(string text = "", string parameter = ""){
-			this.text = text;
-			this.parameter = parameter;
-		}
-
-        public string Text { get { return text; } set { this.text = value; } }
-        public string Parameter { get { return parameter; } set { this.parameter = value; } }
+    public Dialog(List<Fragment> fragments)
+    {
+        Fragments = fragments;
     }
+
+    public Dialog(List<Fragment> fragments, List<DialogOption> options)
+    {
+        Fragments = fragments;
+        Options = options;
+    }
+
+	
 	[SerializeField]
 	public string id;
     [SerializeField]
@@ -109,6 +69,72 @@ public class Dialog : ScriptableObject
         this.Options.Remove(option);
     }
 	
+}
+
+[System.Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public class Fragment
+{
+    [SerializeField]
+    private string name;
+    [SerializeField]
+    private string msg;
+    [SerializeField]
+    private string character;
+    [SerializeField]
+    private string parameter;
+
+    public string Name
+    {
+        get { return name; }
+        set { this.name = value; }
+    }
+
+    public string Msg
+    {
+        get { return msg; }
+        set { msg = value; }
+    }
+
+    public string Character
+    {
+        get { return character; }
+        set { character = value; }
+    }
+
+    public string Parameter
+    {
+        get { return parameter; }
+        set { parameter = value; }
+    }
+
+    public Fragment(string name = "", string msg = "", string character = "", string parameter = "")
+    {
+        this.name = name;
+        this.msg = msg;
+        this.character = character;
+        this.parameter = parameter;
+    }
+}
+
+[System.Serializable]
+[StructLayout(LayoutKind.Sequential)]
+public class DialogOption
+{
+
+    [SerializeField]
+    private string text;
+    [SerializeField]
+    private string parameter;
+
+    public DialogOption(string text = "", string parameter = "")
+    {
+        this.text = text;
+        this.parameter = parameter;
+    }
+
+    public string Text { get { return text; } set { this.text = value; } }
+    public string Parameter { get { return parameter; } set { this.parameter = value; } }
 }
 
 

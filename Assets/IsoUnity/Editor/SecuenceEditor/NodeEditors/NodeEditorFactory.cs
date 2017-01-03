@@ -14,7 +14,7 @@ public abstract class NodeEditorFactory {
 	
 	public abstract string[] CurrentNodeEditors { get; }
 	public abstract NodeEditor createNodeEditorFor (string nodeName);	
-	public abstract int NodeEditorIndex(SecuenceNode node);
+	public abstract int NodeEditorIndex(SequenceNode node);
 }
 
 public class NodeEditorFactoryImp : NodeEditorFactory {
@@ -52,7 +52,7 @@ public class NodeEditorFactoryImp : NodeEditorFactory {
 		return null;
 	}
 
-	public override int NodeEditorIndex(SecuenceNode node){
+	public override int NodeEditorIndex(SequenceNode node){
 		
 		int i = 0;
 		foreach (NodeEditor nodeEditor in nodeEditors) 

@@ -9,7 +9,7 @@ public class GameMenu {
 		GameObject go = new GameObject ("Game");
 
 		go.AddComponent<Game> ();
-		go.AddComponent<SecuenceManager> ();
+		go.AddComponent<SequenceManager> ();
 		go.AddComponent<IsoSwitchesEventManager> ();
 
 		Selection.activeObject = go;    
