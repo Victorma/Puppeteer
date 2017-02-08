@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System;
 
 public class EmptyNodeEditor : NodeEditor {
 
@@ -17,7 +18,10 @@ public class EmptyNodeEditor : NodeEditor {
 
 	public SequenceNode Result { get{ return node; } }
 	public string NodeName{ get { return "Empty node"; } }
-	public NodeEditor clone(){ return new EmptyNodeEditor(); }
+
+    public string[] ChildNames{ get{ return null; } }
+
+    public NodeEditor clone(){ return new EmptyNodeEditor(); }
 
 	public bool manages(SequenceNode c) { return c.Content == null; }
 	public void useNode(SequenceNode c) {

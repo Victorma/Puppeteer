@@ -6,6 +6,7 @@ public interface NodeEditor {
 	SequenceNode Result { get; }
 	string NodeName{ get; }
 	NodeEditor clone();
+    string[] ChildNames { get; }
 	bool manages(SequenceNode c);
 	void useNode(SequenceNode c);
 }

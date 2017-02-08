@@ -74,7 +74,6 @@ public class SequenceNode : ScriptableObject {
             {
                 var newChilds = new SequenceNode[value];
                 var max = move<SequenceNode>(this.childs, newChilds, null);
-
                 this.childs = newChilds;
             }
         }
@@ -96,7 +95,6 @@ public class SequenceNode : ScriptableObject {
             this.childs[i] = this.childs[i + 1];
         }
         this.ChildSlots--;
-
 	}
 	
 	public void removeChild(SequenceNode child){

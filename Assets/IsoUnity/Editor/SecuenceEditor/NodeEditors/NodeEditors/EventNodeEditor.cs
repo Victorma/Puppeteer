@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System;
 
 public class EventNodeEditor : NodeEditor {
 
@@ -56,7 +57,16 @@ public class EventNodeEditor : NodeEditor {
 	
 	public SequenceNode Result { get{ return node; } }
 	public string NodeName{ get { return "GameEvent"; } }
-	public NodeEditor clone(){ return new EventNodeEditor(); }
+
+    public string[] ChildNames
+    {
+        get
+        {
+            return new string[]{ "default" };
+        }
+    }
+
+    public NodeEditor clone(){ return new EventNodeEditor(); }
 	
 	public bool manages(SequenceNode c) { return c.Content != null && c.Content is SerializableGameEvent; }
 	public void useNode(SequenceNode c) {

@@ -1,8 +1,24 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using UnityEditor.Callbacks;
 
 public class SequenceWindow: EditorWindow{
+
+
+    [OnOpenAsset(1)]
+    public static bool Open(int instanceID, int line)
+    {
+        var o = EditorUtility.InstanceIDToObject(instanceID);
+        if(o is SequenceAsset)
+        {
+            var newWindow = ScriptableObject.CreateInstance<SequenceWindow>();
+            newWindow.sequence = o as SequenceAsset;
+            newWindow.Show();
+            return true;
+        }
+        return false;
+    }
 
 	private Sequence sequence;
 
@@ -35,56 +51,44 @@ public class SequenceWindow: EditorWindow{
 
             string[] editorNames = NodeEditorFactory.Intance.CurrentNodeEditors;
 
-            int preEditorSelected = NodeEditorFactory.Intance.NodeEditorIndex(myNode);
             GUILayout.BeginHorizontal();
-            int editorSelected = EditorGUILayout.Popup(preEditorSelected, editorNames);
+            EditorGUI.BeginChangeCheck();
+            var editorSelected = EditorGUILayout.Popup(NodeEditorFactory.Intance.NodeEditorIndex(myNode), editorNames);
+
+            if(!editors.ContainsKey(myNode) || EditorGUI.EndChangeCheck()){
+                var editor = NodeEditorFactory.Intance.createNodeEditorFor(editorNames[editorSelected]);
+                editor.useNode(myNode);
+
+                if (!editors.ContainsKey(myNode)) editors.Add(myNode, editor);
+                else
+                {
+                    ScriptableObject.DestroyImmediate(editors[myNode] as Object);
+                    editors[myNode] = editor;
+
+                }
+            }
 
             if (GUILayout.Button("-", collapseStyle, GUILayout.Width(15), GUILayout.Height(15)))
                 myNode.Collapsed = true;
             if (GUILayout.Button("X", closeStyle, GUILayout.Width(15), GUILayout.Height(15)))
                 sequence.removeChild(myNode);
+
             GUILayout.EndHorizontal();
 
-            NodeEditor editor = null;
-            editors.TryGetValue(myNode, out editor);
-
-            if (editor == null || preEditorSelected != editorSelected)
-            {
-                editor = NodeEditorFactory.Intance.createNodeEditorFor(editorNames[editorSelected]);
-                editor.useNode(myNode);
-
-                if (!editors.ContainsKey(myNode)) editors.Add(myNode, editor);
-                else editors[myNode] = editor;
-            }
 
             GUILayout.BeginHorizontal();
             GUILayout.BeginVertical();
-            editor.draw();
-            GUILayout.EndVertical();
-            GUILayout.BeginVertical();
-            GUILayout.FlexibleSpace();
-            int i = 0;
-            foreach (var c in myNode.Childs)
-            {
-                var n = (i+1) + "";
-                if (c != null) n = c.Name;
-                if (GUILayout.Button(n))
-                {
-                    // Detach
-                    myNode.Childs[i] = null;
-
-                    // Start search
-                    lookingChildNode = myNode;
-                    lookingChildSlot = i;
-                }
-                i++;
-            }
-            GUILayout.FlexibleSpace();
-
+            editors[myNode].draw();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
 
-            nodes[id] = editor.Result;	
+            if(Event.current.type == EventType.MouseDown && Event.current.button == 1)
+            {
+                ContextMenu cm = new ContextMenu();
+                cm.a
+            }
+
+            nodes[id] = editors[myNode].Result;	
         }
 
 		
@@ -286,14 +290,15 @@ public class SequenceWindow: EditorWindow{
 
         scroll = GUI.BeginScrollView(rect, scroll, scrollRect);
         // Clear mouse hover
-        if (Event.current.type == EventType.mouseMove) hovering = -1;
+        if (Event.current.type == EventType.MouseMove) hovering = -1;
 
 		BeginWindows();
         nodes.Clear();
 		createWindows(sequence);
 
-        if (Event.current.type == EventType.repaint)
+        if (Event.current.type == EventType.Repaint)
             drawLines(sequence);
+
         EndWindows();
         if(hovering == -1) 
         {

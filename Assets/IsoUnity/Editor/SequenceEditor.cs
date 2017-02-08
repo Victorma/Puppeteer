@@ -25,16 +25,6 @@ public class SequenceEditor : Editor {
             {
                 editor.Close();
 
-                /*foreach (var node in editor.Sequence.Nodes)
-                {
-                    if (!AssetDatabase.IsSubAsset(node))
-                    {
-                        AssetDatabase.AddObjectToAsset(node, AssetDatabase.GetAssetPath(target));
-                        if (node.Content != null)
-                            AssetDatabase.AddObjectToAsset(node.Content, AssetDatabase.GetAssetPath(target));
-                    }
-                }*/
-
                 AssetDatabase.SaveAssets();
             }
         }

@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class DialogNodeEditor : NodeEditor {
 
@@ -57,7 +58,16 @@ public class DialogNodeEditor : NodeEditor {
 	
 	public SequenceNode Result { get{ return myNode; } }
 	public string NodeName{ get { return "Dialog"; } }
-	public NodeEditor clone(){ return new DialogNodeEditor(); }
+
+    public string[] ChildNames
+    {
+        get
+        {
+            return dialog.Options.ConvertAll(o => o.Text).ToArray();
+        }
+    }
+
+    public NodeEditor clone(){ return new DialogNodeEditor(); }
 	
 	public bool manages(SequenceNode c) { return c.Content != null && c.Content is Dialog; }
 	public void useNode(SequenceNode c) {
@@ -182,11 +192,7 @@ public class DialogNodeEditor : NodeEditor {
 
     private void RemoveOption(ReorderableList list)
     {
-        dialog.removeOption(dialog.Options[list.index]);
-        if (myNode.Childs.Length > 1)
-        {
-            myNode.removeChild(list.index);
-        }
+        myNode.ChildSlots = list.count;
     }
 
     private void ReorderOptions(ReorderableList list)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 [System.Serializable]
+
 public class Dialog : ScriptableObject
 {
     public Dialog()

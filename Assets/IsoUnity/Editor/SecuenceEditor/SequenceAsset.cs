@@ -7,13 +7,14 @@ public class SequenceAsset : Sequence {
     public override SequenceNode createChild(Object content = null, int childSlots = 0)
     {
         var node = ScriptableObject.CreateInstance<SequenceNodeAsset>();
-        AssetDatabase.AddObjectToAsset(node, this);
-        AssetDatabase.SaveAssets();
 
         node.init(this);
         this.nodes.Add(node);
         node.Content = content;
         node.ChildSlots = childSlots;
+
+        AssetDatabase.AddObjectToAsset(node, this);
+        AssetDatabase.SaveAssets();
 
         return node;
     }

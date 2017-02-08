@@ -29,7 +29,6 @@ public class Sequence : ScriptableObject {
         if (!inited)
         {
             this.nodes = new List<SequenceNode>();
-            root = this.createChild();
         }
 	}
 	public SequenceNode Root

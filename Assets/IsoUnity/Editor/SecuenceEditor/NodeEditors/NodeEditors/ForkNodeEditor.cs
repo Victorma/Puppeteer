@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System;
 
 public class ForkNodeEditor : NodeEditor {
 
@@ -43,7 +44,10 @@ public class ForkNodeEditor : NodeEditor {
 	
 	public SequenceNode Result { get{ return myNode; } }
 	public string NodeName{ get { return "Fork"; } }
-	public NodeEditor clone(){ return new ForkNodeEditor(); }
+
+    public string[] ChildNames { get{ return new string[] { "case true", "case false" }; } }
+
+    public NodeEditor clone(){ return new ForkNodeEditor(); }
 	
 	public bool manages(SequenceNode c) { return c.Content != null && c.Content is Checkable; }
 	public void useNode(SequenceNode c) {
