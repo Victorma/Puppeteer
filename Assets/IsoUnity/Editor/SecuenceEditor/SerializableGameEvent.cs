@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Collections.Generic;
 
 [System.Serializable]
+[NodeContent("GameEvent", new string[] { "next" })]
 public class SerializableGameEvent : ScriptableObject, IGameEvent, IAssetSerializable {
 
 	void OnEnable(){

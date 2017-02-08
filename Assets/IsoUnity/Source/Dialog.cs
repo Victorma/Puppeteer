@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System;
 
-[System.Serializable]
-
+[NodeContent("Dialog", new string[] { "next" })]
 public class Dialog : ScriptableObject
 {
     public Dialog()
@@ -16,20 +16,11 @@ public class Dialog : ScriptableObject
     {
         Fragments = fragments;
     }
-
-    public Dialog(List<Fragment> fragments, List<DialogOption> options)
-    {
-        Fragments = fragments;
-        Options = options;
-    }
-
-	
+    
 	[SerializeField]
 	public string id;
     [SerializeField]
     private List<Fragment> fragments = new List<Fragment>();
-    [SerializeField]
-    private List<DialogOption> options = new List<DialogOption>();
 
     public List<Fragment> Fragments {
         get
@@ -40,8 +31,8 @@ public class Dialog : ScriptableObject
         }
         set { this.fragments = value; }
     }
-		
-	public void AddFragment(string name = "", string msg = "", string character = "", string parameter = "")
+
+    public void AddFragment(string name = "", string msg = "", string character = "", string parameter = "")
     {
         Fragments.Add(new Fragment(name, msg, character, parameter));
 	}
@@ -49,26 +40,6 @@ public class Dialog : ScriptableObject
 	public void RemoveFragment(Fragment frg){
         Fragments.Remove(frg);
 	}
-
-    public List<DialogOption> Options
-    {
-        get
-        {
-            if (options == null)
-                options = new List<DialogOption>();
-
-            return this.options;
-        }
-        set { this.options = value; }
-    }
-
-	public void AddOption(string option = "", string parameter = ""){
-        this.Options.Add(new DialogOption(option, parameter));
-	}
-
-	public void removeOption(DialogOption option){
-        this.Options.Remove(option);
-    }
 	
 }
 
@@ -118,24 +89,5 @@ public class Fragment
     }
 }
 
-[System.Serializable]
-[StructLayout(LayoutKind.Sequential)]
-public class DialogOption
-{
-
-    [SerializeField]
-    private string text;
-    [SerializeField]
-    private string parameter;
-
-    public DialogOption(string text = "", string parameter = "")
-    {
-        this.text = text;
-        this.parameter = parameter;
-    }
-
-    public string Text { get { return text; } set { this.text = value; } }
-    public string Parameter { get { return parameter; } set { this.parameter = value; } }
-}
 
 

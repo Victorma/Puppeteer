@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[NodeContent("Fork/Switch Fork", 2)]
 public class ISwitchFork : Checkable {
 
 	void OnEnable(){

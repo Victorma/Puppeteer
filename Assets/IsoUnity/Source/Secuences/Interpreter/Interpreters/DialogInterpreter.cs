@@ -15,7 +15,7 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 	
 	public bool CanHandle(SequenceNode node)
 	{
-		return node!= null && node.Content != null && node.Content is Dialog;
+		return node!= null && node.Content != null && (node.Content is Dialog || node.Content is Options);
 	}
 	
 	public void UseNode(SequenceNode node){
@@ -51,42 +51,52 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 	
 	public void Tick()
 	{
-		Dialog dialog = node.Content as Dialog;
-
-		if(!launched){
-			fragments = new Queue<Fragment>(dialog.Fragments);
-			launched = true;
-			next = true;
-			chosen = -1;
-		}
-
-		if(next){
-			if(fragments.Count > 0){
-                // Launch next fragment event
-                var nextFragment = fragments.Dequeue();
-                var ge = new GameEvent();
-                ge.name = "show dialog fragment";
-                ge.setParameter("fragment", nextFragment);
-                ge.setParameter("launcher", this);
-                ge.setParameter("synchronous", true);
-                eventLaunched = ge;
-                Game.main.enqueueEvent(ge);
-			}else{
-				if(dialog.Options != null && dialog.Options.Count>1){
-                    // Launch options event
+        if (node.Content is Dialog)
+        {
+            Dialog dialog = node.Content as Dialog;
+            if (!launched)
+            {
+                fragments = new Queue<Fragment>(dialog.Fragments);
+                launched = true;
+                next = true;
+                chosen = -1;
+            }
+            if (next)
+            {
+                if (fragments.Count > 0)
+                {
+                    // Launch next fragment event
+                    var nextFragment = fragments.Dequeue();
                     var ge = new GameEvent();
-                    ge.name = "show dialog options";
-                    ge.setParameter("options", dialog.Options);
-                    ge.setParameter("message", dialog.Fragments[dialog.Fragments.Count - 1]);
+                    ge.name = "show dialog fragment";
+                    ge.setParameter("fragment", nextFragment);
                     ge.setParameter("launcher", this);
                     ge.setParameter("synchronous", true);
                     eventLaunched = ge;
                     Game.main.enqueueEvent(ge);
+                    next = false;
                 }
-				else chosen = 0;
-			}
-			next = false;
-		}
+                else
+                    chosen = 0;
+            }
+        }
+        else if (node.Content is Options)
+        {
+            if (!launched)
+            {
+                Options options = node.Content as Options;
+
+                // Launch options event
+                var ge = new GameEvent();
+                ge.name = "show dialog options";
+                ge.setParameter("options", options.Values);
+                ge.setParameter("message", options.Question);
+                ge.setParameter("launcher", this);
+                ge.setParameter("synchronous", true);
+                eventLaunched = ge;
+                Game.main.enqueueEvent(ge);
+            }
+        }
 
 		if(chosen != -1){
 			finished = true;

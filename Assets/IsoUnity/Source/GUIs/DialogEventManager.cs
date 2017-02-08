@@ -20,7 +20,7 @@ public abstract class DialogEventManager : EventManager {
         if(ev.Name == "show dialog options")
         {
             gameEvent = ev;
-            DoOptions(ev.getParameter("message") as string, ev.getParameter("options") as List<DialogOption>);
+            DoOptions(ev.getParameter("message") as string, ev.getParameter("options") as List<Option>);
             doing = DOING_OPTIONS;
         }
     }
@@ -29,7 +29,7 @@ public abstract class DialogEventManager : EventManager {
     private const int DOING_OPTIONS = 2;
     private int doing = -1;
     protected abstract void DoFragment(Fragment fragment);
-    protected abstract void DoOptions(string question, List<DialogOption> options);
+    protected abstract void DoOptions(string question, List<Option> options);
     protected abstract bool IsFragmentFinised();
     protected abstract int IsOptionSelected();
 

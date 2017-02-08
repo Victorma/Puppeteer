@@ -10,10 +10,12 @@ public class SequenceAsset : Sequence {
 
         node.init(this);
         this.nodes.Add(node);
+
+        AssetDatabase.AddObjectToAsset(node, this);
+
         node.Content = content;
         node.ChildSlots = childSlots;
 
-        AssetDatabase.AddObjectToAsset(node, this);
         AssetDatabase.SaveAssets();
 
         return node;

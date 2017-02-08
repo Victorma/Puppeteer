@@ -24,12 +24,12 @@ public class CustomDialogManager : DialogEventManager {
     // Private variables
     private State state = State.Idle;
     private Fragment frg;
-    private List<DialogOption> opt;
+    private List<Option> opt;
     private int charactersShown;
     private float accumulated;
     private string msg = "";
     private CanvasGroup managingGroup;
-    private DialogOption optionSelected;
+    private Option optionSelected;
 
 
     void Start()
@@ -50,7 +50,7 @@ public class CustomDialogManager : DialogEventManager {
         managingGroup = dialogGroup;
     }
 
-    protected override void DoOptions(string question, List<DialogOption> options)
+    protected override void DoOptions(string question, List<Option> options)
     {
         opt = options;
         msg = question;

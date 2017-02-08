@@ -19,11 +19,12 @@ public class pru : MonoBehaviour {
             new Fragment("Pepito", "Hola, qué tal andas?"),
             new Fragment("José", "Yo bien"),
             new Fragment("Pepito", "Juegas a la play?")
-        }, new List<DialogOption>()
+        }), 1);
+        /*, new List<Option>()
         {
-            new DialogOption("Sí"),
-            new DialogOption("No")
-        }), 2);
+            new Option("Sí"),
+            new Option("No")
+        }*/
 
         s.Root.Childs[0] = s.createChild(new Dialog(new List<Fragment>()
         {

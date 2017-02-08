@@ -22,7 +22,7 @@ public class SequenceNodeAsset : SequenceNode {
                 }
                 else
                 {
-                    if (!AssetDatabase.IsSubAsset(value))
+                    if (!AssetDatabase.IsMainAsset(value) && !AssetDatabase.IsSubAsset(value))
                     {
                         AssetDatabase.AddObjectToAsset(value, this);
                         AssetDatabase.SaveAssets();

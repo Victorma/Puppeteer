@@ -25,11 +25,10 @@ public class NodeEditorFactoryImp : NodeEditorFactory {
 	public NodeEditorFactoryImp(){
 		this.nodeEditors = new List<NodeEditor> ();
 		this.nodeEditors.Add (new EmptyNodeEditor ());
-		this.nodeEditors.Add (new EventNodeEditor());
+        this.nodeEditors.Add (new DefaultNodeEditor ());
+        this.nodeEditors.Add (new EventNodeEditor());
 		this.nodeEditors.Add (new ForkNodeEditor());
 		this.nodeEditors.Add (new DialogNodeEditor());
-		
-
 	}
 	
 	public override string[] CurrentNodeEditors {
