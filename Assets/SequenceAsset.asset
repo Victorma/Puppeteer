@@ -12,26 +12,16 @@ MonoBehaviour:
   m_Name: SequenceAsset
   m_EditorClassIdentifier: 
   inited: 0
-  root: {fileID: 114960007518368560}
+  root: {fileID: 114837967563296660}
   nodes:
-  - {fileID: 114960007518368560}
-  - {fileID: 114722857776160866}
-  - {fileID: 114423713771536210}
-  - {fileID: 114656507045301372}
-  - {fileID: 114302684283440876}
---- !u!114 &114218566491394330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 986074b62c14ea9478e480b10c421f0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  options: []
---- !u!114 &114302684283440876
+  - {fileID: 114837967563296660}
+  - {fileID: 114148090473826298}
+  - {fileID: 114228161075795190}
+  - {fileID: 114330635482545224}
+  - {fileID: 114045236757541064}
+  - {fileID: 114627393659078266}
+  - {fileID: 114259264134361388}
+--- !u!114 &114045236757541064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -40,42 +30,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
-  m_Name: Fork/Switch Fork
+  m_Name: Dialog
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 114423713771536210}
-  - {fileID: 114722857776160866}
-  content: {fileID: 114463554815391202}
+  - {fileID: 0}
+  content: {fileID: 114930785740455606}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 366
-    y: 234
-    width: 219
-    height: 107
-  collapsed: 1
---- !u!114 &114423713771536210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  childs: []
-  content: {fileID: 114218566491394330}
-  secuence: {fileID: 11400000}
-  position:
-    serializedVersion: 2
-    x: 895
-    y: 155
-    width: 300
-    height: 94
+    x: 1834
+    y: 50
+    width: 223
+    height: 326
   collapsed: 0
---- !u!114 &114463554815391202
+--- !u!114 &114069739414705070
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -89,7 +57,39 @@ MonoBehaviour:
   comparationType: 0
   id: 
   value: {fileID: 0}
---- !u!114 &114596110030517230
+--- !u!114 &114070548777193748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986074b62c14ea9478e480b10c421f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options: []
+--- !u!114 &114079289519704084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986074b62c14ea9478e480b10c421f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options:
+  - text: 
+    parameter: 
+  - text: 
+    parameter: 
+  - text: 
+    parameter: 
+  - text: 
+    parameter: 
+--- !u!114 &114144241435925716
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -98,39 +98,60 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a413602f9429a24e943fe8c6b8b2508, type: 3}
-  m_Name: ChangeSwitch
+  m_Name: 
   m_EditorClassIdentifier: 
   keys:
   - synchronous
-  - switch
-  - value
   values:
-  - {fileID: 114726048090174000}
-  - {fileID: 114640721201070208}
-  - {fileID: 114908440236360228}
---- !u!114 &114640721201070208
+  - {fileID: 114505116871019400}
+--- !u!114 &114148090473826298
 MonoBehaviour:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
-  m_Name: 
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Options
   m_EditorClassIdentifier: 
-  i: 0
-  f: 0
-  d: 0
-  s: 
-  v2: {x: 0, y: 0}
-  v3: {x: 0, y: 0, z: 0}
-  v4: {x: 0, y: 0, z: 0, w: 0}
-  q: {x: 0, y: 0, z: 0, w: 0}
-  b: 0
-  c: 0
-  whatIs: System.String
---- !u!114 &114645971860033912
+  childs:
+  - {fileID: 114228161075795190}
+  - {fileID: 114330635482545224}
+  - {fileID: 114259264134361388}
+  - {fileID: 114228161075795190}
+  content: {fileID: 114079289519704084}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 732
+    y: 252
+    width: 91
+    height: 157
+  collapsed: 0
+--- !u!114 &114228161075795190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114330635482545224}
+  content: {fileID: 114391823270265092}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 1047
+    y: 96
+    width: 300
+    height: 136
+  collapsed: 0
+--- !u!114 &114243521631975032
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -142,96 +163,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 
-  fragments: []
---- !u!114 &114656507045301372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  childs:
-  - {fileID: 114302684283440876}
-  content: {fileID: 114993194711379598}
-  secuence: {fileID: 11400000}
-  position:
-    serializedVersion: 2
-    x: 113
-    y: 312
-    width: 300
-    height: 136
-  collapsed: 1
---- !u!114 &114722857776160866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
-  m_Name: Dialog
-  m_EditorClassIdentifier: 
-  childs:
-  - {fileID: 114423713771536210}
-  content: {fileID: 114645971860033912}
-  secuence: {fileID: 11400000}
-  position:
-    serializedVersion: 2
-    x: 698
-    y: 109
-    width: 300
-    height: 136
-  collapsed: 1
---- !u!114 &114726048090174000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  i: 0
-  f: 0
-  d: 0
-  s: 
-  v2: {x: 0, y: 0}
-  v3: {x: 0, y: 0, z: 0}
-  v4: {x: 0, y: 0, z: 0, w: 0}
-  q: {x: 0, y: 0, z: 0, w: 0}
-  b: 0
-  c: 0
-  whatIs: System.Boolean
---- !u!114 &114908440236360228
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  i: 0
-  f: 0
-  d: 0
-  s: 
-  v2: {x: 0, y: 0}
-  v3: {x: 0, y: 0, z: 0}
-  v4: {x: 0, y: 0, z: 0, w: 0}
-  q: {x: 0, y: 0, z: 0, w: 0}
-  b: 1
-  c: 0
-  whatIs: System.Boolean
---- !u!114 &114960007518368560
+  fragments:
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+--- !u!114 &114259264134361388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -243,17 +196,40 @@ MonoBehaviour:
   m_Name: GameEvent
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 114722857776160866}
-  content: {fileID: 114596110030517230}
+  - {fileID: 0}
+  content: {fileID: 114144241435925716}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 113
-    y: 86
+    x: 1074
+    y: 520
     width: 300
+    height: 109
+  collapsed: 0
+--- !u!114 &114330635482545224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Fork/Switch Fork
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114045236757541064}
+  - {fileID: 114627393659078266}
+  content: {fileID: 114069739414705070}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 1427
+    y: 310
+    width: 219
     height: 107
-  collapsed: 1
---- !u!114 &114993194711379598
+  collapsed: 0
+--- !u!114 &114391823270265092
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -266,3 +242,93 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 
   fragments: []
+--- !u!114 &114505116871019400
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
+  f: 0
+  d: 0
+  s: 
+  v2: {x: 0, y: 0}
+  v3: {x: 0, y: 0, z: 0}
+  v4: {x: 0, y: 0, z: 0, w: 0}
+  q: {x: 0, y: 0, z: 0, w: 0}
+  b: 0
+  c: 0
+  whatIs: System.Boolean
+--- !u!114 &114627393659078266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Options
+  m_EditorClassIdentifier: 
+  childs: []
+  content: {fileID: 114070548777193748}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 1914
+    y: 540
+    width: 91
+    height: 94
+  collapsed: 0
+--- !u!114 &114837967563296660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114148090473826298}
+  content: {fileID: 114243521631975032}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 184
+    y: 188
+    width: 300
+    height: 328
+  collapsed: 0
+--- !u!114 &114930785740455606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 548e5e0d049bc4d4693000a78d1e305f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  fragments:
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 
+  - name: 
+    msg: 
+    character: 
+    parameter: 

@@ -63,6 +63,7 @@ public class OptionsEditor : Editor {
 
     private void RemoveOption(ReorderableList list)
     {
+        options.removeOption(options.Values[list.index]);
     }
 
     private void ReorderOptions(ReorderableList list)

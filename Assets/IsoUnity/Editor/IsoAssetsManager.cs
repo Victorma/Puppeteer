@@ -4,7 +4,16 @@ using System.Collections;
 
 public class IsoAssetsManager  {
 
-	public static ScriptableObject CreateAssetOf(string name, string ruta){
+    public static T CreateAssetOf<T>(string ruta) where T : ScriptableObject
+    {
+        T so = ScriptableObject.CreateInstance<T>();
+        AssetDatabase.CreateAsset(so, ruta);
+        Selection.activeObject = so;
+
+        return so;
+    }
+
+    public static ScriptableObject CreateAssetOf(string name, string ruta){
 
 		ScriptableObject so = ScriptableObject.CreateInstance (name);
 		AssetDatabase.CreateAsset(so, ruta);

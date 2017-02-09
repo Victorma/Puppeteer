@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-[NodeContent]
+[NodeContent("Options")]
 public class Options : ScriptableObject, NodeContent {
     
     public string[] ChildNames { get { return options.ConvertAll(o => o.Text).ToArray(); } }
