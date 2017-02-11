@@ -68,7 +68,7 @@ public class SerializableGameEvent : ScriptableObject, IGameEvent, IAssetSeriali
                 else
                 {
                     (c as ScriptableObject).hideFlags = HideFlags.HideInHierarchy;
-                    AssetDatabase.AddObjectToAsset(c as Object, inside);
+                    AssetDatabase.AddObjectToAsset(c as Object, this);
                 }
 
                 if (args.ContainsKey(param)) args[param] = (Object)c;

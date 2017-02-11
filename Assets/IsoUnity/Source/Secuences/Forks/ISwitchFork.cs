@@ -1,15 +1,41 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [NodeContent("Fork/Switch Fork", 2)]
-public class ISwitchFork : Checkable {
+public class ISwitchFork : Checkable, IAssetSerializable
+{
+    public static ISwitchFork Create(string id, ComparationType comparation, object value)
+    {
+        var isf = ScriptableObject.CreateInstance<ISwitchFork>();
+        isf.comparationType = comparation;
+        isf.id = id;
+        isf.Value = value;
 
-	void OnEnable(){
+        return isf;
+    }
+
+	void Awake(){
 		if(value == null)
-			value = ScriptableObject.CreateInstance<IsoUnityBasicType>();
+        {
+            value = ScriptableObject.CreateInstance<IsoUnityBasicType>();
+        }
 	}
 
-	public enum ComparationType {Equal, Greather, Less, Distinct, GreatherEqual, LessEqual};
+    void OnDestroy()
+    {
+#if UNITY_EDITOR
+        if (value != null)
+        {
+            if (Application.isEditor && !Application.isPlaying)
+            {
+                ScriptableObject.DestroyImmediate(value, true);
+            }
+        }
+#endif
+    }
+
+    public enum ComparationType {Equal, Greather, Less, Distinct, GreatherEqual, LessEqual};
 	[SerializeField]
 	public ComparationType comparationType = ComparationType.Equal;
 	[SerializeField]
@@ -39,4 +65,20 @@ public class ISwitchFork : Checkable {
 
 		return c;
 	}
+
+    public void SerializeInside(UnityEngine.Object assetObject)
+    {
+#if UNITY_EDITOR
+        if (Application.isEditor && !Application.isPlaying)
+        {
+            if (!UnityEditor.AssetDatabase.IsSubAsset(this))
+            {
+                UnityEditor.AssetDatabase.AddObjectToAsset(this, assetObject);
+                value.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
+                UnityEditor.AssetDatabase.AddObjectToAsset(value, this);
+                UnityEditor.AssetDatabase.SaveAssets();
+            }
+        }
+#endif
+    }
 }

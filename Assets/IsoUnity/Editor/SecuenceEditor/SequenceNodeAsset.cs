@@ -4,7 +4,7 @@ using UnityEditor;
 
 public class SequenceNodeAsset : SequenceNode {
 
-    public override Object Content
+    public override object Content
     {
         get
         {
@@ -13,27 +13,28 @@ public class SequenceNodeAsset : SequenceNode {
 
         set
         {
-            if (value != null)
+            if (value != null && value is Object)
             {
-                if (value != Content && value is IAssetSerializable)
+                var objectVal = value as Object;
+                if (value != Content && objectVal is IAssetSerializable)
                 {
-                    (value as IAssetSerializable).SerializeInside(this);
+                    (objectVal as IAssetSerializable).SerializeInside(this);
                     AssetDatabase.SaveAssets();
                 }
                 else
                 {
-                    if (!AssetDatabase.IsMainAsset(value) && !AssetDatabase.IsSubAsset(value))
+                    if (!AssetDatabase.IsMainAsset(objectVal) && !AssetDatabase.IsSubAsset(objectVal))
                     {
-                        AssetDatabase.AddObjectToAsset(value, this);
+                        AssetDatabase.AddObjectToAsset(objectVal, this);
                         AssetDatabase.SaveAssets();
                     }
                 }
             }
                 
 
-            if (value != Content && Content != null && AssetDatabase.IsSubAsset(Content))
+            if (isUnityObject && value != Content && Content != null && AssetDatabase.IsSubAsset(objectContent))
             {
-                ScriptableObject.DestroyImmediate(Content, true);
+                ScriptableObject.DestroyImmediate(objectContent, true);
                 AssetDatabase.SaveAssets();
             }
 
@@ -42,9 +43,9 @@ public class SequenceNodeAsset : SequenceNode {
         }
     }
 
-    protected override void OnDestroy()
+    protected virtual void OnDestroy()
     {
-        if(Content != null)
-            ScriptableObject.DestroyImmediate(Content, true);
+        if (isUnityObject)
+            ScriptableObject.DestroyImmediate(objectContent, true);
     }
 }

@@ -34,7 +34,7 @@ public class DefaultEventEditor : EventEditor {
             {
                 EditorGUILayout.BeginHorizontal();
 
-                ge.setParameter(param, ParamEditor.editorFor(param, ge.getParameter(param)));
+                ge.setParameter(param, ParamEditor.LayoutEditorFor(param, ge.getParameter(param)));
                 //ge.setParameter (param, EditorGUILayout.ObjectField (param, (Object)ge.getParameter (param), typeof(Object), true));
                 if (GUILayout.Button("X"))
                     ge.removeParameter(param);

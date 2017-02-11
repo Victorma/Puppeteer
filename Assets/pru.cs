@@ -13,38 +13,37 @@ public class pru : MonoBehaviour {
             return;
 
 
-        s = new Sequence();
-        s.Root = s.createChild(new Dialog(new List<Fragment>()
-        {
+        s = ScriptableObject.CreateInstance<Sequence>();
+        s.Root = s.createChild(Dialog.Create(
             new Fragment("Pepito", "Hola, qué tal andas?"),
             new Fragment("José", "Yo bien"),
             new Fragment("Pepito", "Juegas a la play?")
-        }), 1);
-        /*, new List<Option>()
-        {
+        ));
+
+        s.Root.Childs[0] = s.createChild(Options.Create(
             new Option("Sí"),
             new Option("No")
-        }*/
+        ));
 
-        s.Root.Childs[0] = s.createChild(new Dialog(new List<Fragment>()
+        s.Root.Childs[0].Childs[0] = s.createChild(Dialog.Create(new List<Fragment>()
         {
             new Fragment("José", "Tengo mazo de ganas de jugar!"),
             new Fragment("Pepito", "Pues vamos a enchufarla")
         }), 1);
 
-        s.Root.Childs[1] = s.createChild(new Dialog(new List<Fragment>()
+        s.Root.Childs[0].Childs[1] = s.createChild(Dialog.Create(new List<Fragment>()
         {
             new Fragment("José", "No me apetece nada..."),
             new Fragment("Pepito", "Bueno... no pasa nada...")
         }));
 
-        s.Root.Childs[0].Childs[0] = s.createChild(new CheckableWrapper(new CustomCheck()), 2);
-        s.Root.Childs[0].Childs[0].Childs[0] = s.createChild(new Dialog(new List<Fragment>()
+        s.Root.Childs[0].Childs[0].Childs[0] = s.createChild(new CheckableWrapper(new CustomCheck()), 2);
+        s.Root.Childs[0].Childs[0].Childs[0].Childs[0] = s.createChild(Dialog.Create(new List<Fragment>()
         {
             new Fragment("Play", "*La play se enciende*"),
             new Fragment("Pepito", "Weeeeh")
         }));
-        s.Root.Childs[0].Childs[0].Childs[1] = s.createChild(new Dialog(new List<Fragment>()
+        s.Root.Childs[0].Childs[0].Childs[0].Childs[1] = s.createChild(Dialog.Create(new List<Fragment>()
         {
             new Fragment("Play", "*La play no responde*"),
             new Fragment("Pepito", "Jope")

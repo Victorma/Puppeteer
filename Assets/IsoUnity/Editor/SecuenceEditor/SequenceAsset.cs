@@ -1,10 +1,12 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class SequenceAsset : Sequence {
+    
 
-    public override SequenceNode createChild(Object content = null, int childSlots = 0)
+    public override SequenceNode createChild(object content = null, int childSlots = 0)
     {
         var node = ScriptableObject.CreateInstance<SequenceNodeAsset>();
 
@@ -20,13 +22,11 @@ public class SequenceAsset : Sequence {
 
         return node;
     }
-
+    
     public override bool removeChild(SequenceNode node)
     {
-        ScriptableObject.DestroyImmediate(node.Content, true);
-
         var r = base.removeChild(node);
-        if(r)
+        if (r)
             AssetDatabase.SaveAssets();
         return r;
     }

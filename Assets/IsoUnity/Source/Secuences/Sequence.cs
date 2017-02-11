@@ -8,29 +8,18 @@ public class Sequence : ScriptableObject {
     [SerializeField]
     private bool inited = false;
 
-    public Sequence()
-    {
-        init();
-    }
-
-    void Awake()
-    {
-        init();
-    }
-
 	[SerializeField]
     protected SequenceNode root;
 
     [SerializeField]
     protected List<SequenceNode> nodes;
 
-	public void init()
+	void Awake()
     {
-        if (!inited)
-        {
+        if(this.nodes == null)
             this.nodes = new List<SequenceNode>();
-        }
 	}
+
 	public SequenceNode Root
     {
 		get{ return root;}
@@ -42,13 +31,14 @@ public class Sequence : ScriptableObject {
         get { return nodes.ToArray() as SequenceNode[]; }
     }
 
-    public virtual SequenceNode createChild(UnityEngine.Object content = null, int childSlots = 0)
+
+
+    public virtual SequenceNode createChild(object content = null, int childSlots = 0)
     {
         var node = CreateInstance<SequenceNode>();
         node.init(this);
         this.nodes.Add(node);
         node.Content = content;
-        node.ChildSlots = childSlots;
         return node;
     }
 

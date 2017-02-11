@@ -5,14 +5,13 @@ using UnityEditor.Callbacks;
 using System;
 using System.Linq;
 
-public class SequenceWindow: EditorWindow{
-
-
+public class SequenceWindow : EditorWindow
+{
     [OnOpenAsset(1)]
     public static bool Open(int instanceID, int line)
     {
         var o = EditorUtility.InstanceIDToObject(instanceID);
-        if(o is SequenceAsset)
+        if (o is SequenceAsset)
         {
             var newWindow = ScriptableObject.CreateInstance<SequenceWindow>();
             newWindow.sequence = o as SequenceAsset;
@@ -22,15 +21,16 @@ public class SequenceWindow: EditorWindow{
         return false;
     }
 
-	private Sequence sequence;
+    private Sequence sequence;
 
-	public Sequence Sequence {
-		get { return sequence; }
-		set { this.sequence = value; }
-	}
+    public Sequence Sequence
+    {
+        get { return sequence; }
+        set { this.sequence = value; }
+    }
 
     private Dictionary<int, SequenceNode> nodes = new Dictionary<int, SequenceNode>();
-	private Dictionary<SequenceNode, NodeEditor> editors = new Dictionary<SequenceNode, NodeEditor>();
+    private Dictionary<SequenceNode, NodeEditor> editors = new Dictionary<SequenceNode, NodeEditor>();
     private GUIStyle closeStyle, collapseStyle;
 
     private int hovering = -1;
@@ -38,11 +38,11 @@ public class SequenceWindow: EditorWindow{
 
     private int lookingChildSlot;
     private SequenceNode lookingChildNode;
-	
-	void nodeWindow(int id)
-	{
+
+    void nodeWindow(int id)
+    {
         SequenceNode myNode = nodes[id];
-        
+
 
         // Editor selection
         //string[] editorNames = NodeEditorFactory.Intance.CurrentNodeEditors;
@@ -68,10 +68,10 @@ public class SequenceWindow: EditorWindow{
         }
 
         // Drawing
-        
+
         if (myNode.Collapsed)
         {
-            if (GUILayout.Button("Open"))
+            if (GUILayout.Button(myNode.ShortDescription))
                 myNode.Collapsed = false;
         }
         else
@@ -95,7 +95,7 @@ public class SequenceWindow: EditorWindow{
             editors[myNode].draw();
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
-            
+
             nodes[id] = editors[myNode].Result;
         }
 
@@ -112,7 +112,7 @@ public class SequenceWindow: EditorWindow{
         switch (Event.current.type)
         {
             case EventType.MouseDown:
-                
+
                 // Left button
                 if (Event.current.button == 0)
                 {
@@ -124,7 +124,8 @@ public class SequenceWindow: EditorWindow{
                         // finishing search
                         lookingChildNode = null;
                     }
-                    Selection.activeObject = myNode.Content;
+                    if(myNode.Content is UnityEngine.Object)
+                        Selection.activeObject = myNode.Content as UnityEngine.Object;
                 }
 
                 // Right Button
@@ -160,10 +161,10 @@ public class SequenceWindow: EditorWindow{
                 break;
         }
 
-		GUI.DragWindow();
-	}
-	void curveFromTo(Rect wr, Rect wr2, Color color, Color shadow)
-	{
+        GUI.DragWindow();
+    }
+    void curveFromTo(Rect wr, Rect wr2, Color color, Color shadow)
+    {
         Vector2 start = new Vector2(wr.x + wr.width, wr.y + 3 + wr.height / 2),
             startTangent = new Vector2(wr.x + wr.width + Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr.y + 3 + wr.height / 2),
             end = new Vector2(wr2.x, wr2.y + 3 + wr2.height / 2),
@@ -174,7 +175,7 @@ public class SequenceWindow: EditorWindow{
         Handles.DrawBezier(start, end, startTangent, endTangent, color, null, 3);
         Handles.EndGUI();
 
-		/*Drawing.bezierLine(
+        /*Drawing.bezierLine(
 			,
 			,
 			new Vector2(wr2.x, wr2.y + 3 + wr2.height / 2),
@@ -184,7 +185,7 @@ public class SequenceWindow: EditorWindow{
 			new Vector2(wr.x + wr.width + Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr.y + wr.height / 2),
 			new Vector2(wr2.x, wr2.y + wr2.height / 2),
 			new Vector2(wr2.x - Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr2.y + wr2.height / 2), color, 2, true,20);*/
-	}
+    }
 
     private Rect sumRect(Rect r1, Rect r2)
     {
@@ -200,14 +201,14 @@ public class SequenceWindow: EditorWindow{
 
         // Visible loop line
         curveFromTo(from, to.Position, l, s);
-        
+
         if (!loopCheck.ContainsKey(to))
         {
             loopCheck.Add(to, true);
             float h = to.Position.height / (to.Childs.Length * 1.0f);
             for (int i = 0; i < to.Childs.Length; i++)
-            {        
-                Rect fromRect = sumRect(to.Position, new Rect(0, h * i, 0, h-to.Position.height));
+            {
+                Rect fromRect = sumRect(to.Position, new Rect(0, h * i, 0, h - to.Position.height));
                 // Looking child line
                 if (lookingChildNode == to && i == lookingChildSlot)
                 {
@@ -237,7 +238,7 @@ public class SequenceWindow: EditorWindow{
             // OutputSlots
             float h = n.Position.height / (n.Childs.Length * 1.0f);
             for (int i = 0; i < n.Childs.Length; i++)
-                if(drawSlot(new Vector2(n.Position.x + n.Position.width, n.Position.y + h * i + h / 2f)))
+                if (drawSlot(new Vector2(n.Position.x + n.Position.width, n.Position.y + h * i + h / 2f)))
                 {
                     // Detach		
                     n.Childs[i] = null;
@@ -259,8 +260,8 @@ public class SequenceWindow: EditorWindow{
             {
                 float h = n.Position.height / (n.Childs.Length * 1.0f);
                 for (int i = 0; i < n.Childs.Length; i++)
-                    if(n.Childs[i]!=null)
-                    { 
+                    if (n.Childs[i] != null)
+                    {
                         Rect fromRect = sumRect(n.Position, new Rect(0, h * i, 0, h - n.Position.height));
                         curveFromTo(fromRect, n.Childs[i].Position, r, s);
                     }
@@ -277,22 +278,23 @@ public class SequenceWindow: EditorWindow{
 		curveFromTo(rects[node], rects[node.Childs[i]], new Color(0.3f,0.7f,0.4f), s);
      
      */
-	
-	void createWindows(Sequence sequence)
+
+    void createWindows(Sequence sequence)
     {
-		foreach(var node in sequence.Nodes){
+        foreach (var node in sequence.Nodes)
+        {
             nodes.Add(node.GetInstanceID(), node);
             node.Position = GUILayout.Window(node.GetInstanceID(), node.Position, nodeWindow, node.Name);
-		}
-	}
-	
-	Color s = new Color(0.4f, 0.4f, 0.5f),
+        }
+    }
+
+    Color s = new Color(0.4f, 0.4f, 0.5f),
         l = new Color(0.3f, 0.7f, 0.4f),
         r = new Color(0.8f, 0.2f, 0.2f);
-	void OnGUI()
-	{
-		if (sequence == null)
-			this.Close ();
+    void OnGUI()
+    {
+        if (sequence == null)
+            this.Close();
 
         this.wantsMouseMove = true;
 
@@ -318,16 +320,29 @@ public class SequenceWindow: EditorWindow{
             collapseStyle.hover.textColor = Color.blue;
         }
 
-		SequenceNode nodoInicial = sequence.Root;
-        GUILayout.BeginVertical(GUILayout.Height(20));
+        SequenceNode nodoInicial = sequence.Root;
+        GUILayout.BeginVertical(GUILayout.Height(17));
         GUILayout.BeginHorizontal("toolbar");
 
-        if(GUILayout.Button("New Node", "toolbarButton")){
+        using (new EditorGUI.DisabledScope())
+        {
+            if (GUILayout.Button("Switches", "toolbarButton", GUILayout.Width(100)))
+            {
+                var o = SwitchesMenu.ShowAtPosition(GUILayoutUtility.GetLastRect().Move(new Vector2(5,16)));
+                if (o) GUIUtility.ExitGUI();
+            }
+        }
+
+        GUILayout.Space(5);
+
+        if (GUILayout.Button("New Node", "toolbarButton"))
+        {
             var node = sequence.createChild();
-            node.Position = new Rect(scroll + position.size / 2 - node.Position.size/2, node.Position.size);
+            node.Position = new Rect(scroll + position.size / 2 - node.Position.size / 2, node.Position.size);
             node.Position = new Rect(new Vector2((int)node.Position.x, (int)node.Position.y), node.Position.size);
         }
-        if(GUILayout.Button("Set Root", "toolbarButton")){
+        if (GUILayout.Button("Set Root", "toolbarButton"))
+        {
             if (nodes.ContainsKey(focusing))
             {
                 sequence.Root = nodes[focusing];
@@ -341,7 +356,7 @@ public class SequenceWindow: EditorWindow{
         var rect = new Rect(0, lastRect.y + lastRect.height, position.width, position.height - lastRect.height);
 
         float maxX = rect.width, maxY = rect.height;
-        foreach(var node in sequence.Nodes)
+        foreach (var node in sequence.Nodes)
         {
             var px = node.Position.x + node.Position.width + 50;
             var py = node.Position.y + node.Position.height + 50;
@@ -354,7 +369,7 @@ public class SequenceWindow: EditorWindow{
         // Clear mouse hover
         if (Event.current.type == EventType.MouseMove) hovering = -1;
         GUI.Box(scrollRect, "", "preBackground");
-		BeginWindows();
+        BeginWindows();
         {
             nodes.Clear();
             createWindows(sequence);
@@ -368,16 +383,16 @@ public class SequenceWindow: EditorWindow{
         }
         EndWindows();
 
-        if(hovering == -1) 
+        if (hovering == -1)
         {
-            if(Event.current.type == EventType.MouseDrag)
+            if (Event.current.type == EventType.MouseDrag)
             {
                 scroll -= Event.current.delta;
             }
         }
 
         // Right click
-        if(Event.current.type == EventType.MouseDown && Event.current.button == 1)
+        if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
         {
             var menu = new GenericMenu();
             var i = 0;
@@ -385,19 +400,20 @@ public class SequenceWindow: EditorWindow{
             var mousePos = Event.current.mousePosition;
             foreach (var a in GetPossibleCreations())
             {
-                
+
                 menu.AddItem(new GUIContent("Create/" + a.Key), false, (t) => {
-                    var newObject = CreateInstance(a.Value);
+                    var kv = (KeyValuePair < string, Type>)t;
+                    var newObject = CreateInstance(kv.Value);
                     var child = sequence.createChild(newObject);
                     child.Position = new Rect(mousePos, child.Position.size);
-                }, i);
+                }, a);
                 i++;
             }
 
             menu.ShowAsContext();
         }
         GUI.EndScrollView();
-	}
+    }
 
     private Rect scrollRect = new Rect(0, 0, 1000, 1000);
     private Vector2 scroll;
@@ -410,7 +426,7 @@ public class SequenceWindow: EditorWindow{
     private Dictionary<string, Type> possibleCreationsCache;
     private Dictionary<string, Type> GetPossibleCreations()
     {
-        if(possibleCreationsCache == null)
+        if (possibleCreationsCache == null)
         {
             possibleCreationsCache = new Dictionary<string, Type>();
             // Make sure is a DOMWriter

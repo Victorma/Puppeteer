@@ -7,18 +7,19 @@ using System;
 [NodeContent("Dialog", new string[] { "next" })]
 public class Dialog : ScriptableObject
 {
-    public Dialog()
-    {
 
+    public static Dialog Create(params Fragment[] fragments)
+    {
+        return Create(new List<Fragment>(fragments));
     }
 
-    public Dialog(List<Fragment> fragments)
+    public static Dialog Create(List<Fragment> fragments)
     {
-        Fragments = fragments;
+        var d = ScriptableObject.CreateInstance<Dialog>();
+        d.fragments = fragments;
+        return d;
     }
-    
-	[SerializeField]
-	public string id;
+
     [SerializeField]
     private List<Fragment> fragments = new List<Fragment>();
 
@@ -40,7 +41,6 @@ public class Dialog : ScriptableObject
 	public void RemoveFragment(Fragment frg){
         Fragments.Remove(frg);
 	}
-	
 }
 
 [System.Serializable]

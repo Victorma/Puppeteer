@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEngine;
 using UnityEditor;
 
 public class DefaultNodeEditor : NodeEditor {
@@ -22,7 +23,7 @@ public class DefaultNodeEditor : NodeEditor {
 
     public bool manages(SequenceNode c)
     {
-        return c.Content != null;
+        return c.Content != null && c.Content is Object;
     }
 
     public void useNode(SequenceNode c)
@@ -30,8 +31,7 @@ public class DefaultNodeEditor : NodeEditor {
         node = c;
         attr = c.Content.GetType().GetCustomAttributes(true).ToList().Find(a => a is NodeContentAttribute) as NodeContentAttribute;
         node.Name = attr != null ? attr.Name : node.Content.GetType().ToString();
-        
-        editor = Editor.CreateEditor(c.Content);
+        editor = Editor.CreateEditor(c.Content as Object);
     }
     
     // Drawing

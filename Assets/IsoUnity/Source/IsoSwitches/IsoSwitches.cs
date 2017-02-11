@@ -7,24 +7,38 @@ public class IsoSwitches : ScriptableObject
 {
 	[SerializeField]
 	public List<ISwitch> switches = new List<ISwitch>();
-
-
+    
 	public IsoSwitches (){
 	}
 
 	public ISwitch addSwitch(){
 		ISwitch iss = ScriptableObject.CreateInstance<ISwitch>();
-		this.switches.Add(iss);
+#if UNITY_EDITOR
+        if (Application.isEditor && !Application.isPlaying)
+        {
+            UnityEditor.AssetDatabase.AddObjectToAsset(iss, this);
+            iss.Persist();
+        }
+#endif
+        this.switches.Add(iss);
 		return iss;
 	}
 
 	public void removeSwitch(ISwitch swt){
 		if(this.switches.Contains(swt))
 		   this.switches.Remove (swt);
-		//ScriptableObject.Destroy (swt);
-	}
 
-	public ISwitch getSwitch(string id){
+#if UNITY_EDITOR
+        if (Application.isEditor && !Application.isPlaying)
+        {
+            ScriptableObject.DestroyImmediate(swt, true);
+            UnityEditor.AssetDatabase.SaveAssets();
+        }
+#endif
+        //ScriptableObject.Destroy (swt);
+    }
+
+    public ISwitch getSwitch(string id){
 		ISwitch r = null;
 		foreach (ISwitch isw in this.switches) {
 			if(isw.id.Equals(id)){

@@ -2,15 +2,33 @@
 using System.Collections;
 
 [System.Serializable]
-public class ISwitch : ScriptableObject{
+public class ISwitch : ScriptableObject {
 
 	void Awake(){
 		if(state == null){
 			state = ScriptableObject.CreateInstance<IsoUnityBasicType>();
-		}
-	}
 
-	[SerializeField]
+        }
+    }
+
+#if UNITY_EDITOR
+    public void Persist()
+    {
+        if (Application.isEditor && !Application.isPlaying)
+        {
+            state.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+            UnityEditor.AssetDatabase.AddObjectToAsset(state, this);
+            UnityEditor.AssetDatabase.SaveAssets();
+        }
+    }
+
+    void OnDestroy()
+    {
+        ScriptableObject.DestroyImmediate(state, true);
+    }
+#endif
+
+    [SerializeField]
 	public string id = "";
 
 	[SerializeField]

@@ -8,6 +8,18 @@ public class Options : ScriptableObject, NodeContent {
     
     public string[] ChildNames { get { return options.ConvertAll(o => o.Text).ToArray(); } }
     public int ChildSlots { get { return options.Count; } }
+    
+    public static Options Create(params Option[] options)
+    {
+        return Create(new List<Option>(options));
+    }
+
+    public static Options Create(List<Option> options)
+    {
+        var op = CreateInstance<Options>();
+        op.options = options;
+        return op;
+    }
 
     [SerializeField]
     private List<Option> options = new List<Option>();

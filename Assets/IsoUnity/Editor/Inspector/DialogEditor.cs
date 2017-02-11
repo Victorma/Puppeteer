@@ -29,7 +29,7 @@ public class DialogEditor : Editor {
 
         GUIStyle style = new GUIStyle();
         style.padding = new RectOffset(5, 5, 5, 5);
-        dialog.id = UnityEditor.EditorGUILayout.TextField("Name", dialog.id);
+        dialog.name = UnityEditor.EditorGUILayout.TextField("Name", dialog.name);
 
         fragmentsReorderableList.list = dialog.Fragments;
 

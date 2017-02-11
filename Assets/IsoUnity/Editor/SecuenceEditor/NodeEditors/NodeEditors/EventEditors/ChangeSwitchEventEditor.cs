@@ -30,7 +30,7 @@ public class ChangeSwitchEventEditor : EventEditor {
 	public void draw(){
 
 		ge.setParameter("switch", EditorGUILayout.TextField("SwitchID", (string) ge.getParameter("switch")));
-		ge.setParameter("value", ParamEditor.editorFor("Value", ge.getParameter("value")));
+		ge.setParameter("value", ParamEditor.LayoutEditorFor("Value", ge.getParameter("value")));
 	}
 
 	public void detachEvent(SerializableGameEvent ge)

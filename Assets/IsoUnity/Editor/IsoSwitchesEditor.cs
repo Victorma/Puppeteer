@@ -9,7 +9,6 @@ public class IsoSwitchesEditor : Editor{
 	private Vector2 scrollposition = new Vector2(0,0);
 
     private ReorderableList switchList;
-    private List<Rect> rects;
 
 	IsoSwitches isoSwitches;
 	public void OnEnable(){
@@ -18,15 +17,15 @@ public class IsoSwitchesEditor : Editor{
 
         switchList = new ReorderableList(isoSwitches.switches, typeof(ISwitch), true, false, true, true);
 
-        switchList.elementHeight = 50;
-
+        switchList.elementHeight = 35;
+        
         switchList.drawElementCallback += (rect, index, isActive, isFocused) =>
         {
-            var isw = isoSwitches.switches[index];
-            while (rects.Count <= index)
-                rects.Add(new Rect(0, 0, 0, 0));
-            if(Event.current.type == EventType.repaint)
-                rects[index] = rect;
+            var isw = switchList.list[index] as ISwitch;
+            
+            isw.id = EditorGUI.TextField(new Rect(rect.x, rect.y, rect.width, rect.height / 2f - 2f), "ID ", isw.id);
+            isw.State = ParamEditor.editorFor(new Rect(rect.x, rect.y + rect.height / 2f , rect.width, rect.height /2f - 2f), isw.State);
+
         };
 
         switchList.onRemoveCallback += (list) =>
@@ -36,11 +35,12 @@ public class IsoSwitchesEditor : Editor{
 
         switchList.onAddCallback += (list) =>
         {
-            isoSwitches.addSwitch();
+            var isw = isoSwitches.addSwitch();
+            isw.id = search;
         };
 	}
-	
-	
+
+    string search = "";
 	public override void OnInspectorGUI(){
 
 		isoSwitches = target as IsoSwitches;
@@ -49,22 +49,23 @@ public class IsoSwitchesEditor : Editor{
 		style.padding = new RectOffset(5,5,5,5);
 
 		isoSwitches = target as IsoSwitches;
-		
+        search = EditorGUILayout.TextField("Search", search);
 		EditorGUILayout.HelpBox("List of switches that represent the state of the game.", MessageType.None);
+
+        if (string.IsNullOrEmpty(search))
+        {
+            switchList.list = isoSwitches.switches;
+            switchList.draggable = true;
+        }
+        else
+        {
+            switchList.list = isoSwitches.switches.FindAll(i => i.id.Contains(search));
+            switchList.draggable = false;
+        }
 
         switchList.DoLayoutList();
 
-        for(int i = 0; i < rects.Count; i++)
-        {
-            var isw = isoSwitches.switches[i];
-            GUILayout.BeginArea(rects[i]);
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("ID: ", GUILayout.Width(27));
-                isw.id = EditorGUILayout.TextField(isw.id);
-                isw.State = ParamEditor.editorFor("Initial State: ", isw.State);
-                EditorGUILayout.EndHorizontal();
-            GUILayout.EndArea();
-        }
+        
 
 		/*ISwitch[] switches = isoSwitches.getList ();
 		if(switches != null){

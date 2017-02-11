@@ -15,8 +15,6 @@ public class SequenceEditor : Editor {
             {
                 editor = EditorWindow.GetWindow<SequenceWindow>();
                 editor.Sequence = (target as Sequence);
-                if (editor.Sequence.Root == null)
-                    editor.Sequence.init();
             }
         }
         if (GUILayout.Button("Close editor"))
@@ -28,6 +26,8 @@ public class SequenceEditor : Editor {
                 AssetDatabase.SaveAssets();
             }
         }
+
+        DrawDefaultInspector();
 
     }
 }

@@ -5,8 +5,12 @@ using System.Collections.Generic;
 public class SequenceNode : ScriptableObject {
 	[SerializeField]
 	private SequenceNode[] childs;
+    [SerializeField]
+    protected bool isUnityObject;
 	[SerializeField]
-	private Object content = null;
+    protected Object objectContent = null;
+    [SerializeField]
+    private object content = null;
     [SerializeField]
     protected Sequence secuence = null;
     [SerializeField]
@@ -14,10 +18,20 @@ public class SequenceNode : ScriptableObject {
     [SerializeField]
     private bool collapsed = false;
 
+    private NodeContentAttribute contentAttribute;
+
+    public string ShortDescription
+    {
+        get
+        {
+            return isUnityObject ? objectContent.name : content.ToString();
+        }
+    }
+
     public Rect Position
     {
         get {
-            if (collapsed) return new Rect(position.x, position.y, 50, 30);
+            if (collapsed) return new Rect(position.x, position.y, GUI.skin.button.CalcSize(new GUIContent(ShortDescription)).x + 80, 30 * ChildSlots);
             else           return position; 
         }
         set {
@@ -39,7 +53,11 @@ public class SequenceNode : ScriptableObject {
 	}
 	
 	public SequenceNode[] Childs {
-		get{ return childs; }
+		get
+        {
+            UpdateChildSlots();
+            return childs;
+        }
 	}
 
     public string Name{
@@ -47,9 +65,28 @@ public class SequenceNode : ScriptableObject {
 		set{ name = value;}
 	}
 	
-	public virtual Object Content{
-		get{ return content;}
-		set{ content = value;}
+	public virtual object Content{
+		get
+        {
+            return isUnityObject ? objectContent : content;
+        }
+		set
+        {
+            var attrs = System.Attribute.GetCustomAttributes(value.GetType(), typeof(NodeContentAttribute), true);
+            contentAttribute = attrs.Length > 0 ? attrs[0] as NodeContentAttribute : null;
+
+            isUnityObject = value is Object;
+            if (isUnityObject)
+            {
+                content = null;
+                objectContent = value as Object;
+            }
+            else
+            {
+                objectContent = null;
+                content = value;
+            }
+        }
 	}
 	
 	public void clearChilds(){
@@ -57,14 +94,6 @@ public class SequenceNode : ScriptableObject {
         ChildSlots = 0;
         ChildSlots = aux;
 	}
-
-    private int move<T>(T[] from, T[] to, T empty)
-    {
-        int l = Mathf.Min(from.Length, to.Length);
-        for (int i = 0; i < l; i++)          to[i] = from[i];
-        for (int i = l; i < to.Length; i++)  to[i] = empty;
-        return l;
-    }
 
     public int ChildSlots
     {
@@ -79,11 +108,11 @@ public class SequenceNode : ScriptableObject {
         }
         get
         {
-            return this.childs.Length;
+            return Childs.Length;
         }
     }
 	
-	public SequenceNode addNewChild(Object content = null, int childSlots = 0){
+	/*public SequenceNode addNewChild(Object content = null, int childSlots = 0){
         this.ChildSlots++;
         var r = this.childs[this.ChildSlots - 1] = secuence.createChild(content, childSlots);
         return r;
@@ -104,10 +133,22 @@ public class SequenceNode : ScriptableObject {
                 this.removeChild(i);
                 break;
             }
-	}
+	}*/
 
-    protected virtual void OnDestroy()
-    {
-        ScriptableObject.Destroy(this.Content);
+    private void UpdateChildSlots()
+    {        
+        if(Content is NodeContent)          ChildSlots = (Content as NodeContent).ChildSlots;
+        else if(contentAttribute != null)   ChildSlots = contentAttribute.Slots;
     }
+
+    /* AUX */
+    
+    private int move<T>(T[] from, T[] to, T empty)
+    {
+        int l = Mathf.Min(from.Length, to.Length);
+        for (int i = 0; i < l; i++) to[i] = from[i];
+        for (int i = l; i < to.Length; i++) to[i] = empty;
+        return l;
+    }
+
 }
