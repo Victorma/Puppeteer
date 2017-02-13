@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 [System.Serializable]
 [NodeContent("GameEvent", new string[] { "next" })]
-public class SerializableGameEvent : ScriptableObject, IGameEvent, IAssetSerializable {
+public class SerializableGameEvent : ScriptableObject, IGameEvent {
 
 	void OnEnable(){
 		if (args == null || args.Count != keys.Count) {
@@ -232,14 +232,4 @@ public class SerializableGameEvent : ScriptableObject, IGameEvent, IAssetSeriali
 			this.setParameter(key, unserialized);
 		}
 	}
-
-    private Object inside;
-    public void SerializeInside(Object assetObject)
-    {
-        inside = this;
-        if (!AssetDatabase.IsSubAsset(this))
-        {
-            AssetDatabase.AddObjectToAsset(this, assetObject);
-        }
-    }
 }

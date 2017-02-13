@@ -82,7 +82,7 @@ public class SequenceWindow : EditorWindow
             myNode.Collapsed = !myNode.Collapsed;
         if (GUILayout.Button("X", closeStyle, GUILayout.Width(15), GUILayout.Height(15)))
         {
-            sequence.removeChild(myNode);
+            sequence.RemoveNode(myNode);
             return;
         }
 
@@ -337,7 +337,7 @@ public class SequenceWindow : EditorWindow
 
         if (GUILayout.Button("New Node", "toolbarButton"))
         {
-            var node = sequence.createChild();
+            var node = sequence.CreateNode();
             node.Position = new Rect(scroll + position.size / 2 - node.Position.size / 2, node.Position.size);
             node.Position = new Rect(new Vector2((int)node.Position.x, (int)node.Position.y), node.Position.size);
         }
@@ -404,7 +404,7 @@ public class SequenceWindow : EditorWindow
                 menu.AddItem(new GUIContent("Create/" + a.Key), false, (t) => {
                     var kv = (KeyValuePair < string, Type>)t;
                     var newObject = CreateInstance(kv.Value);
-                    var child = sequence.createChild(newObject);
+                    var child = sequence.CreateNode(newObject);
                     child.Position = new Rect(mousePos, child.Position.size);
                 }, a);
                 i++;

@@ -6,7 +6,6 @@ public class DefaultEventEditor : EventEditor {
 	
 	private SerializableGameEvent ge;
 	public DefaultEventEditor() {
-		this.ge = ScriptableObject.CreateInstance<SerializableGameEvent>();
 	}
 	public SerializableGameEvent Result { 
 		get{ return ge; }

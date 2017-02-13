@@ -84,6 +84,7 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
         {
             if (!launched)
             {
+                chosen = -1;
                 Options options = node.Content as Options;
 
                 // Launch options event
@@ -95,6 +96,7 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
                 ge.setParameter("synchronous", true);
                 eventLaunched = ge;
                 Game.main.enqueueEvent(ge);
+                launched = true;
             }
         }
 

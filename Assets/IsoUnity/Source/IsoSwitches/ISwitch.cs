@@ -16,9 +16,8 @@ public class ISwitch : ScriptableObject {
     {
         if (Application.isEditor && !Application.isPlaying)
         {
-            state.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
+            //state.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             UnityEditor.AssetDatabase.AddObjectToAsset(state, this);
-            UnityEditor.AssetDatabase.SaveAssets();
         }
     }
 

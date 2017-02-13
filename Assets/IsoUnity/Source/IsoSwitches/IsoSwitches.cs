@@ -13,14 +13,15 @@ public class IsoSwitches : ScriptableObject
 
 	public ISwitch addSwitch(){
 		ISwitch iss = ScriptableObject.CreateInstance<ISwitch>();
+        this.switches.Add(iss);
 #if UNITY_EDITOR
         if (Application.isEditor && !Application.isPlaying)
         {
             UnityEditor.AssetDatabase.AddObjectToAsset(iss, this);
             iss.Persist();
+            UnityEditor.AssetDatabase.SaveAssets();
         }
 #endif
-        this.switches.Add(iss);
 		return iss;
 	}
 
@@ -41,7 +42,7 @@ public class IsoSwitches : ScriptableObject
     public ISwitch getSwitch(string id){
 		ISwitch r = null;
 		foreach (ISwitch isw in this.switches) {
-			if(isw.id.Equals(id)){
+			if(!string.IsNullOrEmpty(isw.id) && isw.id.Equals(id)){
 				r = isw;
 				break;
 			}

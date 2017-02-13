@@ -4,28 +4,39 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class SequenceAsset : Sequence {
-    
 
-    public override SequenceNode createChild(object content = null, int childSlots = 0)
+    public override SequenceNode CreateNode(string id, object content = null, int childSlots = 0)
     {
-        var node = ScriptableObject.CreateInstance<SequenceNodeAsset>();
+        var node = CreateInstance<SequenceNodeAsset>();
+        AssetDatabase.AddObjectToAsset(node, this);
 
         node.init(this);
-        this.nodes.Add(node);
+        this.nodeDict.Add(id, node);
+        node.Content = content;
+
+        AssetDatabase.SaveAssets();
+
+        return node;
+    }
+
+    public override SequenceNode CreateNode(object content = null, int childSlots = 0)
+    {
+        var node = CreateInstance<SequenceNodeAsset>();
 
         AssetDatabase.AddObjectToAsset(node, this);
 
+        node.init(this);
+        this.nodeDict.Add(node.GetInstanceID().ToString(), node);
         node.Content = content;
-        node.ChildSlots = childSlots;
 
         AssetDatabase.SaveAssets();
 
         return node;
     }
     
-    public override bool removeChild(SequenceNode node)
+    public override bool RemoveNode(SequenceNode node)
     {
-        var r = base.removeChild(node);
+        var r = base.RemoveNode(node);
         if (r)
             AssetDatabase.SaveAssets();
         return r;

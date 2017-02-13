@@ -27,7 +27,6 @@ public class NodeEditorFactoryImp : NodeEditorFactory {
 		this.nodeEditors.Add (new EmptyNodeEditor ());
         this.nodeEditors.Add (new DefaultNodeEditor ());
         this.nodeEditors.Add (new EventNodeEditor());
-		this.nodeEditors.Add (new ForkNodeEditor());
 		this.nodeEditors.Add (new DialogNodeEditor());
 	}
 	

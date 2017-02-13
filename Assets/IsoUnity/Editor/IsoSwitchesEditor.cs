@@ -22,9 +22,14 @@ public class IsoSwitchesEditor : Editor{
         switchList.drawElementCallback += (rect, index, isActive, isFocused) =>
         {
             var isw = switchList.list[index] as ISwitch;
-            
+
+            EditorGUI.BeginChangeCheck();
             isw.id = EditorGUI.TextField(new Rect(rect.x, rect.y, rect.width, rect.height / 2f - 2f), "ID ", isw.id);
             isw.State = ParamEditor.editorFor(new Rect(rect.x, rect.y + rect.height / 2f , rect.width, rect.height /2f - 2f), isw.State);
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(isw);
+            }
 
         };
 

@@ -49,4 +49,20 @@ public class SwitchesMenu : EditorWindow
         editor.OnInspectorGUI();
     }
 }
-    
+
+public class SwitchesWindow : EditorWindow{
+
+    private Editor editor;
+    [MenuItem("Window/Switches")]
+    public static void OpenAsWindow()
+    {
+        var window = EditorWindow.GetWindow<SwitchesWindow>();
+        window.Show();
+        window.editor = Editor.CreateEditor(IsoSwitchesManager.getInstance().getIsoSwitches());
+    }
+
+    void OnGUI()
+    {
+        editor.OnInspectorGUI();
+    }
+}

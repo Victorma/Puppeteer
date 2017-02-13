@@ -14,36 +14,45 @@ public class pru : MonoBehaviour {
 
 
         s = ScriptableObject.CreateInstance<Sequence>();
-        s.Root = s.createChild(Dialog.Create(
+        s.Root = s.CreateNode(Dialog.Create(
             new Fragment("Pepito", "Hola, qué tal andas?"),
             new Fragment("José", "Yo bien"),
             new Fragment("Pepito", "Juegas a la play?")
         ));
 
-        s.Root.Childs[0] = s.createChild(Options.Create(
+        s.Root.Childs[0] = s.CreateNode("options1", Options.Create(
             new Option("Sí"),
             new Option("No")
         ));
 
-        s.Root.Childs[0].Childs[0] = s.createChild(Dialog.Create(new List<Fragment>()
+        // Async child setting (setting child that doesnt have a content yet or have been created)
+        // By accessing to s[$name] you access the node or, if it doesnt exist, create a new node with that id
+        s["options1"][0] = s["chose1"];
+        s["options1"][1] = s["chose2"];
+
+        // Async child content set
+        s["chose1"].Content = Dialog.Create(new List<Fragment>()
         {
             new Fragment("José", "Tengo mazo de ganas de jugar!"),
             new Fragment("Pepito", "Pues vamos a enchufarla")
-        }), 1);
+        });
 
-        s.Root.Childs[0].Childs[1] = s.createChild(Dialog.Create(new List<Fragment>()
+        s["chose2"].Content = Dialog.Create(new List<Fragment>()
         {
             new Fragment("José", "No me apetece nada..."),
             new Fragment("Pepito", "Bueno... no pasa nada...")
-        }));
+        });
 
-        s.Root.Childs[0].Childs[0].Childs[0] = s.createChild(new CheckableWrapper(new CustomCheck()), 2);
-        s.Root.Childs[0].Childs[0].Childs[0].Childs[0] = s.createChild(Dialog.Create(new List<Fragment>()
+        
+        s["chose1"][0] = s.CreateNode("switchFork", ISwitchFork.Create("playRota", ISwitchFork.ComparationType.Equal, false));
+
+        // Anonymous nodes (no id is required for those)
+        s["switchFork"][0] = s.CreateNode(Dialog.Create(new List<Fragment>()
         {
             new Fragment("Play", "*La play se enciende*"),
             new Fragment("Pepito", "Weeeeh")
         }));
-        s.Root.Childs[0].Childs[0].Childs[0].Childs[1] = s.createChild(Dialog.Create(new List<Fragment>()
+        s["switchFork"][1] = s.CreateNode(Dialog.Create(new List<Fragment>()
         {
             new Fragment("Play", "*La play no responde*"),
             new Fragment("Pepito", "Jope")

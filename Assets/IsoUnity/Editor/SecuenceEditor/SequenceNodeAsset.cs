@@ -16,14 +16,14 @@ public class SequenceNodeAsset : SequenceNode {
             if (value != null && value is Object)
             {
                 var objectVal = value as Object;
-                if (value != Content && objectVal is IAssetSerializable)
+                if (value != Content)
                 {
-                    (objectVal as IAssetSerializable).SerializeInside(this);
-                    AssetDatabase.SaveAssets();
-                }
-                else
-                {
-                    if (!AssetDatabase.IsMainAsset(objectVal) && !AssetDatabase.IsSubAsset(objectVal))
+                    if (objectVal is IAssetSerializable)
+                    {
+                        (objectVal as IAssetSerializable).SerializeInside(this);
+                        AssetDatabase.SaveAssets();
+                    }
+                    else if (!AssetDatabase.IsMainAsset(objectVal) && !AssetDatabase.IsSubAsset(objectVal))
                     {
                         AssetDatabase.AddObjectToAsset(objectVal, this);
                         AssetDatabase.SaveAssets();

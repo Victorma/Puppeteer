@@ -60,6 +60,12 @@ public class SequenceNode : ScriptableObject {
         }
 	}
 
+    public SequenceNode this[int child]
+    {
+        get { return Childs[child]; }
+        set { Childs[child] = value; }
+    }
+
     public string Name{
 		get{ return name;} 
 		set{ name = value;}
@@ -72,6 +78,12 @@ public class SequenceNode : ScriptableObject {
         }
 		set
         {
+            if(value == null)
+            {
+                content = objectContent = null;
+                return;
+            }
+
             var attrs = System.Attribute.GetCustomAttributes(value.GetType(), typeof(NodeContentAttribute), true);
             contentAttribute = attrs.Length > 0 ? attrs[0] as NodeContentAttribute : null;
 

@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 [System.Serializable]
-public class Sequence : ScriptableObject {
+public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
 
     [SerializeField]
     private bool inited = false;
@@ -11,14 +12,19 @@ public class Sequence : ScriptableObject {
 	[SerializeField]
     protected SequenceNode root;
 
-    [SerializeField]
-    protected List<SequenceNode> nodes;
 
-	void Awake()
+    protected Dictionary<string, SequenceNode> nodeDict;
+
+
+    void Awake()
     {
         if(this.nodes == null)
             this.nodes = new List<SequenceNode>();
-	}
+        if (this.ids == null)
+            this.ids = new List<string>();
+        if (this.nodeDict == null)
+            this.nodeDict = new Dictionary<string, SequenceNode>();
+    }
 
 	public SequenceNode Root
     {
@@ -31,28 +37,58 @@ public class Sequence : ScriptableObject {
         get { return nodes.ToArray() as SequenceNode[]; }
     }
 
+    public SequenceNode this[string node]
+    {
+        get
+        {
+            if (!nodeDict.ContainsKey(node)) CreateNode(node, null);
+            return nodeDict[node];
+        }
+    }
 
-
-    public virtual SequenceNode createChild(object content = null, int childSlots = 0)
+    public virtual SequenceNode CreateNode(string id, object content = null, int childSlots = 0)
     {
         var node = CreateInstance<SequenceNode>();
         node.init(this);
-        this.nodes.Add(node);
+        this.nodeDict.Add(id, node);
         node.Content = content;
         return node;
     }
 
-    public virtual bool removeChild(SequenceNode node)
+    public virtual SequenceNode CreateNode(object content = null, int childSlots = 0)
     {
-        int pos = nodes.IndexOf(node);
+        var node = CreateInstance<SequenceNode>();
+        node.init(this);
+        this.nodeDict.Add(node.GetInstanceID().ToString(), node);
+        node.Content = content;
+        return node;
+    }
 
-        if (pos != -1)
+    public virtual bool RemoveNode(SequenceNode node)
+    {
+        var id = string.Empty;
+        foreach(var kv in nodeDict)
         {
-            nodes.RemoveAt(pos);
-            SequenceNode.DestroyImmediate(node, true);
+            if(kv.Value == node)
+            {
+                id = kv.Key;
+                break;
+            }
         }
 
-        return pos != -1;
+        return string.IsNullOrEmpty(id) ? false : RemoveNode(id);
+    }
+
+    public virtual bool RemoveNode(string id)
+    {
+        var contains = nodeDict.ContainsKey(id);
+        if (contains)
+        {
+            var node = nodeDict[id];
+            nodeDict.Remove(id);
+            SequenceNode.DestroyImmediate(node, true);
+        }
+        return contains;
     }
 
     private void findNodes(SequenceNode node, Dictionary<SequenceNode, bool> checkList)
@@ -66,6 +102,7 @@ public class Sequence : ScriptableObject {
         foreach (var c in node.Childs)
             findNodes(c, checkList);
     }
+
 
     public int FreeNodes
     {
@@ -81,6 +118,33 @@ public class Sequence : ScriptableObject {
             foreach (var v in found.Values) if (!v) free++;
 
             return free;
+        }
+    }
+
+
+    /**************************
+     * Serialization
+     * ***********************/
+    [SerializeField]
+    private List<SequenceNode> nodes;
+    [SerializeField]
+    private List<string> ids;
+
+    public virtual void OnBeforeSerialize()
+    {
+        this.nodes = nodeDict.Values.ToList();
+        this.ids = nodeDict.Keys.ToList();
+    }
+
+    public virtual void OnAfterDeserialize()
+    {
+        nodeDict = new Dictionary<string, SequenceNode>();
+
+        using (var n = nodes.GetEnumerator())
+        using (var i = ids.GetEnumerator())
+        {
+            while (n.MoveNext() && i.MoveNext())
+                nodeDict.Add(i.Current, n.Current);
         }
     }
 
