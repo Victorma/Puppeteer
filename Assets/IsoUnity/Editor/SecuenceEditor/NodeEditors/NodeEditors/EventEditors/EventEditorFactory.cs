@@ -26,9 +26,9 @@ public class EventEditorFactoryImp : EventEditorFactory {
 		this.eventEditors = new List<EventEditor> ();
 		this.eventEditors.Add (new ChangeSwitchEventEditor ());
 		this.eventEditors.Add (new AddItemEditor ());
+        this.eventEditors.Add(new ShowAnimationEditor());
 
-
-		this.defaultEventEditor = new DefaultEventEditor ();
+        this.defaultEventEditor = new DefaultEventEditor ();
 	}
 
 	public override string[] CurrentEventEditors {
@@ -43,7 +43,7 @@ public class EventEditorFactoryImp : EventEditorFactory {
 
 	public override EventEditor createEventEditorFor (string eventName)
 	{
-		if (eventName.ToLower () == "default")
+		if (eventName.ToLower () == "")
 			return defaultEventEditor.clone();
 
 		foreach (EventEditor eventEditor in eventEditors) {
@@ -51,6 +51,6 @@ public class EventEditorFactoryImp : EventEditorFactory {
 				return eventEditor.clone();
 			}
 		}
-		return eventEditors[0].clone();
+		return defaultEventEditor.clone();
 	}
 }

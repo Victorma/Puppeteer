@@ -152,10 +152,10 @@ public class SerializableGameEvent : ScriptableObject, IGameEvent {
 	public bool belongsTo(string tag, string parameter)
 	{
 		object entityParam = getParameter(parameter);
-		if (entityParam == null || tag == null)
+		if (entityParam == null || tag == null || !(entityParam is string))
 			return false;
 
-		return entityParam == tag
+		return (string)entityParam == tag
 			|| (entityParam is GameObject) ? (entityParam as GameObject).CompareTag(tag) : false
 			|| (entityParam is Component) ? (entityParam as Component).CompareTag(tag) : false;
 	}

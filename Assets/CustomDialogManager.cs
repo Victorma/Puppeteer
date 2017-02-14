@@ -48,6 +48,11 @@ public class CustomDialogManager : DialogEventManager {
         charactersShown = 0;
         state = State.Opening;
         managingGroup = dialogGroup;
+
+        if(frg.Character != "" && frg.Parameter != "")
+        {
+            GameObject.Find(frg.Character).SendMessage(frg.Parameter);
+        }
     }
 
     protected override void DoOptions(string question, List<Option> options)
@@ -55,6 +60,7 @@ public class CustomDialogManager : DialogEventManager {
         opt = options;
         msg = question;
 
+        optionSelected = null;
         optionsMessage.text = msg;
         managingGroup = optionsGroup;
         state = State.Opening;
@@ -90,6 +96,7 @@ public class CustomDialogManager : DialogEventManager {
                 // When showing we'll care about the shown group
                 if (managingGroup == dialogGroup)
                 {
+
                     // If showing a fragment, show more characters until all of them are displayed
                     if (Input.GetMouseButtonDown(0))
                     {
@@ -122,6 +129,7 @@ public class CustomDialogManager : DialogEventManager {
                     state = State.Idle;
                     textHolder.text = "";
                     frg = null;
+
                 }
                 break;
             case State.Idle:

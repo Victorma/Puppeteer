@@ -12,21 +12,8 @@ MonoBehaviour:
   m_Name: IsoSwitches
   m_EditorClassIdentifier: 
   switches:
-  - {fileID: 114000012834961034}
---- !u!114 &114000012834961034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0887338ee6657394ebdae4d5c768a9de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: playRota
-  state: {fileID: 114000012986742892}
---- !u!114 &114000012986742892
+  - {fileID: 114752575037822222}
+--- !u!114 &114680625882539782
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -45,6 +32,19 @@ MonoBehaviour:
   v3: {x: 0, y: 0, z: 0}
   v4: {x: 0, y: 0, z: 0, w: 0}
   q: {x: 0, y: 0, z: 0, w: 0}
-  b: 0
+  b: 1
   c: 0
   whatIs: System.Boolean
+--- !u!114 &114752575037822222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0887338ee6657394ebdae4d5c768a9de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: tiempo
+  state: {fileID: 114680625882539782}

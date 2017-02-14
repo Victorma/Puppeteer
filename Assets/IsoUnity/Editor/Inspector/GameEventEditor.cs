@@ -25,9 +25,7 @@ public class GameEventEditor : Editor {
         {
             if (currentEditor != null && ge != null)
                 currentEditor.detachEvent(ge);
-
-            if (ge != null)
-                ge.Name = "";
+            
 
             currentEditor = EventEditorFactory.Intance.createEventEditorFor(editors[editorSelected]);
             currentEditor.useEvent(ge);

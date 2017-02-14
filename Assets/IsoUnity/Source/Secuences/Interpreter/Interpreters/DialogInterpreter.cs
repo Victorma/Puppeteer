@@ -20,7 +20,10 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 	
 	public void UseNode(SequenceNode node){
 		this.node = node;
-	}
+        launched = false;
+        chosen = -1;
+
+    }
 	
 	public bool HasFinishedInterpretation()
 	{

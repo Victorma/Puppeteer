@@ -24,11 +24,11 @@ public class DefaultEventEditor : EventEditor {
 	public void detachEvent(SerializableGameEvent ge){}
 	
 	private string newParameter;
-	public void draw(){
-		
-		ge.Name = EditorGUILayout.TextField ("Name", ge.Name);
-		
-		foreach (string param in ge.Params) {
+    public void draw() {
+        EditorGUI.BeginChangeCheck();
+        ge.Name = EditorGUILayout.TextField("Name", ge.Name);
+
+        foreach (string param in ge.Params) {
             if (param != "synchronous")
             {
                 EditorGUILayout.BeginHorizontal();
@@ -39,12 +39,17 @@ public class DefaultEventEditor : EventEditor {
                     ge.removeParameter(param);
                 EditorGUILayout.EndHorizontal();
             }
-		}
-		EditorGUILayout.BeginHorizontal ();
-		newParameter = EditorGUILayout.TextField ("New Parameter", newParameter);
-		if (GUILayout.Button ("Add"))
-			ge.setParameter (newParameter, null);
-		EditorGUILayout.EndHorizontal ();
+        }
+        EditorGUILayout.BeginHorizontal();
+        newParameter = EditorGUILayout.TextField("New Parameter", newParameter);
+        if (GUILayout.Button("Add"))
+            ge.setParameter(newParameter, null);
+        EditorGUILayout.EndHorizontal();
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            EditorUtility.SetDirty(ge);
+        }
 	}
 
 
