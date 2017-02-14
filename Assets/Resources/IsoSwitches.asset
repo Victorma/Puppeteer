@@ -45,6 +45,6 @@ MonoBehaviour:
   v3: {x: 0, y: 0, z: 0}
   v4: {x: 0, y: 0, z: 0, w: 0}
   q: {x: 0, y: 0, z: 0, w: 0}
-  b: 0
+  b: 1
   c: 0
   whatIs: System.Boolean

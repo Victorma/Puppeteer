@@ -40,7 +40,8 @@ public class SequenceInterpreterFactoryImp : SequenceInterpreterFactory
         sequenceInterpreters.Add(ScriptableObject.CreateInstance<DialogInterpreter>());
         sequenceInterpreters.Add(new GameEventInterpreter());
         sequenceInterpreters.Add(new CheckableInterpreter());
-	}
+        sequenceInterpreters.Add(new UnityEventInterpreter());
+    }
 	
 	public override ISequenceInterpreter createSequenceInterpreterFor (SequenceNode node)
 	{

@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Name: SequenceAsset
   m_EditorClassIdentifier: 
   inited: 0
-  root: {fileID: 114000013669154542}
+  root: {fileID: 114000010195929700}
   nodes:
-  - {fileID: 114000013669154542}
   - {fileID: 114000010195929700}
-  - {fileID: 114000013207178754}
+  - {fileID: 114000012061636942}
+  - {fileID: 114000012078563710}
   ids:
-  - -3996
   - -4284
-  - -4610
+  - -13552
+  - -26226
 --- !u!114 &114000010195929700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33,32 +33,18 @@ MonoBehaviour:
   m_Name: Fork/Switch Fork
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 0}
+  - {fileID: 114000012078563710}
   - {fileID: 0}
   isUnityObject: 1
   objectContent: {fileID: 114000010788410786}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 625
-    y: 73
+    x: 281
+    y: 153
     width: 300
     height: 89
-  collapsed: 1
---- !u!114 &114000010396816130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ccff87603b449444af7398f1db27cf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
-  item: {fileID: 0}
-  contains: 0
+  collapsed: 0
 --- !u!114 &114000010788410786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,23 +54,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c01c67f8a983ba4c917bf0e5c8114df, type: 3}
-  m_Name: asdfsadf>=asdfasdf
+  m_Name: playRota!=False
   m_EditorClassIdentifier: 
-  comparationType: 4
-  id: asdfsadf
+  comparationType: 3
+  id: playRota
   value: {fileID: 114000013859898376}
---- !u!114 &114000011920538494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1398ea56fdab9014faaf3fd7e4f74387, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114000013207178754
+--- !u!114 &114000012061636942
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -93,22 +68,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
-  m_Name: Fork/Item Fork
+  m_Name: Dialog
   m_EditorClassIdentifier: 
   childs:
   - {fileID: 0}
-  - {fileID: 0}
   isUnityObject: 1
-  objectContent: {fileID: 114000010396816130}
+  objectContent: {fileID: 114000012603346834}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 584
-    y: 234
+    x: 1266
+    y: 70
     width: 300
-    height: 89
+    height: 186
   collapsed: 0
---- !u!114 &114000013669154542
+--- !u!114 &114000012078563710
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -117,21 +91,63 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
-  m_Name: 
+  m_Name: UnityEvent
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 114000010195929700}
-  - {fileID: 114000013207178754}
+  - {fileID: 114000012061636942}
   isUnityObject: 1
-  objectContent: {fileID: 114000011920538494}
+  objectContent: {fileID: 114000012224493918}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 189
-    y: 170
+    x: 752
+    y: 119
     width: 300
-    height: 53
+    height: 136
   collapsed: 0
+--- !u!114 &114000012224493918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 464c3805ebfb72f469254236a7bddf3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &114000012603346834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 548e5e0d049bc4d4693000a78d1e305f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fragments:
+  - name: Guau!
+    msg: Guau
+    character: 
+    parameter: 
 --- !u!114 &114000013859898376
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -143,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  i: 345345
+  i: 1
   f: 0
   d: 0
   s: asdfasdf
@@ -153,4 +169,4 @@ MonoBehaviour:
   q: {x: 0, y: 0, z: 0, w: 0}
   b: 0
   c: 0
-  whatIs: System.String
+  whatIs: System.Boolean
