@@ -67,11 +67,11 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1237
-    y: 28
+    x: 1279
+    y: 58
     width: 223
     height: 186
-  collapsed: 0
+  collapsed: 1
 --- !u!114 &114014627184888252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,11 +90,11 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1234
-    y: 307
+    x: 1315
+    y: 341
     width: 223
     height: 186
-  collapsed: 0
+  collapsed: 1
 --- !u!114 &114020817570414412
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -135,8 +135,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1573
-    y: 331
+    x: 1600
+    y: 284
     width: 233
     height: 107
   collapsed: 1
@@ -160,11 +160,11 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 507
-    y: 237
+    x: 519
+    y: 194
     width: 300
     height: 136
-  collapsed: 0
+  collapsed: 1
 --- !u!114 &114074225546147936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,8 +261,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 99
-    y: 168
+    x: 114
+    y: 233
     width: 223
     height: 256
   collapsed: 1
@@ -410,8 +410,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 911
-    y: 219
+    x: 910
+    y: 193
     width: 300
     height: 89
   collapsed: 1
@@ -429,8 +429,8 @@ MonoBehaviour:
   fragments:
   - name: Pepito
     msg: Hola me llamo pepito y vengo a contaros mi vida $player
-    character: pepito
-    parameter: sonrisa
+    character: tio
+    parameter: Feliz
   - name: $player
     msg: Encantado de conocerte
     character: 
@@ -564,7 +564,7 @@ MonoBehaviour:
     y: 36
     width: 297
     height: 149
-  collapsed: 0
+  collapsed: 1
 --- !u!114 &114917139753054320
 MonoBehaviour:
   m_ObjectHideFlags: 1
