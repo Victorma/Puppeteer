@@ -8,6 +8,7 @@ using UnityEngine;
 public class OptionsEditor : Editor {
 
     private ReorderableList optionsReorderableList;
+    private Editor conditionsEditor;
 
     private void OnEnable()
     {
@@ -18,6 +19,10 @@ public class OptionsEditor : Editor {
         optionsReorderableList.onAddCallback += AddOption;
         optionsReorderableList.onRemoveCallback += RemoveOption;
         optionsReorderableList.onReorderCallback += ReorderOptions;
+        optionsReorderableList.onSelectCallback += (list) =>
+        {
+            conditionsEditor = list.index != -1 ? Editor.CreateEditor(options.Values[list.index].Conditions) : null;
+        };
     }
 
 
@@ -33,6 +38,9 @@ public class OptionsEditor : Editor {
         }
         optionsReorderableList.list = options.Values;
         optionsReorderableList.DoLayoutList();
+
+        if (conditionsEditor != null && conditionsEditor.target != null)
+            conditionsEditor.OnInspectorGUI();
     }
 
 
