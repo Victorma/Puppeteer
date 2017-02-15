@@ -39,14 +39,28 @@ public class IsoSwitches : ScriptableObject
         //ScriptableObject.Destroy (swt);
     }
 
+    private ISwitch findSwitch(string id)
+    {
+        ISwitch r = null;
+        foreach (ISwitch isw in this.switches)
+        {
+            if (!string.IsNullOrEmpty(isw.id) && isw.id.Equals(id))
+            {
+                r = isw;
+                break;
+            }
+        }
+        return r;
+    }
+
+    public bool containsSwitch(string id)
+    {
+        return findSwitch(id) != null;
+    }
+
     public ISwitch getSwitch(string id){
-		ISwitch r = null;
-		foreach (ISwitch isw in this.switches) {
-			if(!string.IsNullOrEmpty(isw.id) && isw.id.Equals(id)){
-				r = isw;
-				break;
-			}
-		}
+
+        var r = findSwitch(id);
 		if(r == null){
 			r = addSwitch();
 			r.id = id;

@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-[NodeContent("Fork/Switch Fork", 2)]
+[NodeContent("Switches/Switch Fork", 2)]
 public class ISwitchFork : Checkable, IAssetSerializable
 {
     public static ISwitchFork Create(string id, ComparationType comparation, object value)

@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using NCalc;
 
+[NodeContent("Switches/Formula fork", 2)]
 public class FormulaFork : Checkable {
 
     public string formula;

@@ -37,7 +37,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  i: 0
+  i: 100
   f: 0
   d: 0
   s: 
@@ -47,4 +47,4 @@ MonoBehaviour:
   q: {x: 0, y: 0, z: 0, w: 0}
   b: 0
   c: 0
-  whatIs: System.Boolean
+  whatIs: System.Int32

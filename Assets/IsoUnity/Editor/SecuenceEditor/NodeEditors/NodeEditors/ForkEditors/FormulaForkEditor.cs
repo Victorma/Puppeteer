@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using NCalc;
 
@@ -8,6 +8,12 @@ public class FormulaForkEditor : Editor {
 
     private Expression lastExpression;
     private object lastValue;
+    private List<string> warnings;
+
+    void OnEnable()
+    {
+        warnings = new List<string>();
+    }
 
     public override void OnInspectorGUI()
     {
@@ -18,14 +24,45 @@ public class FormulaForkEditor : Editor {
 
         if (EditorGUI.EndChangeCheck())
         {
+            warnings.Clear();
             lastExpression = new Expression(f.formula);
+            lastExpression.EvaluateParameter += LastExpression_EvaluateParameter;
+            lastExpression.EvaluateFunction += LastExpression_EvaluateFunction;
             lastValue = lastExpression.Evaluate();
         }
 
-        if (lastExpression != null && lastExpression.HasErrors())
+        if (lastExpression != null)
         {
-            EditorGUILayout.LabelField(lastExpression.Error);
-            EditorGUILayout.LabelField(lastValue != null ? lastValue.ToString() : "null");
+            if(lastExpression.HasErrors())
+                EditorGUILayout.LabelField(lastExpression.Error);
+            else if (lastValue != null)
+                EditorGUILayout.LabelField(lastValue != null ? lastValue.ToString() : "null");
+
+            foreach(var w in warnings)
+            {
+                EditorGUILayout.HelpBox(w, MessageType.Warning);
+            }
         } 
+    }
+
+    private void LastExpression_EvaluateFunction(string name, FunctionArgs args)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void LastExpression_EvaluateParameter(string name, ParameterArgs args)
+    {
+        var iSwitches = IsoSwitchesManager.getInstance().getIsoSwitches();
+
+        if(iSwitches.containsSwitch(name))
+        {
+            args.HasResult = true;
+            args.Result = iSwitches.consultSwitch(name);
+        }
+        else
+        {
+            args.HasResult = false;
+            warnings.Add("Switch not found: \"" + name +"\"");
+        }
     }
 }

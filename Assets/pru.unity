@@ -195,7 +195,7 @@ Prefab:
     - target: {fileID: 224000010333797730, guid: 221f7c9486276c643acd5d8c4272e043,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 62
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 221f7c9486276c643acd5d8c4272e043, type: 2}
@@ -361,6 +361,7 @@ GameObject:
   - 114: {fileID: 1846253816}
   - 114: {fileID: 1846253815}
   - 114: {fileID: 1846253818}
+  - 95: {fileID: 1846253819}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -425,6 +426,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
+--- !u!95 &1846253819
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1846253814}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1915251094
 GameObject:
   m_ObjectHideFlags: 0
