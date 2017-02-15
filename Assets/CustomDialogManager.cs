@@ -25,7 +25,7 @@ public class CustomDialogManager : DialogEventManager {
     private State state = State.Idle;
     private Fragment frg;
     private List<Option> opt;
-    private List<GameObject> instancedOptions;
+    private List<GameObject> instancedOptions = new List<GameObject>();
     private int charactersShown;
     private float accumulated;
     private string msg = "";

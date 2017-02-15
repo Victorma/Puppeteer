@@ -17,14 +17,12 @@ MonoBehaviour:
   - {fileID: 114000012722588986}
   - {fileID: 114000010195929700}
   - {fileID: 114000013207178754}
-  - {fileID: 114000012684602254}
-  - {fileID: 114000013135313886}
+  - {fileID: 114000012029631734}
   ids:
   - -10516
   - -4284
   - -4610
-  - -17844
-  - -37326
+  - -12096
 --- !u!114 &114000010195929700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,18 +61,6 @@ MonoBehaviour:
   inventory: {fileID: 0}
   item: {fileID: 0}
   contains: 0
---- !u!114 &114000010505634350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a203c3b480741994ca61ad42153a6f16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  formula: 
 --- !u!114 &114000010788410786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,19 +86,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
   m_Name: Switches/Formula setter
   m_EditorClassIdentifier: 
-  childs:
-  - {fileID: 114000013207178754}
-  isUnityObject: 1
-  objectContent: {fileID: 114000014028189756}
-  secuence: {fileID: 11400000}
-  position:
-    serializedVersion: 2
-    x: 890
-    y: 107
-    width: 342
-    height: 53
-  collapsed: 0
---- !u!114 &114000012722588986
+--- !u!114 &114000012029631734
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -121,21 +95,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
-  m_Name: GameEvent
+  m_Name: 
   m_EditorClassIdentifier: 
-  childs:
-  - {fileID: 114000010195929700}
-  isUnityObject: 1
-  objectContent: {fileID: 114000013900164474}
+  childs: []
+  isUnityObject: 0
+  objectContent: {fileID: 0}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 130
-    y: 152
+    x: 0
+    y: 0
     width: 300
-    height: 109
+    height: 0
   collapsed: 0
---- !u!114 &114000013135313886
+--- !u!114 &114000013207178754
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -157,7 +130,7 @@ MonoBehaviour:
     x: 779
     y: 371
     width: 300
-    height: 71
+    height: 94
   collapsed: 0
 --- !u!114 &114000013207178754
 MonoBehaviour:
@@ -181,7 +154,7 @@ MonoBehaviour:
     x: 1344
     y: 173
     width: 300
-    height: 89
+    height: 58
   collapsed: 0
 --- !u!114 &114000013712470186
 MonoBehaviour:

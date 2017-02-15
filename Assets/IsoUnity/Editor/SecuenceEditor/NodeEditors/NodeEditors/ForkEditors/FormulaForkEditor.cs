@@ -10,6 +10,8 @@ public class FormulaForkEditor : Editor {
     private object lastValue;
     private List<string> warnings;
 
+    public string Name { get; set; }
+
     void OnEnable()
     {
         warnings = new List<string>();
@@ -52,6 +54,7 @@ public class FormulaForkEditor : Editor {
 
     private void LastExpression_EvaluateParameter(string name, ParameterArgs args)
     {
+
         var iSwitches = IsoSwitchesManager.getInstance().getIsoSwitches();
 
         if(iSwitches.containsSwitch(name))
