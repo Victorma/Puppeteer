@@ -3,8 +3,9 @@ using System.Collections;
 using System;
 using NCalc;
 
-[NodeContent("Switches/Formula fork", 2)]
+[NodeContent("Fork/Single/Formula fork", 2)]
 public class FormulaFork : Checkable {
+
 
     Expression expression;
 
@@ -15,6 +16,7 @@ public class FormulaFork : Checkable {
         get { return formula; }
         set
         {
+            this.name = value;
             this.formula = value;
             RegenerateExpression();
         }
@@ -79,5 +81,10 @@ public class FormulaFork : Checkable {
     {
         var r = expression.Evaluate();
         return r is bool ? (bool) r : false;
+    }
+
+    public override string ToString()
+    {
+        return this.formula;
     }
 }

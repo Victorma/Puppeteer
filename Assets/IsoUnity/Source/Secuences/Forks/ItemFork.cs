@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[NodeContent("Fork/Item Fork", 2)]
+[NodeContent("Fork/Single/Item Fork", 2)]
 public class ItemFork : Checkable {
 
 	public Inventory inventory;

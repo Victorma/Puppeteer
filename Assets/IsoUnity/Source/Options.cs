@@ -40,7 +40,7 @@ public class Options : ScriptableObject, NodeContent {
 
     public void AddOption(string option = "", string parameter = "")
     {
-        var conditions = ScriptableObject.CreateInstance<Conditions>();
+        var conditions = ScriptableObject.CreateInstance<AnyFork>();
 #if UNITY_EDITOR
         if (Application.isEditor && !Application.isPlaying)
         {
@@ -57,11 +57,11 @@ public class Options : ScriptableObject, NodeContent {
 #if UNITY_EDITOR
         if (Application.isEditor && !Application.isPlaying)
         {
-            ScriptableObject.DestroyImmediate(option.Conditions, true);
+            ScriptableObject.DestroyImmediate(option.Fork, true);
         }
         else
         {
-            ScriptableObject.DestroyImmediate(option.Conditions);
+            ScriptableObject.DestroyImmediate(option.Fork);
         }
 #else
         ScriptableObject.DestroyImmediate(option.Conditions);
@@ -75,20 +75,20 @@ public class Options : ScriptableObject, NodeContent {
 public class Option
 {
     [SerializeField]
-    private Conditions conditions;
+    private Checkable fork;
     [SerializeField]
     private string text;
     [SerializeField]
     private string parameter;
 
-    public Option(string text = "", string parameter = "", Conditions conditions = null)
+    public Option(string text = "", string parameter = "", Checkable fork = null)
     {
         this.text = text;
         this.parameter = parameter;
-        this.conditions = conditions;
+        this.fork = fork;
     }
 
     public string Text { get { return text; } set { this.text = value; } }
     public string Parameter { get { return parameter; } set { this.parameter = value; } }
-    public Conditions Conditions { get { return conditions; } }
+    public Checkable Fork { get { return fork; } }
 }

@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-public class Conditions : ScriptableObject {
+public abstract class ForkGroup : Checkable {
 
     [SerializeField]
-    private List<Checkable> conditions = new List<Checkable>();
+    protected List<Checkable> forks = new List<Checkable>();
 
-    public List<Checkable> List { get { return conditions; } }
+    public List<Checkable> List { get { return forks; } }
 
-    public void AddCondition(Checkable condition)
+    public void AddFork(Checkable condition)
     {
-        this.conditions.Add(condition);
+        this.forks.Add(condition);
 
 #if UNITY_EDITOR
         if(Application.isEditor && !Application.isPlaying)
@@ -35,24 +36,24 @@ public class Conditions : ScriptableObject {
 #endif
     }
 
-    public void RemoveCondition(Checkable condition)
+    public void RemoveFork(Checkable fork)
     {
-        this.conditions.Remove(condition);
+        this.forks.Remove(fork);
 #if UNITY_EDITOR
         if (Application.isEditor && !Application.isPlaying)
         {
             // If this is an asset and the condition isnt
-            if (UnityEditor.AssetDatabase.IsSubAsset(condition))
+            if (UnityEditor.AssetDatabase.IsSubAsset(fork))
             {
                 // Capture it inside me
-                ScriptableObject.DestroyImmediate(condition, true);
+                ScriptableObject.DestroyImmediate(fork, true);
             }
         }
 #endif
     }
 
-    public bool Eval()
+    void OnDestroy()
     {
-        return conditions.TrueForAll(c => c.check());
+        new List<Checkable>(List).ForEach(f => RemoveFork(f));
     }
 }

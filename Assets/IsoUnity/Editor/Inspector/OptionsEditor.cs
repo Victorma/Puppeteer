@@ -7,11 +7,16 @@ using UnityEngine;
 [CustomEditor(typeof(Options))]
 public class OptionsEditor : Editor {
 
+    private static Texture2D conditionsTex, noConditionsTex;
+
     private ReorderableList optionsReorderableList;
-    private Editor conditionsEditor;
+    private Editor forkEditor;
 
     private void OnEnable()
     {
+        if (!conditionsTex) conditionsTex = (Texture2D)Resources.Load("isometra/img/icons/conditions-16x16", typeof(Texture2D));
+        if (!noConditionsTex) noConditionsTex = (Texture2D)Resources.Load("isometra/img/icons/no-conditions-16x16", typeof(Texture2D));
+
         optionsReorderableList = new ReorderableList(new ArrayList(), typeof(Option), true, true, true, true);
         //optionsReorderableList.elementHeight = 70;
         optionsReorderableList.drawHeaderCallback += DrawOptionsHeader;
@@ -21,7 +26,7 @@ public class OptionsEditor : Editor {
         optionsReorderableList.onReorderCallback += ReorderOptions;
         optionsReorderableList.onSelectCallback += (list) =>
         {
-            conditionsEditor = list.index != -1 ? Editor.CreateEditor(options.Values[list.index].Conditions) : null;
+            forkEditor = list.index != -1 ? Editor.CreateEditor(options.Values[list.index].Fork) : null;
         };
     }
 
@@ -39,8 +44,8 @@ public class OptionsEditor : Editor {
         optionsReorderableList.list = options.Values;
         optionsReorderableList.DoLayoutList();
 
-        if (conditionsEditor != null && conditionsEditor.target != null)
-            conditionsEditor.OnInspectorGUI();
+        if (forkEditor != null && forkEditor.target != null)
+            forkEditor.OnInspectorGUI();
     }
 
 
@@ -48,9 +53,7 @@ public class OptionsEditor : Editor {
     /**************************
      * OPTIONS LIST OPERATIONS
      ***************************/
-
-    Rect labelRect = new Rect(0, 2, 35, 15);
-    Rect optionRect = new Rect(40, 2, 185, 15);
+     
     private void DrawOptionsHeader(Rect rect)
     {
         GUI.Label(rect, "Dialog options");
@@ -59,9 +62,10 @@ public class OptionsEditor : Editor {
     private void DrawOption(Rect rect, int index, bool active, bool focused)
     {
         Option opt = (Option)optionsReorderableList.list[index];
-
-        EditorGUI.LabelField(moveRect(labelRect, rect), "Text: ");
-        opt.Text = EditorGUI.TextField(moveRect(optionRect, rect), opt.Text);
+        
+        opt.Text = EditorGUI.TextField(new Rect(rect.position + new Vector2(0,1), new Vector2(rect.width-20, rect.height-4)), opt.Text);
+        GUI.DrawTexture(new Rect(rect.position + new Vector2(rect.width - 17,0), new Vector2(16, 16)), (opt.Fork as ForkGroup).List.Count > 0 ? conditionsTex : noConditionsTex);
+        
     }
 
     private void AddOption(ReorderableList list)
