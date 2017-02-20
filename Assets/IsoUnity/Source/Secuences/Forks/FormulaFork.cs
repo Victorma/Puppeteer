@@ -6,6 +6,13 @@ using NCalc;
 [NodeContent("Fork/Single/Formula fork", 2)]
 public class FormulaFork : Checkable {
 
+    public static FormulaFork Create(string formula)
+    {
+        var r = ScriptableObject.CreateInstance<FormulaFork>();
+        r.Formula = formula;
+        return r;
+    }
+
 
     Expression expression;
 

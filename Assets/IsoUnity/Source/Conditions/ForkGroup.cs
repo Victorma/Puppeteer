@@ -4,6 +4,18 @@ using System;
 
 public abstract class ForkGroup : Checkable {
 
+    public static T Create<T>(params Checkable[] forks) where T : ForkGroup
+    {
+        return Create<T>(new List<Checkable>(forks));
+    }
+
+    public static T Create<T>(List<Checkable> forks) where T : ForkGroup
+    {
+        var r = ScriptableObject.CreateInstance<T>();
+        r.forks = forks;
+        return r;
+    }
+
     [SerializeField]
     protected List<Checkable> forks = new List<Checkable>();
 

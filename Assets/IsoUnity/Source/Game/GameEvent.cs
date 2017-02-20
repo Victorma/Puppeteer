@@ -1,14 +1,24 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
-public class GameEvent : IGameEvent {
+public class GameEvent : IGameEvent, NodeContent {
 
 	public GameEvent(){
 
-	}
+    }
 
-	public string name;
+    public GameEvent(string name)
+    {
+        this.name = name;
+    }
+
+    public GameEvent(string name, Dictionary<string, object> parameters)
+    {
+        this.name = name;
+        this.args = parameters;
+    }
+
+    public string name;
 	public string Name {
 		get{ return name; }
 		set{ this.name = value; }
@@ -47,7 +57,23 @@ public class GameEvent : IGameEvent {
 		}
 	}
 
-	public override bool Equals (object o)
+    public string[] ChildNames
+    {
+        get
+        {
+            return null;
+        }
+    }
+
+    public int ChildSlots
+    {
+        get
+        {
+            return 1;
+        }
+    }
+
+    public override bool Equals (object o)
 	{
 		if (o is IGameEvent)
 			return GameEvent.CompareEvents (this, o as IGameEvent);

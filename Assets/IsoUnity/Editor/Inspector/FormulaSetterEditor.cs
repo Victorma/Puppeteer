@@ -41,7 +41,7 @@ public class FormulaSetterEditor : Editor {
 
         if (!string.IsNullOrEmpty(fs.iswitch) && isoSwitches.containsSwitch(fs.iswitch))
         {
-            fs.formula = EditorGUILayout.TextField(fs.formula);
+            fs.Formula = EditorGUILayout.TextField(fs.Formula);
         }
         else
         {

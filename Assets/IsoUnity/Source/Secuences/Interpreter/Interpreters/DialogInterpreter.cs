@@ -9,6 +9,7 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 	private SequenceNode node;
 	private SequenceNode nextNode;
 	private Queue<Fragment> fragments;
+    private List<Option> optionsList, launchedOptionsList;
 	private int chosen;
 	private bool next;
 
@@ -46,7 +47,8 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
                     break;
 
                 case "show dialog options":
-                    chosen = (int)ge.getParameter("option");
+                    var optionchosen = (int)ge.getParameter("option");
+                    chosen = optionsList.FindIndex(o => o == launchedOptionsList[optionchosen]);
                     break;
             }
         }
@@ -93,7 +95,9 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
                 // Launch options event
                 var ge = new GameEvent();
                 ge.name = "show dialog options";
-                ge.setParameter("options", options.Values);
+                optionsList = options.Values;
+                launchedOptionsList = optionsList.FindAll(o => o.Fork == null || o.Fork.check());
+                ge.setParameter("options", launchedOptionsList);
                 ge.setParameter("message", options.Question);
                 ge.setParameter("launcher", this);
                 ge.setParameter("synchronous", true);

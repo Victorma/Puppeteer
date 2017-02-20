@@ -37,10 +37,11 @@ public class SequenceInterpreterFactoryImp : SequenceInterpreterFactory
 				}
 					*/
 		sequenceInterpreters = new List<ISequenceInterpreter>();
+        sequenceInterpreters.Add(new SimpleContentInterpreter());
+        sequenceInterpreters.Add(new CheckableInterpreter());
         sequenceInterpreters.Add(ScriptableObject.CreateInstance<DialogInterpreter>());
         sequenceInterpreters.Add(new GameEventInterpreter());
-        sequenceInterpreters.Add(new CheckableInterpreter());
-	}
+    }
 	
 	public override ISequenceInterpreter createSequenceInterpreterFor (SequenceNode node)
 	{

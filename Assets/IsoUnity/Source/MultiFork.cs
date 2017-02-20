@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System;
 
 [NodeContent("Fork/MultiFork")]
-public class MultiFork : ScriptableObject, NodeContent, IAssetSerializable {
+public class MultiFork : ScriptableObject, NodeContent, IAssetSerializable, ISimpleContent {
 
     public static MultiFork Create(List<Checkable> forks)
     {
         var r = ScriptableObject.CreateInstance<MultiFork>();
-        var forkGroup = ScriptableObject.CreateInstance<ForkGroup>();
+        var forkGroup = ScriptableObject.CreateInstance<Forks>();
+        forkGroup.List.AddRange(forks);
         r.forkGroup = forkGroup;
         return r;
     }
@@ -26,7 +27,7 @@ public class MultiFork : ScriptableObject, NodeContent, IAssetSerializable {
      *  NODECONTENT
      * **************/
     public string[] ChildNames { get { return null; } }
-    public int ChildSlots { get { return forkGroup == null ? 0 : forkGroup.List.Count; } }
+    public int ChildSlots { get { return forkGroup == null ? 1 : forkGroup.List.Count + 1; } }
     
     void Awake()
     {
@@ -58,6 +59,12 @@ public class MultiFork : ScriptableObject, NodeContent, IAssetSerializable {
     void OnDestroy()
     {
         ScriptableObject.DestroyImmediate(this.ForkGroup, Application.isEditor && !Application.isPlaying);
+    }
+
+    public int Execute()
+    {
+        var index = forkGroup.List.FindIndex(f => f.check());
+        return index == -1 ? ChildSlots - 1 : index;
     }
 }
 
