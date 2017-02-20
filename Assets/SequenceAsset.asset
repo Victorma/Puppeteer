@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e0d983d07aae244b4199260a850e12, type: 3}
+  m_Name: SequenceAsset
+  m_EditorClassIdentifier: 
+  inited: 0
+  root: {fileID: 114000010921572678}
+  nodes:
+  - {fileID: 114000010921572678}
+  - {fileID: 114000010969561206}
+  - {fileID: 114000011871493274}
+  ids:
+  - -35662
+  - -42858
+  - -43620
+--- !u!114 &114000010190610708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 548e5e0d049bc4d4693000a78d1e305f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fragments:
+  - name: 
+    msg: Si
+    character: 
+    parameter: 
+--- !u!114 &114000010921572678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Fork/Single/Formula fork
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114000010969561206}
+  - {fileID: 114000011871493274}
+  isUnityObject: 1
+  objectContent: {fileID: 114000012347670972}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 196
+    y: 410
+    width: 300
+    height: 53
+  collapsed: 0
+--- !u!114 &114000010969561206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 0}
+  isUnityObject: 1
+  objectContent: {fileID: 114000010190610708}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 719
+    y: 218
+    width: 300
+    height: 186
+  collapsed: 0
+--- !u!114 &114000011871493274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 0}
+  isUnityObject: 1
+  objectContent: {fileID: 114000012366196612}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 716
+    y: 485
+    width: 300
+    height: 186
+  collapsed: 0
+--- !u!114 &114000012347670972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a203c3b480741994ca61ad42153a6f16, type: 3}
+  m_Name: 'var(''Game'', ''Game'', ''Test'') == ''cosa rara'' '
+  m_EditorClassIdentifier: 
+  formula: 'var(''Game'', ''Game'', ''Test'') == ''cosa rara'' '
+--- !u!114 &114000012366196612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 548e5e0d049bc4d4693000a78d1e305f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fragments:
+  - name: 
+    msg: No
+    character: 
+    parameter: 
+--- !u!114 &114000013787144824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forks:
+  - {fileID: 0}

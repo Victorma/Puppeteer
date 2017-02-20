@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using NCalc;
+using System.Reflection;
 
 [NodeContent("Fork/Single/Formula fork", 2)]
 public class FormulaFork : Checkable {
@@ -40,17 +39,22 @@ public class FormulaFork : Checkable {
 
     public string Error
     {
-        get { return 
+        get { return
                 string.IsNullOrEmpty(formula.Trim())
                 ? "The formula can't be empty"
-                : !string.IsNullOrEmpty(paramError) 
-                    ? paramError 
-                    : !(expresionResult is bool) 
-                        ? "The formula doesn't result in a boolean value." 
+                : !string.IsNullOrEmpty(paramError)
+                    ? paramError
+                    : !(expresionResult is bool)
+                        ? "The formula doesn't result in a boolean value."
                         : expression.Error; }
     }
 
     void Awake()
+    {
+        RegenerateExpression();
+    }
+
+    void OnEnable()
     {
         RegenerateExpression();
     }
@@ -64,6 +68,7 @@ public class FormulaFork : Checkable {
             {
                 expression = new Expression(this.formula);
                 expression.EvaluateParameter += CheckParameter;
+                expression.EvaluateFunction += EvaluateFunction;
                 expresionResult = expression.Evaluate();
             }
             catch { }
@@ -84,10 +89,44 @@ public class FormulaFork : Checkable {
         }
     }
 
+
+    private void EvaluateFunction(string name, FunctionArgs args)
+    {
+        switch (name)
+        {
+            case "var":
+                {
+                    GameObject go = GameObject.Find((string)args.Parameters[0].Evaluate());
+                    Component co = null;
+                    PropertyInfo p = null;
+
+                    if (go) co = go.GetComponent((string)args.Parameters[1].Evaluate());
+                    if (co) p = co.GetType().GetProperty((string)args.Parameters[2].Evaluate());
+
+                    // Result
+                    args.HasResult = go != null && co != null && p != null;
+                    if (args.HasResult) args.Result = p.GetValue(co, null);
+                }
+
+                break;
+            case "objectVar":
+                {
+                    object o = Sequence.current.GetObject((string)args.Parameters[0].Evaluate());
+                    PropertyInfo p = null;
+
+                    if (o != null) p = o.GetType().GetProperty((string)args.Parameters[1].Evaluate());
+
+                    args.HasResult = o != null && p != null;
+                    if (args.HasResult) args.Result = p.GetValue(o, null);
+                }
+                break;
+        }
+    }
+
     public override bool check()
     {
         var r = expression.Evaluate();
-        return r is bool ? (bool) r : false;
+        return r is bool ? (bool)r : false;
     }
 
     public override string ToString()

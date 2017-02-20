@@ -12,7 +12,6 @@ public class pru : MonoBehaviour {
         if (s != null)
             return;
 
-
         s = ScriptableObject.CreateInstance<Sequence>();
         s.Root = s.CreateNode(Dialog.Create(
             new Fragment("Pepito", "Hola, qué tal andas?"),
@@ -106,6 +105,8 @@ public class pru : MonoBehaviour {
     bool launched = false;
     // Update is called once per frame
     void Update () {
+
+        //IsoSwitchesManager.getInstance().getIsoSwitches().consultSwitch("BagPicked");
 
         if (Input.GetMouseButtonDown(0) && !launched)
         {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class Game : MonoBehaviour {
 
+    public string Test { get { return "test"; } }
+
 	/**
 	 * This var allows new Game instances load destroy the previous one and replace it.
 	 * This can have unexpected behaviours, we recommend to use only one Game class along

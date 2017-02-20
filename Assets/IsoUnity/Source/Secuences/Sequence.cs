@@ -13,6 +13,7 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
     protected SequenceNode root;
 
 
+
     protected Dictionary<string, SequenceNode> nodeDict;
 
 
@@ -121,6 +122,23 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
         }
     }
 
+    /**************************
+     * Object pool
+     * ************************/
+    protected Dictionary<string, object> objectPool = new Dictionary<string, object>();
+
+    public object GetObject(string name)
+    {
+        return objectPool.ContainsKey(name) ? objectPool[name] : null;
+    }
+
+    public void SetObject(string name, object value)
+    {
+        if (objectPool.ContainsKey(name))
+            objectPool[name] = value;
+        else
+            objectPool.Add(name, value);
+    }
 
     /**************************
      * Serialization
@@ -129,6 +147,7 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
     private List<SequenceNode> nodes;
     [SerializeField]
     private List<string> ids;
+    public static Sequence current;
 
     public virtual void OnBeforeSerialize()
     {

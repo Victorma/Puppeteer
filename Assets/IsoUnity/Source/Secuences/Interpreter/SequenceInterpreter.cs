@@ -5,9 +5,11 @@ public class SequenceInterpreter  {
 
 	private ISequenceInterpreter currentInterpreter;
 	private SequenceNode currentNode;
+    private Sequence sequence;
 
 	public SequenceInterpreter(Sequence sequence){
-		currentNode = sequence.Root;
+        this.sequence = sequence;
+        currentNode = sequence.Root;
 	}
 
 	public bool SequenceFinished {
@@ -27,9 +29,11 @@ public class SequenceInterpreter  {
 				currentInterpreter.UseNode(currentNode);
 			}
 
+            Sequence.current = sequence;
 			currentInterpreter.Tick();
+            Sequence.current = null;
 
-			if(currentInterpreter.HasFinishedInterpretation()){
+            if (currentInterpreter.HasFinishedInterpretation()){
 				Debug.Log ("Finished interpretation");
 				currentNode = currentInterpreter.NextNode();
 				if(currentInterpreter is Object)
