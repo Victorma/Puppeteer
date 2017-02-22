@@ -11,6 +11,9 @@ public class ForkGroupEditor : Editor
 
     void OnEnable()
     {
+        if (!target)
+            return;
+
         forkGroup = target as ForkGroup;
         forkList = new ReorderableList(forkGroup.List, typeof(Checkable));
         forkList.drawHeaderCallback += (rect) =>

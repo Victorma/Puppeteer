@@ -16,9 +16,10 @@ public class CustomDialogManager : DialogEventManager {
     public float fadeTime;
     public Text textHolder;
     public Text optionsMessage;
+    public GameObject interactionBlocker;
     public CanvasGroup dialogGroup;
     public CanvasGroup optionsGroup;
-    public GridLayoutGroup optionsGrid;
+    public LayoutGroup optionsHolder;
     public GameObject optionPrefab;
 
     // Private variables
@@ -49,8 +50,10 @@ public class CustomDialogManager : DialogEventManager {
         charactersShown = 0;
         state = State.Opening;
         managingGroup = dialogGroup;
+        managingGroup.gameObject.SetActive(true);
+        interactionBlocker.SetActive(true);
 
-        if(frg.Character != "" && frg.Parameter != "")
+        if (frg.Character != "" && frg.Parameter != "")
         {
             GameObject.Find(frg.Character).SendMessage(frg.Parameter);
         }
@@ -64,12 +67,14 @@ public class CustomDialogManager : DialogEventManager {
         optionSelected = null;
         optionsMessage.text = msg;
         managingGroup = optionsGroup;
+        managingGroup.gameObject.SetActive(true);
+        interactionBlocker.SetActive(true);
         state = State.Opening;
         foreach (var o in opt)
         {
             // create the options
             var option = GameObject.Instantiate(optionPrefab);
-            option.transform.SetParent(optionsGrid.transform);
+            option.transform.SetParent(optionsHolder.transform);
             var text = option.transform.GetChild(0).GetComponent<Text>().text = o.Text;
             option.GetComponent<Button>().onClick.AddListener(() => {
                 optionSelected = opt.Find(e => e.Text == text);
@@ -128,6 +133,8 @@ public class CustomDialogManager : DialogEventManager {
                 managingGroup.alpha = Mathf.Clamp01(managingGroup.alpha - Time.deltaTime / fadeTime);
                 if (managingGroup.alpha == 0)
                 {
+                    managingGroup.gameObject.SetActive(false);
+                    interactionBlocker.SetActive(false);
                     state = State.Idle;
                     textHolder.text = "";
                     frg = null;
@@ -144,6 +151,6 @@ public class CustomDialogManager : DialogEventManager {
     private void UpdateText()
     {
         accumulated -= timePerCharacter;
-        textHolder.text = msg.Substring(0, charactersShown);
+        textHolder.text = msg.Substring(0, charactersShown) + "<color=#00000000>" + msg.Substring(charactersShown) + "</color>";
     }
 }

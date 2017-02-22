@@ -52,9 +52,10 @@ public class pru : MonoBehaviour {
 
         // Multifork chooses the content by priority and allows it to have multiple childs. 
         // By default, if any of the checkables is working, it launches last child
+        s.SetObject("objectname", "asd");
         s["chose1"][0] = s.CreateNode("multiFork", MultiFork.Create(new List<Checkable>()
         {
-            FormulaFork.Create("playProbada == true && playRota == true"),
+            FormulaFork.Create("playProbada == true && playRota == true && var('objectname', 'component', 'property') == 123 && varObject('objectname', 'property') == 123"),
             // AnyFork can be also AllFork. Any combines checkables with an "or" and All uses an "and"
             ForkGroup.Create<AnyFork>(new List<Checkable>() // This is made like this for the sake of exampling
             {

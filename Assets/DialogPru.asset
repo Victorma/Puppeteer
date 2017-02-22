@@ -1,0 +1,142 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e0d983d07aae244b4199260a850e12, type: 3}
+  m_Name: DialogPru
+  m_EditorClassIdentifier: 
+  inited: 0
+  root: {fileID: 114000012589575538}
+  nodes:
+  - {fileID: 114000012589575538}
+  - {fileID: 114000013215203694}
+  ids:
+  - -9444
+  - -9776
+--- !u!114 &114000011221332398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986074b62c14ea9478e480b10c421f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options:
+  - fork: {fileID: 114000011375074622}
+    text: Toni
+    parameter: 
+  - fork: {fileID: 114000013344169988}
+    text: Toni2
+    parameter: 
+  - fork: {fileID: 114000013570651098}
+    text: Salir
+    parameter: 
+--- !u!114 &114000011375074622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forks: []
+--- !u!114 &114000011813288620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 548e5e0d049bc4d4693000a78d1e305f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fragments:
+  - name: Nombre
+    msg: Palabra corta Palabra corta Palabra corta Palabrasuperlargaqueocupaunhuevoynosepartealamitad
+    character: 
+    parameter: 
+--- !u!114 &114000012589575538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Dialog
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114000013215203694}
+  isUnityObject: 1
+  objectContent: {fileID: 114000011813288620}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 239
+    y: 271
+    width: 300
+    height: 186
+  collapsed: 0
+--- !u!114 &114000013215203694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Options
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114000012589575538}
+  - {fileID: 114000012589575538}
+  - {fileID: 0}
+  isUnityObject: 1
+  objectContent: {fileID: 114000011221332398}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 610
+    y: 307
+    width: 300
+    height: 136
+  collapsed: 0
+--- !u!114 &114000013344169988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forks: []
+--- !u!114 &114000013570651098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forks: []

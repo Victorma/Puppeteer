@@ -7,7 +7,7 @@ public class AnyFork : ForkGroup {
 
     public override bool check()
     {
-        return forks.Exists(f => f.check());
+        return forks.Count == 0 || forks.Exists(f => f.check());
     }
 
     public override string ToString()
