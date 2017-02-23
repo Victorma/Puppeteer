@@ -16,9 +16,41 @@ MonoBehaviour:
   nodes:
   - {fileID: 114000012589575538}
   - {fileID: 114000013215203694}
+  - {fileID: 114000012039437752}
+  - {fileID: 114000011740078296}
+  - {fileID: 114000014281599264}
   ids:
   - -9444
   - -9776
+  - -5488
+  - -7034
+  - -77714
+--- !u!114 &114000010033736600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dceab41990a77394aa0aede67dc01b11, type: 3}
+  m_Name: '''Perro'' '
+  m_EditorClassIdentifier: 
+  iswitch: variable
+  formula: '''Perro'' '
+--- !u!114 &114000010563539838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dceab41990a77394aa0aede67dc01b11, type: 3}
+  m_Name: '''Toni'''
+  m_EditorClassIdentifier: 
+  iswitch: variable
+  formula: '''Toni'''
 --- !u!114 &114000011221332398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,10 +64,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   options:
   - fork: {fileID: 114000011375074622}
-    text: Toni
+    text: Perro
     parameter: 
   - fork: {fileID: 114000013344169988}
-    text: Toni2
+    text: Toni
     parameter: 
   - fork: {fileID: 114000013570651098}
     text: Salir
@@ -52,6 +84,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forks: []
+--- !u!114 &114000011609133312
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
+  f: 0
+  d: 0
+  s: 
+  v2: {x: 0, y: 0}
+  v3: {x: 0, y: 0, z: 0}
+  v4: {x: 0, y: 0, z: 0, w: 0}
+  q: {x: 0, y: 0, z: 0, w: 0}
+  b: 0
+  c: 0
+  whatIs: System.Boolean
+--- !u!114 &114000011740078296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Switches/Formula setter
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114000014281599264}
+  isUnityObject: 1
+  objectContent: {fileID: 114000010563539838}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 1215
+    y: 461
+    width: 342
+    height: 53
+  collapsed: 0
 --- !u!114 &114000011813288620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,9 +142,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fragments:
   - name: Nombre
-    msg: Palabra corta Palabra corta Palabra corta Palabrasuperlargaqueocupaunhuevoynosepartealamitad
+    msg: 'Hola $variable
+
+      <$ if(variable == ''Toni'',''Hey'',''Boo'') $>'
     character: 
     parameter: 
+--- !u!114 &114000011870338772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
+  f: 0
+  d: 0
+  s: toli
+  v2: {x: 0, y: 0}
+  v3: {x: 0, y: 0, z: 0}
+  v4: {x: 0, y: 0, z: 0, w: 0}
+  q: {x: 0, y: 0, z: 0, w: 0}
+  b: 0
+  c: 0
+  whatIs: System.String
+--- !u!114 &114000012039437752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Switches/Formula setter
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114000012589575538}
+  isUnityObject: 1
+  objectContent: {fileID: 114000010033736600}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 1204
+    y: 246
+    width: 396
+    height: 53
+  collapsed: 0
 --- !u!114 &114000012589575538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,11 +210,30 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 239
-    y: 271
+    x: 288
+    y: 281
     width: 300
     height: 186
   collapsed: 0
+--- !u!114 &114000012607037362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a413602f9429a24e943fe8c6b8b2508, type: 3}
+  m_Name: ChangeSwitch
+  m_EditorClassIdentifier: 
+  keys:
+  - synchronous
+  - switch
+  - value
+  values:
+  - {fileID: 114000011609133312}
+  - {fileID: 114000011870338772}
+  - {fileID: 114000013546530928}
 --- !u!114 &114000013215203694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,16 +246,16 @@ MonoBehaviour:
   m_Name: Options
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 114000012589575538}
-  - {fileID: 114000012589575538}
+  - {fileID: 114000012039437752}
+  - {fileID: 114000011740078296}
   - {fileID: 0}
   isUnityObject: 1
   objectContent: {fileID: 114000011221332398}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 610
-    y: 307
+    x: 716
+    y: 311
     width: 300
     height: 136
   collapsed: 0
@@ -128,6 +271,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forks: []
+--- !u!114 &114000013546530928
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8daaa0a8c5652f247939f4ab49339994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  i: 0
+  f: 0
+  d: 0
+  s: 
+  v2: {x: 0, y: 0}
+  v3: {x: 0, y: 0, z: 0}
+  v4: {x: 0, y: 0, z: 0, w: 0}
+  q: {x: 0, y: 0, z: 0, w: 0}
+  b: 1
+  c: 0
+  whatIs: System.Boolean
 --- !u!114 &114000013570651098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,3 +305,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forks: []
+--- !u!114 &114000014281599264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: GameEvent
+  m_EditorClassIdentifier: 
+  childs:
+  - {fileID: 114000012589575538}
+  isUnityObject: 1
+  objectContent: {fileID: 114000012607037362}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 1203
+    y: 613
+    width: 300
+    height: 107
+  collapsed: 0

@@ -75,4 +75,11 @@ public class IsoSwitches : ScriptableObject
 	public object consultSwitch(string id){
 		return getSwitch (id).State;
 	}
+
+    public IsoSwitches Clone()
+    {
+        var r = ScriptableObject.CreateInstance<IsoSwitches>();
+        r.switches = switches.ConvertAll(s => s.Clone());
+        return r;
+    }
 }

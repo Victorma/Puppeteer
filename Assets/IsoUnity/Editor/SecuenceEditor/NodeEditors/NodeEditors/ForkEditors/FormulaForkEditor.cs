@@ -23,9 +23,9 @@ public class FormulaForkEditor : Editor {
         EditorGUI.BeginChangeCheck();
         f.Formula = EditorGUILayout.TextField(f.Formula);
 
-        if (!f.IsValidExpression)
+        if (!f.SequenceFormula.IsValidExpression)
         {
-            EditorGUILayout.LabelField(f.Error);
+            EditorGUILayout.LabelField(f.SequenceFormula.Error);
         } 
     }
 }

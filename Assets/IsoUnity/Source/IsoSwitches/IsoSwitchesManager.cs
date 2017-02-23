@@ -18,7 +18,8 @@ public abstract class IsoSwitchesManager
 public class IsoSwitchesManagerInstance : IsoSwitchesManager
 {
 	//private String ruta;
-	private IsoSwitches instance;
+	private IsoSwitches resource;
+    private IsoSwitches instance;
 
 	public IsoSwitchesManagerInstance(){
 		//ruta = "Assets/Resources/IsoSwitches.asset";
@@ -27,10 +28,10 @@ public class IsoSwitchesManagerInstance : IsoSwitchesManager
 	
 	public override IsoSwitches getIsoSwitches(){
 
-		if (instance == null) {
-			instance = Resources.Load<IsoSwitches> ("IsoSwitches");
+		if (resource == null) {
+            resource = Resources.Load<IsoSwitches> ("IsoSwitches");
 
-			if(instance == null){
+			if(resource == null){
 				if (Application.isEditor) {
 					#if UNITY_EDITOR
 					System.Reflection.MethodInfo mi = Type.GetType ("IsoSwitchesMenu").GetMethod ("createSwitches");
@@ -39,11 +40,13 @@ public class IsoSwitchesManagerInstance : IsoSwitchesManager
 				} else {
 					//To prevent crashing
 					Debug.LogWarning("Iso switches not found in /Resources. Runtime instance created. Consider to create the Asset.");
-					instance = ScriptableObject.CreateInstance<IsoSwitches> ();
+                    resource = ScriptableObject.CreateInstance<IsoSwitches> ();
 				}
 			}
+
+            instance = resource.Clone();
 		}
 		
-		return instance;
+		return Application.isPlaying ? instance : resource;
 	}
 }

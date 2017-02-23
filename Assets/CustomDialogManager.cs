@@ -14,6 +14,7 @@ public class CustomDialogManager : DialogEventManager {
     // Public variables
     public float timePerCharacter;
     public float fadeTime;
+    public Text nameText;
     public Text textHolder;
     public Text optionsMessage;
     public GameObject interactionBlocker;
@@ -47,6 +48,7 @@ public class CustomDialogManager : DialogEventManager {
     {
         frg = fragment;
         msg = frg.Msg;
+        nameText.text = frg.Name;
         charactersShown = 0;
         state = State.Opening;
         managingGroup = dialogGroup;

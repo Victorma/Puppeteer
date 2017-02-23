@@ -8,7 +8,6 @@ public class FormulaSetter : ScriptableObject, ISimpleContent {
     public string iswitch;
     [SerializeField]
     private string formula;
-    private Expression expression;
 
     public static FormulaSetter Create(string iswitch, string formula)
     {
@@ -25,66 +24,23 @@ public class FormulaSetter : ScriptableObject, ISimpleContent {
         {
             this.name = value;
             this.formula = value;
-            RegenerateExpression();
+            SequenceFormula.Formula = this.formula;
         }
     }
     
     private string paramError;
-
-    public bool IsValidExpression
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(formula.Trim()) && string.IsNullOrEmpty(paramError) && !expression.HasErrors();
-        }
-    }
-
-    public string Error
-    {
-        get
-        {
-            return
-              string.IsNullOrEmpty(formula.Trim())
-              ? "The formula can't be empty"
-              : !string.IsNullOrEmpty(paramError)
-                  ? paramError
-                  : expression.Error;
-        }
-    }
+    
+    public SequenceFormula SequenceFormula { get; private set; }
 
     void Awake()
     {
-        RegenerateExpression();
+        SequenceFormula = new SequenceFormula();
     }
 
-    private void RegenerateExpression()
+    void OnEnable()
     {
-        paramError = string.Empty;
-        if (!string.IsNullOrEmpty(formula))
-        {
-            try
-            {
-                expression = new Expression(this.formula);
-                expression.EvaluateParameter += CheckParameter;
-                // test
-                expression.Evaluate();
-            }
-            catch { }
-        }
-    }
-
-    private void CheckParameter(string param, ParameterArgs args)
-    {
-        if (!IsoSwitchesManager.getInstance().getIsoSwitches().containsSwitch(param))
-        {
-            args.HasResult = false;
-            paramError = "Missing parameter \"" + param + "\"";
-        }
-        else
-        {
-            args.HasResult = true;
-            args.Result = IsoSwitchesManager.getInstance().getIsoSwitches().consultSwitch(param);
-        }
+        SequenceFormula = new SequenceFormula();
+        SequenceFormula.Formula = formula;
     }
 
     public override string ToString()
@@ -94,8 +50,8 @@ public class FormulaSetter : ScriptableObject, ISimpleContent {
 
     public int Execute()
     {
-        var result = expression.Evaluate();
-        if(IsValidExpression && result != null)
+        var result = SequenceFormula.Evaluate();
+        if(SequenceFormula.IsValidExpression && result != null)
         {
             IsoSwitchesManager.getInstance().getIsoSwitches().getSwitch(iswitch).State = result;
         }

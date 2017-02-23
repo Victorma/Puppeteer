@@ -13,6 +13,9 @@ public class IsoSwitchesEditor : Editor{
 	IsoSwitches isoSwitches;
 	public void OnEnable(){
 
+        if (target == null)
+            return;
+
         isoSwitches = target as IsoSwitches;
 
         switchList = new ReorderableList(isoSwitches.switches, typeof(ISwitch), true, false, true, true);

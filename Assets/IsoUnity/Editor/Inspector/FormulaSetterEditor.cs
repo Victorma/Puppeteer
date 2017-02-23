@@ -4,18 +4,13 @@ using UnityEditor;
 
 [CustomEditor(typeof(FormulaSetter))]
 public class FormulaSetterEditor : Editor {
-
-    IsoSwitches isoSwitches;
-    void OnEnable()
-    {
-        isoSwitches = IsoSwitchesManager.getInstance().getIsoSwitches();
-    }
+    
 
     public override void OnInspectorGUI()
     {
+        var isoSwitches = IsoSwitchesManager.getInstance().getIsoSwitches();
         var fs = target as FormulaSetter;
-
-
+        
         EditorGUILayout.BeginHorizontal();
         fs.iswitch = EditorGUILayout.TextField(fs.iswitch, GUILayout.Width(100));
         if(GUILayout.Button("v", GUILayout.Width(15), GUILayout.Height(15)))
@@ -42,13 +37,18 @@ public class FormulaSetterEditor : Editor {
         if (!string.IsNullOrEmpty(fs.iswitch) && isoSwitches.containsSwitch(fs.iswitch))
         {
             fs.Formula = EditorGUILayout.TextField(fs.Formula);
+            EditorGUILayout.EndHorizontal();
+            if (!fs.SequenceFormula.IsValidExpression)
+            {
+                EditorGUILayout.LabelField(fs.SequenceFormula.Error);
+            }
         }
         else
         {
             EditorGUILayout.LabelField("Variable is not a valid Switch");
+            EditorGUILayout.EndHorizontal();
         }
 
 
-        EditorGUILayout.EndHorizontal();
     }
 }

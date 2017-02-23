@@ -50,10 +50,10 @@ public class SequenceWindow : EditorWindow
         GUILayout.BeginHorizontal();
         EditorGUI.BeginChangeCheck();
         //var editorSelected = EditorGUILayout.Popup(NodeEditorFactory.Intance.NodeEditorIndex(myNode), editorNames);
-
+        
         if (!editors.ContainsKey(myNode) || EditorGUI.EndChangeCheck())
         {
-            var editor = NodeEditorFactory.Intance.createNodeEditorFor(
+               var editor = NodeEditorFactory.Intance.createNodeEditorFor(
                 NodeEditorFactory.Intance.CurrentNodeEditors[
                     NodeEditorFactory.Intance.NodeEditorIndex(myNode)
                 ]);
@@ -161,7 +161,31 @@ public class SequenceWindow : EditorWindow
                 break;
         }
 
+        var resizeRect = new Rect(new Vector2(myNode.Position.width - 10, 0), new Vector2(10, myNode.Position.height));
+        EditorGUIUtility.AddCursorRect(resizeRect,MouseCursor.ResizeHorizontal, myNode.GetHashCode());
+        if (EditorGUIUtility.hotControl == 0 
+            && Event.current.type == EventType.MouseDown 
+            && Event.current.button == 0 
+            && resizeRect.Contains(Event.current.mousePosition))
+        {
+            EditorGUIUtility.hotControl = myNode.GetHashCode();
+            Event.current.Use();
+        }
+        
+        if(GUIUtility.hotControl == myNode.GetHashCode())
+        {
+            //Debug.Log("hotcontrol");
+            myNode.Position = new Rect(myNode.Position.x, myNode.Position.y, Event.current.mousePosition.x + 5, myNode.Position.height);
+            this.Repaint();
+            //Event.current.Use();
+            if (Event.current.type == EventType.MouseUp)
+                EditorGUIUtility.hotControl = 0;
+            //if(Event.current.type != EventType.layout)*/
+        }
+
         GUI.DragWindow();
+
+
     }
     void curveFromTo(Rect wr, Rect wr2, Color color, Color shadow)
     {

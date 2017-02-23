@@ -12,9 +12,6 @@ public class FormulaFork : Checkable {
         return r;
     }
 
-
-    Expression expression;
-
     [SerializeField]
     private string formula = "";
     public string Formula
@@ -22,110 +19,29 @@ public class FormulaFork : Checkable {
         get { return formula; }
         set
         {
-            this.name = value;
-            this.formula = value;
-            RegenerateExpression();
+            name = value;
+            formula = value;
+            SequenceFormula.Formula = formula;
         }
     }
 
-    private object expresionResult;
-    private string paramError;
-
-    public bool IsValidExpression
-    {
-        get {
-            return !string.IsNullOrEmpty(formula.Trim()) && string.IsNullOrEmpty(paramError) && !expression.HasErrors() && (expresionResult is bool); }
-    }
-
-    public string Error
-    {
-        get { return
-                string.IsNullOrEmpty(formula.Trim())
-                ? "The formula can't be empty"
-                : !string.IsNullOrEmpty(paramError)
-                    ? paramError
-                    : !(expresionResult is bool)
-                        ? "The formula doesn't result in a boolean value."
-                        : expression.Error; }
-    }
+    public SequenceFormula SequenceFormula { get; private set; }
 
     void Awake()
     {
-        RegenerateExpression();
+        SequenceFormula = new SequenceFormula();
     }
 
     void OnEnable()
     {
-        RegenerateExpression();
+        SequenceFormula = new SequenceFormula();
+        SequenceFormula.Formula = formula;
     }
 
-    private void RegenerateExpression()
-    {
-        paramError = string.Empty;
-        if (!string.IsNullOrEmpty(formula))
-        {
-            try
-            {
-                expression = new Expression(this.formula);
-                expression.EvaluateParameter += CheckParameter;
-                expression.EvaluateFunction += EvaluateFunction;
-                expresionResult = expression.Evaluate();
-            }
-            catch { }
-        }
-    }
-
-    private void CheckParameter(string param, ParameterArgs args)
-    {
-        if (!IsoSwitchesManager.getInstance().getIsoSwitches().containsSwitch(param))
-        {
-            args.HasResult = false;
-            paramError = "Missing parameter \"" + param + "\"";
-        }
-        else
-        {
-            args.HasResult = true;
-            args.Result = IsoSwitchesManager.getInstance().getIsoSwitches().consultSwitch(param);
-        }
-    }
-
-
-    private void EvaluateFunction(string name, FunctionArgs args)
-    {
-        switch (name)
-        {
-            case "var":
-                {
-                    GameObject go = GameObject.Find((string)args.Parameters[0].Evaluate());
-                    Component co = null;
-                    PropertyInfo p = null;
-
-                    if (go) co = go.GetComponent((string)args.Parameters[1].Evaluate());
-                    if (co) p = co.GetType().GetProperty((string)args.Parameters[2].Evaluate());
-
-                    // Result
-                    args.HasResult = go != null && co != null && p != null;
-                    if (args.HasResult) args.Result = p.GetValue(co, null);
-                }
-
-                break;
-            case "objectVar":
-                {
-                    object o = Sequence.current.GetObject((string)args.Parameters[0].Evaluate());
-                    PropertyInfo p = null;
-
-                    if (o != null) p = o.GetType().GetProperty((string)args.Parameters[1].Evaluate());
-
-                    args.HasResult = o != null && p != null;
-                    if (args.HasResult) args.Result = p.GetValue(o, null);
-                }
-                break;
-        }
-    }
 
     public override bool check()
     {
-        var r = expression.Evaluate();
+        var r = SequenceFormula.Evaluate();
         return r is bool ? (bool)r : false;
     }
 

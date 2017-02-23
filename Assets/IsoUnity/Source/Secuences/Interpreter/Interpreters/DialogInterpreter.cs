@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 {
@@ -12,8 +13,7 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
     private List<Option> optionsList, launchedOptionsList;
 	private int chosen;
 	private bool next;
-
-	
+    
 	public bool CanHandle(SequenceNode node)
 	{
 		return node!= null && node.Content != null && (node.Content is Dialog || node.Content is Options);
@@ -71,7 +71,17 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
                 if (fragments.Count > 0)
                 {
                     // Launch next fragment event
-                    var nextFragment = fragments.Dequeue();
+                    var nextFragment = fragments.Dequeue().Clone();
+
+                    nextFragment.Msg = Regex.Replace(nextFragment.Msg, @"\<\$(.+)\$\>", m => {
+                        var formula = new SequenceFormula(m.Groups[1].Value);
+                        return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
+                    }, RegexOptions.Multiline);
+                    nextFragment.Msg = Regex.Replace(nextFragment.Msg, @"\$(\w+)", m => {
+                        var formula = new SequenceFormula(m.Groups[1].Value);
+                        return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
+                    }, RegexOptions.Multiline);
+
                     var ge = new GameEvent();
                     ge.name = "show dialog fragment";
                     ge.setParameter("fragment", nextFragment);

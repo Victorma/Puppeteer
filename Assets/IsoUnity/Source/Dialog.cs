@@ -45,7 +45,7 @@ public class Dialog : ScriptableObject
 
 [System.Serializable]
 [StructLayout(LayoutKind.Sequential)]
-public class Fragment
+public class Fragment : ICloneable
 {
     [SerializeField]
     private string name;
@@ -86,6 +86,16 @@ public class Fragment
         this.msg = msg;
         this.character = character;
         this.parameter = parameter;
+    }
+
+    object ICloneable.Clone()
+    {
+        return this.MemberwiseClone();
+    }
+
+    public Fragment Clone()
+    {
+        return this.MemberwiseClone() as Fragment;
     }
 }
 

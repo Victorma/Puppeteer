@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [System.Serializable]
 public class ISwitch : ScriptableObject {
@@ -11,21 +12,28 @@ public class ISwitch : ScriptableObject {
         }
     }
 
-#if UNITY_EDITOR
     public void Persist()
     {
+#if UNITY_EDITOR
         if (Application.isEditor && !Application.isPlaying)
         {
             //state.hideFlags = HideFlags.HideInHierarchy | HideFlags.HideInInspector;
             UnityEditor.AssetDatabase.AddObjectToAsset(state, this);
         }
+#endif
     }
 
     void OnDestroy()
     {
-        ScriptableObject.DestroyImmediate(state, true);
+        if (Application.isEditor && Application.isPlaying)
+        {
+            ScriptableObject.DestroyImmediate(state, true);
+        }
+        else
+        {
+            ScriptableObject.DestroyImmediate(state);
+        }
     }
-#endif
 
     [SerializeField]
 	public string id = "";
@@ -36,4 +44,12 @@ public class ISwitch : ScriptableObject {
 		get{ return state.Value;}
 		set{ state.Value = value;}
 	}
+
+    internal ISwitch Clone()
+    {
+        var r = ScriptableObject.CreateInstance<ISwitch>();
+        r.id = id;
+        r.state.Value = State;
+        return r;
+    }
 }
