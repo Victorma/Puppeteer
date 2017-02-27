@@ -350,9 +350,14 @@ public class SequenceWindow : EditorWindow
 
         using (new EditorGUI.DisabledScope())
         {
-            if (GUILayout.Button("Switches", "toolbarButton", GUILayout.Width(100)))
+            if (GUILayout.Button("Globals", "toolbarButton", GUILayout.Width(100)))
             {
                 var o = SwitchesMenu.ShowAtPosition(GUILayoutUtility.GetLastRect().Move(new Vector2(5,16)));
+                if (o) GUIUtility.ExitGUI();
+            }
+            if (GUILayout.Button("Locals", "toolbarButton", GUILayout.Width(100)))
+            {
+                var o = SwitchesMenu.ShowAtPosition(GUILayoutUtility.GetLastRect().Move(new Vector2(105, 16)), sequence.LocalVariables);
                 if (o) GUIUtility.ExitGUI();
             }
         }

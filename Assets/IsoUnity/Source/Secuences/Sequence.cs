@@ -9,29 +9,31 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
     [SerializeField]
     private bool inited = false;
 
-	[SerializeField]
+    [SerializeField]
     protected SequenceNode root;
 
-
+    [SerializeField]
+    protected IsoSwitches localVariables;
 
     protected Dictionary<string, SequenceNode> nodeDict;
 
-
     void Awake()
     {
-        if(this.nodes == null)
+        if (this.nodes == null)
             this.nodes = new List<SequenceNode>();
         if (this.ids == null)
             this.ids = new List<string>();
         if (this.nodeDict == null)
             this.nodeDict = new Dictionary<string, SequenceNode>();
+        if (localVariables == null)
+            this.localVariables = IsoSwitches.CreateInstance<IsoSwitches>();
     }
 
-	public SequenceNode Root
+    public SequenceNode Root
     {
-		get{ return root;}
-		set{ root = value;}
-	}
+        get { return root; }
+        set { root = value; }
+    }
 
     public SequenceNode[] Nodes
     {
@@ -45,6 +47,29 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
             if (!nodeDict.ContainsKey(node)) CreateNode(node, null);
             return nodeDict[node];
         }
+    }
+
+    public IsoSwitches LocalVariables
+    {
+        get
+        {
+            return localVariables;
+        }
+    }
+
+    public virtual object ContainsVariable(string id)
+    {
+        return localVariables.containsSwitch(id);
+    }
+
+    public virtual object GetVariable(string id)
+    {
+        return localVariables.consultSwitch(id);
+    }
+
+    public virtual void SetVariable(string id, object value)
+    {
+        localVariables.getSwitch(id).State = value;
     }
 
     public virtual SequenceNode CreateNode(string id, object content = null, int childSlots = 0)

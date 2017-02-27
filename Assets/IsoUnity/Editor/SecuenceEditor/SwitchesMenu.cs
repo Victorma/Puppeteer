@@ -5,8 +5,7 @@ using UnityEditor;
 
 public class SwitchesMenu : EditorWindow
 {
-
-    internal static bool ShowAtPosition(Rect buttonRect)
+    internal static bool ShowAtPosition(Rect buttonRect, IsoSwitches switches = null)
     {
         long num = DateTime.Now.Ticks / 10000L;
         if (num >= SwitchesMenu.s_LastClosedTime + 50L)
@@ -19,7 +18,7 @@ public class SwitchesMenu : EditorWindow
             {
                 SwitchesMenu.s_DrawerParametersMenu = ScriptableObject.CreateInstance<SwitchesMenu>();
             }
-            SwitchesMenu.s_DrawerParametersMenu.Init(buttonRect);
+            SwitchesMenu.s_DrawerParametersMenu.Init(buttonRect, switches);
             return true;
         }
         return false;
@@ -29,13 +28,13 @@ public class SwitchesMenu : EditorWindow
     private static long s_LastClosedTime;
 
     private Editor editor;
-    private void Init(Rect buttonRect)
+    private void Init(Rect buttonRect, IsoSwitches switches)
     {
         buttonRect.position = GUIUtility.GUIToScreenPoint(buttonRect.position);
         float y = 305f;
         Vector2 windowSize = new Vector2(300f, y);
         base.ShowAsDropDown(buttonRect, windowSize);
-        editor = Editor.CreateEditor(IsoSwitchesManager.getInstance().getIsoSwitches());
+        editor = Editor.CreateEditor(switches == null ? IsoSwitchesManager.getInstance().getIsoSwitches() : switches);
     }
 
     private void OnDisable()

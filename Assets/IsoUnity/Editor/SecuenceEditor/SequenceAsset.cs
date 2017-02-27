@@ -5,6 +5,28 @@ using System.Linq;
 
 public class SequenceAsset : Sequence {
 
+    [SerializeField]
+    private bool assetinited = false;
+
+    void OnEnable()
+    {
+        if (!assetinited)
+        {
+            InitAsset();
+        }
+    }
+
+    public void InitAsset()
+    {
+        if(this.localVariables == null){
+            this.localVariables = ScriptableObject.CreateInstance<IsoSwitches>();
+        }
+
+        AssetDatabase.AddObjectToAsset(this.localVariables, this);
+        AssetDatabase.SaveAssets();
+        assetinited = true;
+    }
+
     public override SequenceNode CreateNode(string id, object content = null, int childSlots = 0)
     {
         var node = CreateInstance<SequenceNodeAsset>();

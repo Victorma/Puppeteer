@@ -13,6 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inited: 0
   root: {fileID: 114000012589575538}
+  localVariables: {fileID: 114000013352237486}
   nodes:
   - {fileID: 114000012589575538}
   - {fileID: 114000013215203694}
@@ -25,6 +26,7 @@ MonoBehaviour:
   - -5488
   - -7034
   - -77714
+  inited: 0
 --- !u!114 &114000010033736600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,11 +65,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   options:
-  - fork: {fileID: 114000011375074622}
-    text: Perro
-    parameter: 
   - fork: {fileID: 114000013344169988}
     text: Toni
+    parameter: 
+  - fork: {fileID: 114000011375074622}
+    text: Perro
     parameter: 
   - fork: {fileID: 114000013570651098}
     text: Salir
@@ -124,9 +126,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1215
-    y: 461
-    width: 342
+    x: 973
+    y: 390
+    width: 727
     height: 53
   collapsed: 0
 --- !u!114 &114000011813288620
@@ -141,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fragments:
-  - name: Nombre
+  - name: Toni el toli
     msg: 'Hola $variable
 
       <$ if(variable == ''Toni'',''Hey'',''Boo'') $>'
@@ -187,9 +189,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1204
-    y: 246
-    width: 396
+    x: 1176
+    y: 141
+    width: 247
     height: 53
   collapsed: 0
 --- !u!114 &114000012589575538
@@ -210,9 +212,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 288
-    y: 281
-    width: 300
+    x: 142
+    y: 357
+    width: 226
     height: 186
   collapsed: 0
 --- !u!114 &114000012607037362
@@ -254,9 +256,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 716
-    y: 311
-    width: 300
+    x: 528
+    y: 244
+    width: 288
     height: 136
   collapsed: 0
 --- !u!114 &114000013344169988
@@ -271,6 +273,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forks: []
+--- !u!114 &114000013352237486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f903b5c05730594280dcba273e69bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  switches: []
 --- !u!114 &114000013546530928
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -323,8 +337,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1203
-    y: 613
-    width: 300
+    x: 899
+    y: 580
+    width: 233
     height: 107
   collapsed: 0
