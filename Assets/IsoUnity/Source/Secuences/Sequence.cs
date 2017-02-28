@@ -47,6 +47,15 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
             if (!nodeDict.ContainsKey(node)) CreateNode(node, null);
             return nodeDict[node];
         }
+		set 
+		{
+			if (!nodeDict.ContainsKey (node)) {
+				nodeDict.Add (node, value);
+				nodes.Add (value);
+			} else {
+				nodeDict [node] = value;
+			}
+		}
     }
 
     public IsoSwitches LocalVariables
@@ -146,6 +155,41 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
             return free;
         }
     }
+
+
+	public virtual Sequence Clone()
+	{
+		var clone = this.MemberwiseClone () as Sequence;
+
+		// Clone the nodes
+		var clonedNodes = new Dictionary<SequenceNode, SequenceNode> ();
+		foreach (var n in nodes)
+			clonedNodes.Add (n, n.Clone ());
+
+		// Assign the childs
+		foreach (var kv in clonedNodes)
+			for (int i = 0; i < kv.Value.ChildSlots; i++) 
+				if(kv.Value.Childs[i] != null)
+					kv.Value.Childs [i] = clonedNodes [kv.Value.Childs [i]];
+
+		// Fill up the sequence
+		clone.nodes = nodes.ConvertAll(n => clonedNodes[n]);
+		clone.nodeDict = new Dictionary<string, SequenceNode> ();
+		foreach (var kv in nodeDict)
+			clone.nodeDict.Add (kv.Key, clonedNodes [kv.Value]);
+
+		clone.Root = clonedNodes [Root];
+
+		// Clone the objects
+		clone.objectPool = new Dictionary<string, object>();
+		foreach (var kv in objectPool)
+			clone.objectPool.Add (kv.Key, kv.Value);
+
+		// Local variables
+		clone.localVariables = localVariables.Clone ();
+
+		return clone;
+	}
 
     /**************************
      * Object pool

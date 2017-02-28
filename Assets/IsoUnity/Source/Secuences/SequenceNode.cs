@@ -163,4 +163,12 @@ public class SequenceNode : ScriptableObject {
         return l;
     }
 
+	public virtual SequenceNode Clone(){
+		var clone = this.MemberwiseClone () as SequenceNode;
+
+		if (Content != null && Content is System.ICloneable)
+			clone.Content = (Content as System.ICloneable).Clone ();
+
+		return clone;
+	}
 }

@@ -22,8 +22,11 @@ public class SequenceAsset : Sequence {
             this.localVariables = ScriptableObject.CreateInstance<IsoSwitches>();
         }
 
-        AssetDatabase.AddObjectToAsset(this.localVariables, this);
-        AssetDatabase.SaveAssets();
+        if (!AssetDatabase.IsSubAsset(this.localVariables))
+        {
+            AssetDatabase.AddObjectToAsset(this.localVariables, this);
+            AssetDatabase.SaveAssets();
+        }
         assetinited = true;
     }
 
