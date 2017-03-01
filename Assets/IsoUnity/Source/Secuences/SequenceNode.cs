@@ -114,7 +114,7 @@ public class SequenceNode : ScriptableObject {
             if (this.childs.Length != value)
             {
                 var newChilds = new SequenceNode[value];
-                var max = move<SequenceNode>(this.childs, newChilds, null);
+                move<SequenceNode>(this.childs, newChilds, null);
                 this.childs = newChilds;
             }
         }

@@ -63,7 +63,7 @@ public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
         }
     }
 
-    public virtual object ContainsVariable(string id)
+    public virtual bool ContainsVariable(string id)
     {
         return localVariables.containsSwitch(id);
     }

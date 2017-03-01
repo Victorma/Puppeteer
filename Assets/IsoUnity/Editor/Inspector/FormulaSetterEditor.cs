@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
+using System.Linq;
 
 [CustomEditor(typeof(FormulaSetter))]
 public class FormulaSetterEditor : Editor {
@@ -16,10 +17,14 @@ public class FormulaSetterEditor : Editor {
         if(GUILayout.Button("v", GUILayout.Width(15), GUILayout.Height(15)))
         {
             var menu = new GenericMenu();
-            var possibles = isoSwitches.switches.ConvertAll(s => s.id);
+			var switches = new List<ISwitch> ();
+			switches.AddRange (Sequence.current.LocalVariables.getList ());
+			switches.AddRange (isoSwitches.getList ());
+
+			var possibles = switches.ConvertAll (s => s.id);
 
             if (!string.IsNullOrEmpty(fs.iswitch))
-                possibles = isoSwitches.switches.FindAll(s => s.id.Contains(fs.iswitch)).ConvertAll(s => s.id);
+				possibles = switches.FindAll(s => s.id.Contains(fs.iswitch)).ConvertAll(s => s.id);
 
             possibles.Sort();
 

@@ -102,7 +102,7 @@ public class GameEvent : IGameEvent, NodeContent {
         if (entityParam == null || g == null)
             return false;
 
-        return entityParam == g || entityParam == g.tag;
+		return entityParam == g || ( entityParam is string && ((string)entityParam) == g.tag);
     }
 
     public bool belongsTo(ScriptableObject so, string parameter)
@@ -112,7 +112,7 @@ public class GameEvent : IGameEvent, NodeContent {
             return false;
 
         // Compare normal and name
-        return entityParam == so || entityParam == so.name;
+		return entityParam == so || ( entityParam is string && ((string) entityParam) == so.name);
     }
 
     public bool belongsTo(string tag, string parameter)
@@ -121,7 +121,7 @@ public class GameEvent : IGameEvent, NodeContent {
         if (entityParam == null || tag == null)
             return false;
 
-        return entityParam == tag
+		return ( entityParam is string && ((string)entityParam) == tag)
             || (entityParam is GameObject) ? (entityParam as GameObject).CompareTag(tag) : false
             || (entityParam is Component) ? (entityParam as Component).CompareTag(tag) : false;
     }

@@ -13,7 +13,8 @@ public class Inventory : EventManager
 
     public override void ReceiveEvent(IGameEvent ge)
     {
-        if (ge.getParameter("Inventory") == this || ge.getParameter("Inventory") == gameObject.name)
+		var p = ge.getParameter ("Inventory");
+		if (p == this || (p is string && ((string)p) == gameObject.name))
         {
             Item item = (Item)ge.getParameter("Item");
             switch (ge.Name.ToLower())

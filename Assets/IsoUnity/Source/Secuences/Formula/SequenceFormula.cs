@@ -84,15 +84,20 @@ public class SequenceFormula {
 
     private void CheckParameter(string param, ParameterArgs args)
     {
-        if (!IsoSwitchesManager.getInstance().getIsoSwitches().containsSwitch(param))
-        {
-            args.HasResult = false;
-            paramError = "Missing parameter \"" + param + "\"";
+		if (Sequence.current.ContainsVariable (param)) 
+		{
+			args.HasResult = true;
+			args.Result = Sequence.current.GetVariable (param);
+		} 
+		else if (IsoSwitchesManager.getInstance().getIsoSwitches().containsSwitch(param))
+		{
+			args.HasResult = true;
+			args.Result = IsoSwitchesManager.getInstance().getIsoSwitches().consultSwitch(param);
         }
         else
-        {
-            args.HasResult = true;
-            args.Result = IsoSwitchesManager.getInstance().getIsoSwitches().consultSwitch(param);
+		{
+			args.HasResult = false;
+			paramError = "Missing parameter \"" + param + "\"";
         }
     }
 

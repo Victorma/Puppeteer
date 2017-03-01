@@ -53,7 +53,16 @@ public class FormulaSetter : ScriptableObject, ISimpleContent {
         var result = SequenceFormula.Evaluate();
         if(SequenceFormula.IsValidExpression && result != null)
         {
-            IsoSwitchesManager.getInstance().getIsoSwitches().getSwitch(iswitch).State = result;
+			if (Sequence.current.ContainsVariable (iswitch)) {
+				// Save as local
+				Sequence.current.SetVariable (iswitch, result);
+			} else if (IsoSwitchesManager.getInstance ().getIsoSwitches ().containsSwitch (iswitch)) {
+				// Save as global
+				IsoSwitchesManager.getInstance ().getIsoSwitches ().getSwitch (iswitch).State = result;
+			} else {
+				// If it doesnt exist, store it as local variable
+				Sequence.current.SetVariable (iswitch, result);
+			}
         }
 
         return 0;

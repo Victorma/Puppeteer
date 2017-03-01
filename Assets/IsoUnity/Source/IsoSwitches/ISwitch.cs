@@ -25,7 +25,7 @@ public class ISwitch : ScriptableObject {
 
     void OnDestroy()
     {
-        if (Application.isEditor && Application.isPlaying)
+        if (Application.isEditor && !Application.isPlaying)
         {
             ScriptableObject.DestroyImmediate(state, true);
         }

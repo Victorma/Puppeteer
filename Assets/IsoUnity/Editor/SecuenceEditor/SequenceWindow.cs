@@ -11,7 +11,7 @@ public class SequenceWindow : EditorWindow
     public static bool Open(int instanceID, int line)
     {
         var o = EditorUtility.InstanceIDToObject(instanceID);
-        if (o is SequenceAsset)
+		if (o is SequenceAsset)
         {
             var newWindow = ScriptableObject.CreateInstance<SequenceWindow>();
             newWindow.sequence = o as SequenceAsset;
@@ -52,7 +52,6 @@ public class SequenceWindow : EditorWindow
     void nodeWindow(int id)
     {
         SequenceNode myNode = nodes[id];
-
 
         // Editor selection
         //string[] editorNames = NodeEditorFactory.Intance.CurrentNodeEditors;
@@ -221,8 +220,8 @@ public class SequenceWindow : EditorWindow
 
         GUI.DragWindow();
 
-
     }
+
     void curveFromTo(Rect wr, Rect wr2, Color color)
     {
         Vector2 start = new Vector2(wr.x + wr.width, wr.y + 3 + wr.height / 2),
@@ -362,6 +361,8 @@ public class SequenceWindow : EditorWindow
         if (sequence == null)
             this.Close();
 
+		Sequence.current = sequence;
+
         this.wantsMouseMove = true;
 
         if (closeStyle == null)
@@ -465,12 +466,9 @@ public class SequenceWindow : EditorWindow
         }
         EndWindows();	
 
-        if (hovering == -1)
+        if (Event.current.type == EventType.MouseDrag && EditorGUIUtility.hotControl == 0)
         {
-            if (Event.current.type == EventType.MouseDrag)
-            {
-                scroll -= Event.current.delta;
-            }
+            scroll -= Event.current.delta;
         }
 
 		switch (Event.current.type) {
@@ -535,9 +533,9 @@ public class SequenceWindow : EditorWindow
 			break;
 		}
 
-
-
         GUI.EndScrollView();
+
+		Sequence.current = null;
     }
 
 

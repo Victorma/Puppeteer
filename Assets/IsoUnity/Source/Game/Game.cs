@@ -117,8 +117,8 @@ public class Game : MonoBehaviour {
     /*
      * As the player input isnt so frecuent, it's only checked each ms to improve performance
      */
-    private float timeToController = 100 / 1000;
-    private float currentTimeToController = 0;
+    //private float timeToController = 100 / 1000;
+    //private float currentTimeToController = 0;
 
 	public void tick(){
 

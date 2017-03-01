@@ -71,7 +71,11 @@ public class IsoSwitchesEditor : Editor{
             switchList.draggable = false;
         }
 
+		scrollposition = EditorGUILayout.BeginScrollView (scrollposition);
+
         switchList.DoLayoutList();
+
+		EditorGUILayout.EndScrollView ();
 
         
 
