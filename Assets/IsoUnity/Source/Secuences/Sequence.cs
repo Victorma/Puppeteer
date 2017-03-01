@@ -7,9 +7,6 @@ using System.Linq;
 public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
 
     [SerializeField]
-    private bool inited = false;
-
-    [SerializeField]
     protected SequenceNode root;
 
     [SerializeField]

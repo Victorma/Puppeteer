@@ -11,7 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e0d983d07aae244b4199260a850e12, type: 3}
   m_Name: SequenceAsset
   m_EditorClassIdentifier: 
-  inited: 0
   root: {fileID: 114000010921572678}
   localVariables: {fileID: 114000013534928612}
   nodes:

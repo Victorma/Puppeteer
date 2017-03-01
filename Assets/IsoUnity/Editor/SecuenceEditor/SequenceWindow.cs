@@ -33,7 +33,8 @@ public class SequenceWindow : EditorWindow
     private Dictionary<SequenceNode, NodeEditor> editors = new Dictionary<SequenceNode, NodeEditor>();
     private GUIStyle closeStyle, collapseStyle;
 
-    private int hovering = -1;
+	private int hovering = -1;
+	private SequenceNode hoveringNode = null;
     private int focusing = -1;
 
     private int lookingChildSlot;
@@ -156,6 +157,7 @@ public class SequenceWindow : EditorWindow
                 if (new Rect(0, 0, myNode.Position.width, myNode.Position.height).Contains(Event.current.mousePosition))
                 {
                     hovering = id;
+					hoveringNode = myNode;
                 }
 
                 break;
@@ -218,32 +220,6 @@ public class SequenceWindow : EditorWindow
 
     private Dictionary<SequenceNode, bool> loopCheck = new Dictionary<SequenceNode, bool>();
 
-    void drawLines(Rect from, SequenceNode to)
-    {
-        if (to == null)
-            return;
-
-        // Visible loop line
-        curveFromTo(from, to.Position, l, s);
-
-        if (!loopCheck.ContainsKey(to))
-        {
-            loopCheck.Add(to, true);
-            float h = to.Position.height / (to.Childs.Length * 1.0f);
-            for (int i = 0; i < to.Childs.Length; i++)
-            {
-                Rect fromRect = sumRect(to.Position, new Rect(0, h * i, 0, h - to.Position.height));
-                // Looking child line
-                if (lookingChildNode == to && i == lookingChildSlot)
-                {
-                    if (hovering != -1) curveFromTo(fromRect, nodes[hovering].Position, l, s);
-                    else curveFromTo(fromRect, new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 1, 1), l, s);
-                }
-                else drawLines(fromRect, to.Childs[i]);
-            }
-        }
-
-    }
 
     bool drawSlot(Vector2 center)
     {
@@ -275,23 +251,52 @@ public class SequenceWindow : EditorWindow
     void drawLines(Sequence sequence)
     {
         loopCheck.Clear();
-        drawLines(new Rect(0, 0, 0, position.height), sequence.Root);
+
+		// Draw the main nodes in green
+		drawLines(new Rect(0, 0, 0, position.height), sequence.Root, 
+			Color.green, 
+			new Color(Color.green.r, Color.green.g, Color.green.b, .2f));
 
         // Draw the rest of the lines in red
         foreach (var n in sequence.Nodes)
-        {
-            if (!loopCheck.ContainsKey(n))
-            {
-                float h = n.Position.height / (n.Childs.Length * 1.0f);
-                for (int i = 0; i < n.Childs.Length; i++)
-                    if (n.Childs[i] != null)
-                    {
-                        Rect fromRect = sumRect(n.Position, new Rect(0, h * i, 0, h - n.Position.height));
-                        curveFromTo(fromRect, n.Childs[i].Position, r, s);
-                    }
-            }
+		{
+			drawLines(new Rect(-1,-1,-1,-1), n, 
+				Color.red, 
+				new Color(Color.red.r, Color.red.g, Color.red.b, .2f));
         }
     }
+
+
+	void drawLines(Rect from, SequenceNode to, Color c, Color notHoveringColor, bool parentHovered = false)
+	{
+		if (to == null)
+			return;
+
+		var hoveringMe = hoveringNode != null && hoveringNode == to;
+		var useColor = parentHovered || hoveringNode == null || hoveringMe ? c : notHoveringColor;
+
+		// Visible loop line
+		if(from.width != -1 && from.height != -1)
+			curveFromTo(from, to.Position, useColor, s);
+
+		if (!loopCheck.ContainsKey(to))
+		{
+			loopCheck.Add(to, true);
+			float h = to.Position.height / (to.Childs.Length * 1.0f);
+			for (int i = 0; i < to.Childs.Length; i++)
+			{
+				Rect fromRect = sumRect(to.Position, new Rect(0, h * i, 0, h - to.Position.height));
+				// Looking child line
+				if (lookingChildNode == to && i == lookingChildSlot)
+				{
+					if (hovering != -1) curveFromTo(fromRect, nodes[hovering].Position, useColor, s);
+					else curveFromTo(fromRect, new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 1, 1), useColor, s);
+				}
+				else drawLines(fromRect, to.Childs[i], c, notHoveringColor, hoveringMe);
+			}
+		}
+
+	}
 
     /**
      *  Rectangle backup code calculation
@@ -396,7 +401,7 @@ public class SequenceWindow : EditorWindow
 
         scroll = GUI.BeginScrollView(rect, scroll, scrollRect);
         // Clear mouse hover
-        if (Event.current.type == EventType.MouseMove) hovering = -1;
+		if (Event.current.type == EventType.MouseMove) { hovering = -1; hoveringNode = null; }
         GUI.Box(scrollRect, "", "preBackground");
         BeginWindows();
         {

@@ -34,7 +34,6 @@ public class SequenceInterpreter  {
             Sequence.current = null;
 
             if (currentInterpreter.HasFinishedInterpretation()){
-				Debug.Log ("Finished interpretation");
 				currentNode = currentInterpreter.NextNode();
 				if(currentInterpreter is Object)
 					Object.DestroyImmediate(currentInterpreter as Object);

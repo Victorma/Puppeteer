@@ -11,7 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e0d983d07aae244b4199260a850e12, type: 3}
   m_Name: DialogPru
   m_EditorClassIdentifier: 
-  inited: 0
   root: {fileID: 114000012589575538}
   localVariables: {fileID: 114000013352237486}
   nodes:
@@ -20,13 +19,15 @@ MonoBehaviour:
   - {fileID: 114000012039437752}
   - {fileID: 114000011740078296}
   - {fileID: 114000014281599264}
+  - {fileID: 114000013356048880}
   ids:
   - -9444
   - -9776
   - -5488
   - -7034
   - -77714
-  inited: 0
+  - -83328
+  assetinited: 1
 --- !u!114 &114000010033736600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,6 +54,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iswitch: variable
   formula: '''Toni'''
+--- !u!114 &114000010658525460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986074b62c14ea9478e480b10c421f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options: []
 --- !u!114 &114000011221332398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,10 +139,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 973
-    y: 390
-    width: 727
-    height: 53
+    x: 978
+    y: 314
+    width: 312
+    height: 58
   collapsed: 0
 --- !u!114 &114000011813288620
 MonoBehaviour:
@@ -189,10 +202,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1176
-    y: 141
+    x: 1022
+    y: 140
     width: 247
-    height: 53
+    height: 58
   collapsed: 0
 --- !u!114 &114000012589575538
 MonoBehaviour:
@@ -212,10 +225,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 142
-    y: 357
-    width: 226
-    height: 186
+    x: 171
+    y: 303
+    width: 255
+    height: 191
   collapsed: 0
 --- !u!114 &114000012607037362
 MonoBehaviour:
@@ -256,10 +269,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 528
-    y: 244
+    x: 594
+    y: 188
     width: 288
-    height: 136
+    height: 141
   collapsed: 0
 --- !u!114 &114000013344169988
 MonoBehaviour:
@@ -285,6 +298,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switches: []
+--- !u!114 &114000013356048880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childs: []
+  isUnityObject: 0
+  objectContent: {fileID: 0}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 300
+    height: 0
+  collapsed: 0
 --- !u!114 &114000013546530928
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -337,8 +372,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 899
-    y: 580
-    width: 233
-    height: 107
+    x: 666
+    y: 678
+    width: 284
+    height: 112
   collapsed: 0

@@ -92,6 +92,9 @@ public class SequenceLauncher : EventManager {
 	IGameEvent ge;
 	public override void ReceiveEvent (IGameEvent ev)
 	{
+		if (interpreter != null)
+			interpreter.EventHappened (ev);
+
 		if (ev.Name == "event finished" && ev.getParameter ("event") == ge) {
 			
 			if (loop && !localExecution) {

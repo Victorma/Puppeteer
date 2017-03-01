@@ -166,6 +166,10 @@ public class SequenceNode : ScriptableObject {
 	public virtual SequenceNode Clone(){
 		var clone = this.MemberwiseClone () as SequenceNode;
 
+		clone.childs = new SequenceNode[this.ChildSlots];
+		for (int i = 0; i < ChildSlots; i++)
+			clone.childs [i] = childs [i];
+
 		if (Content != null && Content is System.ICloneable)
 			clone.Content = (Content as System.ICloneable).Clone ();
 
