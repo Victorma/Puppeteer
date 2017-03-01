@@ -8,13 +8,10 @@ using System;
 public class DialogNodeEditor : NodeEditor {
 
 	private SequenceNode myNode;
-    private Dialog dialog;
     private Editor editor;
-    
 
     public void draw(){
 
-		dialog = myNode.Content as Dialog;
         editor.OnInspectorGUI();
 		
 		/*if (Event.current.type != EventType.layout)

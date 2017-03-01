@@ -37,10 +37,7 @@ public class OptionsEditor : Editor {
         options = target as Options;
 
         //EditorGUILayout.HelpBox("Options are the lines between you have to choose at the end of the dialog. Leave empty to do nothing, put one to execute this as the dialog ends, or put more than one to let the player choose between them.", MessageType.None);
-        if (optionsReorderableList.list != null)
-        {
-            int i = optionsReorderableList.count;
-        }
+
         optionsReorderableList.list = options.Values;
         optionsReorderableList.DoLayoutList();
 

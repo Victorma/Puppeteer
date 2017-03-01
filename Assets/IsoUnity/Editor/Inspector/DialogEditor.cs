@@ -69,11 +69,6 @@ public class DialogEditor : Editor {
      * FRAGMENTS LIST OPERATIONS
      *****************************/
 
-    Rect entityRect = new Rect(0, 2, 40, 15);
-    Rect characterRect = new Rect(0, 2, 95, 15);
-    Rect parameterRect = new Rect(100, 2, 190, 15);
-    Rect nameRect = new Rect(0, 20, 190, 15);
-    Rect textRect = new Rect(0, 35, 190, 30);
     private void DrawFragmentsHeader(Rect rect)
     {
         GUI.Label(rect, "Dialog fragments");
@@ -83,7 +78,11 @@ public class DialogEditor : Editor {
     {
         Fragment frg = (Fragment)fragmentsReorderableList.list[index];
 
-        EditorGUI.LabelField(moveRect(entityRect, rect), "Target: ");
+		Rect characterRect = new Rect(0, 2, rect.width * .5f, 15);
+		Rect parameterRect = new Rect(rect.width * .5f, 2, rect.width * .5f, 15);
+		Rect nameRect = new Rect(0, 20, rect.width, 15);
+		Rect textRect = new Rect(0, 35, rect.width, 30);
+
         frg.Character = EditorGUI.TextField(moveRect(characterRect, rect), frg.Character);
         frg.Parameter = EditorGUI.TextField(moveRect(parameterRect, rect), frg.Parameter);
         frg.Name = EditorGUI.TextField(moveRect(nameRect, rect), frg.Name);

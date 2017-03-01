@@ -7,13 +7,11 @@ using NCalc;
 public class FormulaForkEditor : Editor {
     
     private object lastValue;
-    private List<string> warnings;
 
     public string Name { get; set; }
 
     void OnEnable()
     {
-        warnings = new List<string>();
     }
 
     public override void OnInspectorGUI()

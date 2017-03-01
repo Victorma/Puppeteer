@@ -29,16 +29,25 @@ public class SequenceWindow : EditorWindow
         set { this.sequence = value; }
     }
 
+	/*******************
+	 *  ATTRIBUTES
+	 * *****************/
+
     private Dictionary<int, SequenceNode> nodes = new Dictionary<int, SequenceNode>();
     private Dictionary<SequenceNode, NodeEditor> editors = new Dictionary<SequenceNode, NodeEditor>();
-    private GUIStyle closeStyle, collapseStyle;
+    private GUIStyle closeStyle, collapseStyle, selectedStyle;
 
 	private int hovering = -1;
 	private SequenceNode hoveringNode = null;
     private int focusing = -1;
 
     private int lookingChildSlot;
-    private SequenceNode lookingChildNode;
+	private SequenceNode lookingChildNode;
+
+	private Rect scrollRect = new Rect(0, 0, 1000, 1000);
+	private Vector2 scroll;
+
+	private bool toSelect = false;
 
     void nodeWindow(int id)
     {
@@ -117,7 +126,22 @@ public class SequenceWindow : EditorWindow
                 // Left button
                 if (Event.current.button == 0)
                 {
-                    if (hovering == id) focusing = hovering;
+					if (hovering == id) {
+						toSelect = false;
+						focusing = hovering;
+						if (Event.current.control) {
+							if (selection.Contains (myNode))
+								selection.Remove (myNode);
+							else
+								selection.Add (myNode);
+						} else {
+							toSelect = true;
+							if (!selection.Contains (myNode)) {
+								selection.Clear ();
+								selection.Add (myNode);
+							}
+						}
+					}
                     if (lookingChildNode != null)
                     {
                         // link creation between nodes
@@ -152,14 +176,23 @@ public class SequenceWindow : EditorWindow
                 }
 
                 break;
-            case EventType.MouseMove:
+			case EventType.MouseMove:
 
-                if (new Rect(0, 0, myNode.Position.width, myNode.Position.height).Contains(Event.current.mousePosition))
-                {
-                    hovering = id;
+				if (new Rect (0, 0, myNode.Position.width, myNode.Position.height).Contains (Event.current.mousePosition)) {
+					hovering = id;
 					hoveringNode = myNode;
-                }
-
+				}
+				break;
+		case EventType.MouseDrag:
+			toSelect = false;
+			break;
+		case EventType.MouseUp:
+			{
+				if(toSelect) {
+					selection.Clear ();
+					selection.Add (myNode);
+				}
+			}
                 break;
         }
 
@@ -190,7 +223,7 @@ public class SequenceWindow : EditorWindow
 
 
     }
-    void curveFromTo(Rect wr, Rect wr2, Color color, Color shadow)
+    void curveFromTo(Rect wr, Rect wr2, Color color)
     {
         Vector2 start = new Vector2(wr.x + wr.width, wr.y + 3 + wr.height / 2),
             startTangent = new Vector2(wr.x + wr.width + Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr.y + 3 + wr.height / 2),
@@ -201,17 +234,6 @@ public class SequenceWindow : EditorWindow
         Handles.color = color;
         Handles.DrawBezier(start, end, startTangent, endTangent, color, null, 3);
         Handles.EndGUI();
-
-        /*Drawing.bezierLine(
-			,
-			,
-			new Vector2(wr2.x, wr2.y + 3 + wr2.height / 2),
-			, shadow, 5, true,20);
-		Drawing.bezierLine(
-			new Vector2(wr.x + wr.width, wr.y + wr.height / 2),
-			new Vector2(wr.x + wr.width + Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr.y + wr.height / 2),
-			new Vector2(wr2.x, wr2.y + wr2.height / 2),
-			new Vector2(wr2.x - Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr2.y + wr2.height / 2), color, 2, true,20);*/
     }
 
     private Rect sumRect(Rect r1, Rect r2)
@@ -278,7 +300,7 @@ public class SequenceWindow : EditorWindow
 
 		// Visible loop line
 		if(from.width != -1 && from.height != -1)
-			curveFromTo(from, to.Position, useColor, s);
+			curveFromTo(from, to.Position, useColor);
 
 		if (!loopCheck.ContainsKey(to))
 		{
@@ -290,8 +312,8 @@ public class SequenceWindow : EditorWindow
 				// Looking child line
 				if (lookingChildNode == to && i == lookingChildSlot)
 				{
-					if (hovering != -1) curveFromTo(fromRect, nodes[hovering].Position, useColor, s);
-					else curveFromTo(fromRect, new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 1, 1), useColor, s);
+					if (hovering != -1) curveFromTo(fromRect, nodes[hovering].Position, useColor);
+					else curveFromTo(fromRect, new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 1, 1), useColor);
 				}
 				else drawLines(fromRect, to.Childs[i], c, notHoveringColor, hoveringMe);
 			}
@@ -301,13 +323,7 @@ public class SequenceWindow : EditorWindow
 
     /**
      *  Rectangle backup code calculation
-     **
-     
-        if(!rects.ContainsKey(node.Childs[i]))
-			rects.Add(node.Childs[i], new Rect(rects[node].x + 315, rects[node].y + i*altura, 150, 0));
-		curveFromTo(rects[node], rects[node.Childs[i]], new Color(0.3f,0.7f,0.4f), s);
-     
-     */
+     **/
 
     void createWindows(Sequence sequence)
     {
@@ -317,22 +333,26 @@ public class SequenceWindow : EditorWindow
             var finalPosition = GUILayout.Window(node.GetInstanceID(), node.Position, nodeWindow, node.Name);
 			var diff = finalPosition.position - node.Position.position;
 
+			// If the window has been moved, lets move the others too
 			if (diff != Vector2.zero) {
 
 				if (selection.Contains (node)) {
 					selection.ForEach (n => {
-						if(n != node) n.Position = new Rect(n.Position.position + diff, n.Position.size);
+						if(n != node) {
+							n.Position = new Rect(n.Position.position + diff, n.Position.size);
+							// Redo the window
+							GUILayout.Window(n.GetInstanceID(), n.Position, nodeWindow, n.Name);
+						}
 					});
 				}
-				Repaint ();
 			}
 			node.Position = finalPosition;
         }
     }
 
-    Color s = new Color(0.4f, 0.4f, 0.5f),
+    /*Color s = new Color(0.4f, 0.4f, 0.5f),
         l = new Color(0.3f, 0.7f, 0.4f),
-        r = new Color(0.8f, 0.2f, 0.2f);
+        r = new Color(0.8f, 0.2f, 0.2f);*/
 
 	List<SequenceNode> selection = new List<SequenceNode>();
 	Vector2 startPoint;
@@ -366,7 +386,10 @@ public class SequenceWindow : EditorWindow
             collapseStyle.hover.textColor = Color.blue;
         }
 
-        SequenceNode nodoInicial = sequence.Root;
+		if (selectedStyle == null) {
+			selectedStyle = Resources.Load<GUISkin> ("resplandor").box;
+		}
+
         GUILayout.BeginVertical(GUILayout.Height(17));
         GUILayout.BeginHorizontal("toolbar");
 
@@ -420,11 +443,19 @@ public class SequenceWindow : EditorWindow
         // Clear mouse hover
 		if (Event.current.type == EventType.MouseMove) { hovering = -1; hoveringNode = null; }
         GUI.Box(scrollRect, "", "preBackground");
+		
         BeginWindows();
         {
             nodes.Clear();
             createWindows(sequence);
 
+			if(Event.current.type == EventType.Repaint)
+				foreach (var n in selection)
+					GUI.Box (new Rect(
+						n.Position.position - new Vector2(0,0), 
+						n.Position.size + new Vector2(0	,0)), 
+						"", selectedStyle);
+				
             drawSlots(sequence);
 
             if (Event.current.type == EventType.Repaint)
@@ -432,7 +463,7 @@ public class SequenceWindow : EditorWindow
                 drawLines(sequence);
             }
         }
-        EndWindows();
+        EndWindows();	
 
         if (hovering == -1)
         {
@@ -457,30 +488,22 @@ public class SequenceWindow : EditorWindow
 					} 
 				}
 				break;
-			case EventType.MouseMove:
-				{
-					if (GUIUtility.hotControl == this.GetHashCode ()) {
-						Event.current.Use ();
-					}
-				}
-				break;
 			case EventType.MouseUp:
 				{
 					if (Event.current.button == 0) {
 						if (GUIUtility.hotControl == this.GetHashCode()) {
 							GUIUtility.hotControl = 0;
-						selection = sequence.Nodes.ToList().FindAll (node => RectContains(
-							Rect.MinMaxRect (startPoint.x, startPoint.y, Event.current.mousePosition.x, Event.current.mousePosition.y), node.Position));
-						Event.current.Use ();
+
+							UpdateSelection ();
+							Event.current.Use ();
 						}
 
 					} else if (Event.current.button == 1) {
 						// Right click
 
 						var menu = new GenericMenu();
-						var i = 0;
-						string text = string.Empty;
 						var mousePos = Event.current.mousePosition;
+						int i = 0;
 						foreach (var a in GetPossibleCreations())
 						{
 
@@ -497,25 +520,42 @@ public class SequenceWindow : EditorWindow
 					}
 				}
 				break;
+		case EventType.Repaint: 
+			// Draw selection rect 
+			if (GUIUtility.hotControl == GetHashCode ()) {
+				UpdateSelection ();
+				Handles.BeginGUI();
+				Handles.color = Color.white;
+				Handles.DrawSolidRectangleWithOutline (
+					Rect.MinMaxRect (startPoint.x, startPoint.y, Event.current.mousePosition.x, Event.current.mousePosition.y), 
+					new Color (.3f, .3f, .3f, .3f),
+					Color.gray);
+				Handles.EndGUI ();
+			}
+			break;
 		}
 
-		// Draw selection rect 
-		if (GUIUtility.hotControl == GetHashCode ()) {
-			Handles.BeginGUI();
-			Handles.color = Color.white;
-			Handles.DrawSolidRectangleWithOutline (
-				Rect.MinMaxRect (startPoint.x, startPoint.y, Event.current.mousePosition.x, Event.current.mousePosition.y), 
-				new Color (.3f, .3f, .3f, .3f),
-				Color.gray);
-			Handles.EndGUI ();
-		}
+
 
         GUI.EndScrollView();
     }
 
-    private Rect scrollRect = new Rect(0, 0, 1000, 1000);
-    private Vector2 scroll;
 
+	/*************************
+	 *  Selection
+	 * **********************/
+
+	void UpdateSelection(){
+
+		var xmin = Math.Min (startPoint.x, Event.current.mousePosition.x);
+		var ymin = Math.Min (startPoint.y, Event.current.mousePosition.y);
+		var xmax = Math.Max (startPoint.x, Event.current.mousePosition.x);
+		var ymax = Math.Max (startPoint.y, Event.current.mousePosition.y);
+		selection = sequence.Nodes.ToList().FindAll (node => 
+			RectContains(Rect.MinMaxRect (xmin, ymin, xmax, ymax), node.Position)
+		);
+		Repaint ();
+	}
 
     /**************************
      * Possible node contents *
@@ -543,7 +583,11 @@ public class SequenceWindow : EditorWindow
     }
 
 	bool RectContains (Rect r1, Rect r2){
-		return r1.xMin < r2.xMin && r1.xMax > r2.xMax && r1.yMin < r2.yMin && r1.yMax > r2.yMax;
+		var intersection = Rect.MinMaxRect (Mathf.Max (r1.xMin, r2.xMin), Mathf.Max (r1.yMin, r2.yMin), Mathf.Min (r1.xMax, r2.xMax), Mathf.Min (r1.yMax, r2.yMax));
+
+		return Event.current.shift 
+			? r1.xMin < r2.xMin && r1.xMax > r2.xMax && r1.yMin < r2.yMin && r1.yMax > r2.yMax // Completely inside
+				:  intersection.width > 0 && intersection.height > 0;
 	}
 
     static IEnumerable<Type> GetTypesWith<TAttribute>(bool inherit)

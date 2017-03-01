@@ -16,9 +16,6 @@ public class FormulaSetterEditor : Editor {
         if(GUILayout.Button("v", GUILayout.Width(15), GUILayout.Height(15)))
         {
             var menu = new GenericMenu();
-            var i = 0;
-            string text = string.Empty;
-            var mousePos = Event.current.mousePosition;
             var possibles = isoSwitches.switches.ConvertAll(s => s.id);
 
             if (!string.IsNullOrEmpty(fs.iswitch))

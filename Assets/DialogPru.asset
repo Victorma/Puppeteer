@@ -67,11 +67,11 @@ MonoBehaviour:
   - fork: {fileID: 114000013344169988}
     text: Toni
     parameter: 
-  - fork: {fileID: 114000011375074622}
-    text: Perro
-    parameter: 
   - fork: {fileID: 114000013570651098}
     text: Salir
+    parameter: 
+  - fork: {fileID: 114000011375074622}
+    text: Perro
     parameter: 
 --- !u!114 &114000011330009108
 MonoBehaviour:
@@ -137,8 +137,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1151
-    y: 318
+    x: 1150
+    y: 306
     width: 187
     height: 53
   collapsed: 0
@@ -200,9 +200,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1124
-    y: 129
-    width: 247
+    x: 1242
+    y: 71
+    width: 187
     height: 53
   collapsed: 0
 --- !u!114 &114000012589575538
@@ -223,9 +223,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 221
-    y: 278
-    width: 223
+    x: 223
+    y: 395
+    width: 317
     height: 186
   collapsed: 0
 --- !u!114 &114000012607037362
@@ -267,8 +267,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 622
-    y: 178
+    x: 674
+    y: 203
     width: 288
     height: 136
   collapsed: 0
@@ -360,8 +360,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1321
-    y: 501
-    width: 284
+    x: 1424
+    y: 419
+    width: 233
     height: 107
   collapsed: 0
