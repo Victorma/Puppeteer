@@ -185,6 +185,7 @@ public class SequenceWindow : EditorWindow
             //if(Event.current.type != EventType.layout)*/
         }
 
+
         GUI.DragWindow();
 
 
@@ -313,13 +314,29 @@ public class SequenceWindow : EditorWindow
         foreach (var node in sequence.Nodes)
         {
             nodes.Add(node.GetInstanceID(), node);
-            node.Position = GUILayout.Window(node.GetInstanceID(), node.Position, nodeWindow, node.Name);
+            var finalPosition = GUILayout.Window(node.GetInstanceID(), node.Position, nodeWindow, node.Name);
+			var diff = finalPosition.position - node.Position.position;
+
+			if (diff != Vector2.zero) {
+
+				if (selection.Contains (node)) {
+					selection.ForEach (n => {
+						if(n != node) n.Position = new Rect(n.Position.position + diff, n.Position.size);
+					});
+				}
+				Repaint ();
+			}
+			node.Position = finalPosition;
         }
     }
 
     Color s = new Color(0.4f, 0.4f, 0.5f),
         l = new Color(0.3f, 0.7f, 0.4f),
         r = new Color(0.8f, 0.2f, 0.2f);
+
+	List<SequenceNode> selection = new List<SequenceNode>();
+	Vector2 startPoint;
+
     void OnGUI()
     {
         if (sequence == null)
@@ -425,27 +442,74 @@ public class SequenceWindow : EditorWindow
             }
         }
 
-        // Right click
-        if (Event.current.type == EventType.MouseDown && Event.current.button == 1)
-        {
-            var menu = new GenericMenu();
-            var i = 0;
-            string text = string.Empty;
-            var mousePos = Event.current.mousePosition;
-            foreach (var a in GetPossibleCreations())
-            {
+		switch (Event.current.type) {
+			case EventType.MouseDown: 
+				{
+					if (Event.current.button == 0) {
+						// Selecting
+						if (GUIUtility.hotControl == 0) {
+							// Start selecting
+							GUIUtility.hotControl = this.GetHashCode();
+							startPoint = Event.current.mousePosition;
+							selection.Clear ();
+							Event.current.Use ();
+						}
+					} 
+				}
+				break;
+			case EventType.MouseMove:
+				{
+					if (GUIUtility.hotControl == this.GetHashCode ()) {
+						Event.current.Use ();
+					}
+				}
+				break;
+			case EventType.MouseUp:
+				{
+					if (Event.current.button == 0) {
+						if (GUIUtility.hotControl == this.GetHashCode()) {
+							GUIUtility.hotControl = 0;
+						selection = sequence.Nodes.ToList().FindAll (node => RectContains(
+							Rect.MinMaxRect (startPoint.x, startPoint.y, Event.current.mousePosition.x, Event.current.mousePosition.y), node.Position));
+						Event.current.Use ();
+						}
 
-                menu.AddItem(new GUIContent("Create/" + a.Key), false, (t) => {
-                    var kv = (KeyValuePair < string, Type>)t;
-                    var newObject = CreateInstance(kv.Value);
-                    var child = sequence.CreateNode(newObject);
-                    child.Position = new Rect(mousePos, child.Position.size);
-                }, a);
-                i++;
-            }
+					} else if (Event.current.button == 1) {
+						// Right click
 
-            menu.ShowAsContext();
-        }
+						var menu = new GenericMenu();
+						var i = 0;
+						string text = string.Empty;
+						var mousePos = Event.current.mousePosition;
+						foreach (var a in GetPossibleCreations())
+						{
+
+							menu.AddItem(new GUIContent("Create/" + a.Key), false, (t) => {
+								var kv = (KeyValuePair < string, Type>)t;
+								var newObject = CreateInstance(kv.Value);
+								var child = sequence.CreateNode(newObject);
+								child.Position = new Rect(mousePos, child.Position.size);
+							}, a);
+							i++;
+						}
+
+						menu.ShowAsContext();
+					}
+				}
+				break;
+		}
+
+		// Draw selection rect 
+		if (GUIUtility.hotControl == GetHashCode ()) {
+			Handles.BeginGUI();
+			Handles.color = Color.white;
+			Handles.DrawSolidRectangleWithOutline (
+				Rect.MinMaxRect (startPoint.x, startPoint.y, Event.current.mousePosition.x, Event.current.mousePosition.y), 
+				new Color (.3f, .3f, .3f, .3f),
+				Color.gray);
+			Handles.EndGUI ();
+		}
+
         GUI.EndScrollView();
     }
 
@@ -477,6 +541,10 @@ public class SequenceWindow : EditorWindow
         }
         return possibleCreationsCache;
     }
+
+	bool RectContains (Rect r1, Rect r2){
+		return r1.xMin < r2.xMin && r1.xMax > r2.xMax && r1.yMin < r2.yMin && r1.yMax > r2.yMax;
+	}
 
     static IEnumerable<Type> GetTypesWith<TAttribute>(bool inherit)
                           where TAttribute : System.Attribute
