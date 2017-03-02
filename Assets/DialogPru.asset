@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dceab41990a77394aa0aede67dc01b11, type: 3}
   m_Name: '''Toni'''
   m_EditorClassIdentifier: 
-  iswitch: variable
+  iswitch: Gato
   formula: '''Toni'''
 --- !u!114 &114000011221332398
 MonoBehaviour:
@@ -137,9 +137,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1150
-    y: 306
-    width: 187
+    x: 987
+    y: 312
+    width: 342
     height: 53
   collapsed: 0
 --- !u!114 &114000011813288620
@@ -200,8 +200,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1242
-    y: 71
+    x: 1230
+    y: 96
     width: 187
     height: 53
   collapsed: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0887338ee6657394ebdae4d5c768a9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
+  id: Gato
   state: {fileID: 114000013415042262}
 --- !u!114 &114000012589575538
 MonoBehaviour:
@@ -236,8 +236,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 223
-    y: 395
+    x: 170
+    y: 337
     width: 317
     height: 186
   collapsed: 0
@@ -280,9 +280,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 674
-    y: 203
-    width: 288
+    x: 598
+    y: 240
+    width: 262
     height: 136
   collapsed: 0
 --- !u!114 &114000013344169988
@@ -331,7 +331,7 @@ MonoBehaviour:
   q: {x: 0, y: 0, z: 0, w: 0}
   b: 0
   c: 0
-  whatIs: 
+  whatIs: System.Int32
 --- !u!114 &114000013541750138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,8 +396,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1424
-    y: 419
+    x: 1381
+    y: 412
     width: 233
     height: 107
   collapsed: 0

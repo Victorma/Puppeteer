@@ -33,260 +33,339 @@ public class SequenceWindow : EditorWindow
 	 *  ATTRIBUTES
 	 * *****************/
 
+	// Main vars
     private Dictionary<int, SequenceNode> nodes = new Dictionary<int, SequenceNode>();
     private Dictionary<SequenceNode, NodeEditor> editors = new Dictionary<SequenceNode, NodeEditor>();
     private GUIStyle closeStyle, collapseStyle, selectedStyle;
 
+	// Graph control
 	private int hovering = -1;
 	private SequenceNode hoveringNode = null;
     private int focusing = -1;
 
+	// Graph management
     private int lookingChildSlot;
 	private SequenceNode lookingChildNode;
+	private Dictionary<SequenceNode, bool> loopCheck = new Dictionary<SequenceNode, bool>();
 
+	// Graph scroll
 	private Rect scrollRect = new Rect(0, 0, 1000, 1000);
 	private Vector2 scroll;
 
+	// Selection
 	private bool toSelect = false;
+	private List<SequenceNode> selection = new List<SequenceNode>();
+	private Vector2 startPoint;
 
-    void nodeWindow(int id)
-    {
-        SequenceNode myNode = nodes[id];
+	/******************
+	 * Window behaviours
+	 * ******************/
 
-        // Editor selection
-        //string[] editorNames = NodeEditorFactory.Intance.CurrentNodeEditors;
+	void OnEnable(){
+		InitStyles ();
+	}
 
-        GUILayout.BeginHorizontal();
-        EditorGUI.BeginChangeCheck();
-        //var editorSelected = EditorGUILayout.Popup(NodeEditorFactory.Intance.NodeEditorIndex(myNode), editorNames);
-        
-        if (!editors.ContainsKey(myNode) || EditorGUI.EndChangeCheck())
-        {
-               var editor = NodeEditorFactory.Intance.createNodeEditorFor(
-                NodeEditorFactory.Intance.CurrentNodeEditors[
-                    NodeEditorFactory.Intance.NodeEditorIndex(myNode)
-                ]);
-            editor.useNode(myNode);
+	void OnGUI()
+	{
+		if (sequence == null)
+			this.Close();
 
-            if (!editors.ContainsKey(myNode)) editors.Add(myNode, editor);
-            else
-            {
-                ScriptableObject.DestroyImmediate(editors[myNode] as ScriptableObject);
-                editors[myNode] = editor;
-            }
-        }
+		Sequence.current = sequence;
+		this.wantsMouseMove = true;
 
-        // Drawing
+		// Print the toolbar
+		var lastRect = DoToolbar ();
 
-        if (myNode.Collapsed)
-        {
-            if (GUILayout.Button(myNode.ShortDescription))
-                myNode.Collapsed = false;
-        }
-        else
-        {
-            GUILayout.FlexibleSpace();
-        }
-        if (GUILayout.Button(myNode.Collapsed ? "+" : "-", collapseStyle, GUILayout.Width(15), GUILayout.Height(15)))
-            myNode.Collapsed = !myNode.Collapsed;
-        if (GUILayout.Button("X", closeStyle, GUILayout.Width(15), GUILayout.Height(15)))
-        {
-            sequence.RemoveNode(myNode);
-            return;
-        }
+		var rect = new Rect(0, lastRect.y + lastRect.height, position.width, position.height - lastRect.height);
 
-        GUILayout.EndHorizontal();
+		// Do the sequence graph
+		DoGraph (rect);
 
-        if (!myNode.Collapsed)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.BeginVertical();
-            editors[myNode].draw();
-            GUILayout.EndVertical();
-            GUILayout.EndHorizontal();
+		Sequence.current = null;
+	}
 
-            nodes[id] = editors[myNode].Result;
-        }
+	/*******************************
+	 * Initialization methods
+	 ******************************/
 
-        // Event management
-        if (Event.current.type != EventType.layout)
-        {
-            Rect lastRect = GUILayoutUtility.GetLastRect();
-            Rect myRect = myNode.Position;
-            myRect.height = lastRect.y + lastRect.height;
-            myNode.Position = myRect;
-            this.Repaint();
-        }
+	void InitStyles(){
 
-        switch (Event.current.type)
-        {
-            case EventType.MouseDown:
+		if (closeStyle == null)
+		{
+			closeStyle = new GUIStyle(GUI.skin.button);
+			closeStyle.padding = new RectOffset(0, 0, 0, 0);
+			closeStyle.margin = new RectOffset(0, 5, 2, 0);
+			closeStyle.normal.textColor = Color.red;
+			closeStyle.focused.textColor = Color.red;
+			closeStyle.active.textColor = Color.red;
+			closeStyle.hover.textColor = Color.red;
+		}
 
-                // Left button
-                if (Event.current.button == 0)
-                {
-					if (hovering == id) {
-						toSelect = false;
-						focusing = hovering;
-						if (Event.current.control) {
-							if (selection.Contains (myNode))
-								selection.Remove (myNode);
-							else
-								selection.Add (myNode);
-						} else {
-							toSelect = true;
-							if (!selection.Contains (myNode)) {
-								selection.Clear ();
-								selection.Add (myNode);
-							}
-						}
+		if (collapseStyle == null)
+		{
+			collapseStyle = new GUIStyle(GUI.skin.button);
+			collapseStyle.padding = new RectOffset(0, 0, 0, 0);
+			collapseStyle.margin = new RectOffset(0, 5, 2, 0);
+			collapseStyle.normal.textColor = Color.blue;
+			collapseStyle.focused.textColor = Color.blue;
+			collapseStyle.active.textColor = Color.blue;
+			collapseStyle.hover.textColor = Color.blue;
+		}
+
+		if (selectedStyle == null) {
+			selectedStyle = Resources.Load<GUISkin> ("resplandor").box;
+		}
+	}
+
+	/**************************
+	 * TOOLBAR
+	 **************************/
+	Rect DoToolbar(){
+
+		GUILayout.BeginVertical(GUILayout.Height(17));
+		GUILayout.BeginHorizontal("toolbar");
+
+		using (new EditorGUI.DisabledScope())
+		{
+			if (GUILayout.Button("Globals", "toolbarButton", GUILayout.Width(100)))
+			{
+				var o = SwitchesMenu.ShowAtPosition(GUILayoutUtility.GetLastRect().Move(new Vector2(5,16)));
+				if (o) GUIUtility.ExitGUI();
+			}
+			if (GUILayout.Button("Locals", "toolbarButton", GUILayout.Width(100)))
+			{
+				var o = SwitchesMenu.ShowAtPosition(GUILayoutUtility.GetLastRect().Move(new Vector2(105, 16)), sequence.LocalVariables);
+				if (o) GUIUtility.ExitGUI();
+			}
+		}
+
+		GUILayout.Space(5);
+
+		if (GUILayout.Button("New Node", "toolbarButton"))
+		{
+			var node = sequence.CreateNode();
+			node.Position = new Rect(scroll + position.size / 2 - node.Position.size / 2, node.Position.size);
+			node.Position = new Rect(new Vector2((int)node.Position.x, (int)node.Position.y), node.Position.size);
+		}
+		if (GUILayout.Button("Set Root", "toolbarButton"))
+		{
+			if (nodes.ContainsKey(focusing))
+			{
+				sequence.Root = nodes[focusing];
+			}
+		}
+
+		GUILayout.EndHorizontal();
+		GUILayout.EndVertical();
+
+		return GUILayoutUtility.GetLastRect();
+	}
+
+	/********************
+	 * GRAPH
+	 * ******************/
+	void DoGraph(Rect rect){
+
+
+		float maxX = rect.width, maxY = rect.height;
+		foreach (var node in sequence.Nodes)
+		{
+			var px = node.Position.x + node.Position.width + 50;
+			var py = node.Position.y + node.Position.height + 50;
+			maxX = Mathf.Max(maxX, px);
+			maxY = Mathf.Max(maxY, py);
+		}
+
+		scrollRect = new Rect(0, 0, maxX, maxY);
+		scroll = GUI.BeginScrollView(rect, scroll, scrollRect);
+
+		// Clear mouse hover
+		if (Event.current.type == EventType.MouseMove) { 
+			if (hovering != -1) 
+				this.Repaint ();
+			
+			hovering = -1; 
+			hoveringNode = null; 
+		}
+		GUI.Box(scrollRect, "", "preBackground");
+		drawBackground (rect);
+
+		BeginWindows();
+		{
+			nodes.Clear();
+			createWindows(sequence);
+
+			if(Event.current.type == EventType.Repaint)
+				foreach (var n in selection)
+					GUI.Box (new Rect(
+						n.Position.position - new Vector2(0,0), 
+						n.Position.size + new Vector2(0	,0)), 
+						"", selectedStyle);
+
+			drawSlots(sequence);
+
+			if (Event.current.type == EventType.Repaint)
+			{
+				drawLines(sequence);
+			}
+		}
+		EndWindows();	
+
+		if (Event.current.type == EventType.MouseDrag && EditorGUIUtility.hotControl == 0)
+		{
+			scroll -= Event.current.delta;
+		}
+
+		switch (Event.current.type) {
+		case EventType.MouseDown: 
+			{
+				if (Event.current.button == 0) {
+					// Selecting
+					if (GUIUtility.hotControl == 0) {
+						// Start selecting
+						GUIUtility.hotControl = this.GetHashCode();
+						startPoint = Event.current.mousePosition;
+						selection.Clear ();
+						Event.current.Use ();
 					}
-                    if (lookingChildNode != null)
-                    {
-                        // link creation between nodes
-                        lookingChildNode.Childs[lookingChildSlot] = myNode;
-                        // finishing search
-                        lookingChildNode = null;
-                    }
-                    if(myNode.Content is UnityEngine.Object)
-                        Selection.activeObject = myNode.Content as UnityEngine.Object;
-                }
-
-                // Right Button
-                if (Event.current.button == 1)
-                {
-                    var menu = new GenericMenu();
-                    var i = 0;
-                    string text = string.Empty;
-                    menu.AddItem(new GUIContent("Set sequence root"), false, (node) => sequence.Root = node as SequenceNode, myNode);
-                    foreach (var a in editors[myNode].ChildNames)
-                    {
-                        text = (a == "") ? (i + "") : a;
-                        menu.AddItem(new GUIContent("Set node for " + text), false, (t) => {
-                            // Detach		
-                            myNode.Childs[(int)t] = null;
-                            lookingChildNode = myNode;
-                            lookingChildSlot = (int)t;
-                        }, i);
-                        i++;
-                    }
-
-                    menu.ShowAsContext();
-                }
-
-                break;
-			case EventType.MouseMove:
-
-				if (new Rect (0, 0, myNode.Position.width, myNode.Position.height).Contains (Event.current.mousePosition)) {
-					hovering = id;
-					hoveringNode = myNode;
-				}
-				break;
-		case EventType.MouseDrag:
-			toSelect = false;
+				} 
+			}
 			break;
 		case EventType.MouseUp:
 			{
-				if(toSelect) {
-					selection.Clear ();
-					selection.Add (myNode);
+				if (Event.current.button == 0) {
+					if (GUIUtility.hotControl == this.GetHashCode()) {
+						GUIUtility.hotControl = 0;
+
+						UpdateSelection ();
+						Event.current.Use ();
+					}
+
+				} else if (Event.current.button == 1) {
+					// Right click
+
+					var menu = new GenericMenu();
+					var mousePos = Event.current.mousePosition;
+					int i = 0;
+					foreach (var a in GetPossibleCreations())
+					{
+
+						menu.AddItem(new GUIContent("Create/" + a.Key), false, (t) => {
+							var kv = (KeyValuePair < string, Type>)t;
+							var newObject = CreateInstance(kv.Value);
+							var child = sequence.CreateNode(newObject);
+							child.Position = new Rect(mousePos, child.Position.size);
+						}, a);
+						i++;
+					}
+
+					menu.ShowAsContext();
 				}
 			}
-                break;
-        }
+			break;
+		case EventType.Repaint: 
+			// Draw selection rect 
+			if (GUIUtility.hotControl == GetHashCode ()) {
+				UpdateSelection ();
+				Handles.BeginGUI();
+				Handles.color = Color.white;
+				Handles.DrawSolidRectangleWithOutline (
+					Rect.MinMaxRect (startPoint.x, startPoint.y, Event.current.mousePosition.x, Event.current.mousePosition.y), 
+					new Color (.3f, .3f, .3f, .3f),
+					Color.gray);
+				Handles.EndGUI ();
+			}
+			break;
+		}
 
-        var resizeRect = new Rect(new Vector2(myNode.Position.width - 10, 0), new Vector2(10, myNode.Position.height));
-        EditorGUIUtility.AddCursorRect(resizeRect,MouseCursor.ResizeHorizontal, myNode.GetHashCode());
-        if (EditorGUIUtility.hotControl == 0 
-            && Event.current.type == EventType.MouseDown 
-            && Event.current.button == 0 
-            && resizeRect.Contains(Event.current.mousePosition))
-        {
-            EditorGUIUtility.hotControl = myNode.GetHashCode();
-            Event.current.Use();
-        }
-        
-        if(GUIUtility.hotControl == myNode.GetHashCode())
-        {
-            //Debug.Log("hotcontrol");
-            myNode.Position = new Rect(myNode.Position.x, myNode.Position.y, Event.current.mousePosition.x + 5, myNode.Position.height);
-            this.Repaint();
-            //Event.current.Use();
-            if (Event.current.type == EventType.MouseUp)
-                EditorGUIUtility.hotControl = 0;
-            //if(Event.current.type != EventType.layout)*/
-        }
+		GUI.EndScrollView();
+	}
 
 
-        GUI.DragWindow();
+	// AUX GRAPH FUNCTIONS
 
-    }
+	void drawBackground(Rect rect){
 
-    void curveFromTo(Rect wr, Rect wr2, Color color)
-    {
-        Vector2 start = new Vector2(wr.x + wr.width, wr.y + 3 + wr.height / 2),
-            startTangent = new Vector2(wr.x + wr.width + Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr.y + 3 + wr.height / 2),
-            end = new Vector2(wr2.x, wr2.y + 3 + wr2.height / 2),
-            endTangent = new Vector2(wr2.x - Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr2.y + 3 + wr2.height / 2);
+		float increment = 15;
 
-        Handles.BeginGUI();
-        Handles.color = color;
-        Handles.DrawBezier(start, end, startTangent, endTangent, color, null, 3);
-        Handles.EndGUI();
-    }
+		float pos = 0;
+		int i = 0;
+		float max = Mathf.Max (rect.width, rect.height);
 
-    private Rect sumRect(Rect r1, Rect r2)
-    {
-        return new Rect(r1.x + r2.x, r1.y + r2.y, r1.width + r2.width, r1.height + r2.height);
-    }
+		Handles.BeginGUI ();
 
-    private Dictionary<SequenceNode, bool> loopCheck = new Dictionary<SequenceNode, bool>();
+		Handles.DrawSolidRectangleWithOutline (rect, new Color(.1f,.1f,.1f,1f), new Color(.1f,.1f,.1f,1f));
 
+		while (pos < max) {
 
-    bool drawSlot(Vector2 center)
-    {
-        return GUI.Button(new Rect(center.x - 10, center.y - 10, 20, 20), "");
-    }
+			Handles.color = new Color(.2f,.2f,.2f,1f);
 
-    void drawSlots(Sequence sequence)
-    {
+			// Horizontal
+			Handles.DrawLine (new Vector2 (0,pos), new Vector2 (rect.width, pos));
+			// Vertical
+			Handles.DrawLine (new Vector2 (pos,0), new Vector2 (pos, rect.height));
 
-        // Draw the rest of the lines in red
-        foreach (var n in sequence.Nodes)
-        {
-            // InputSlot
-            drawSlot(new Vector2(n.Position.x, n.Position.y + 3 + n.Position.height / 2));
+			i++;	
+			pos += increment;
+		}
 
-            // OutputSlots
-            float h = n.Position.height / (n.Childs.Length * 1.0f);
-            for (int i = 0; i < n.Childs.Length; i++)
-                if (drawSlot(new Vector2(n.Position.x + n.Position.width, n.Position.y + h * i + h / 2f)))
-                {
-                    // Detach		
-                    n.Childs[i] = null;
-                    lookingChildNode = n;
-                    lookingChildSlot = i;
-                }
-        }
-    }
+		i = 0;
+		pos = 0;
+		while (pos < max) {
 
-    void drawLines(Sequence sequence)
-    {
-        loopCheck.Clear();
+			Handles.color = new Color(.3f,.3f,.3f,1f);
+
+			// Horizontal
+			Handles.DrawLine (new Vector2 (0,pos), new Vector2 (rect.width, pos));
+			// Vertical
+			Handles.DrawLine (new Vector2 (pos,0), new Vector2 (pos, rect.height));
+
+			i+=10;
+			pos += increment*10;
+		}
+
+		Handles.EndGUI ();
+	}
+
+	void drawSlots(Sequence sequence)
+	{
+
+		// Draw the rest of the lines in red
+		foreach (var n in sequence.Nodes)
+		{
+			// InputSlot
+			drawSlot(new Vector2(n.Position.x, n.Position.y + 3 + n.Position.height / 2));
+
+			// OutputSlots
+			float h = n.Position.height / (n.Childs.Length * 1.0f);
+			for (int i = 0; i < n.Childs.Length; i++)
+				if (drawSlot(new Vector2(n.Position.x + n.Position.width, n.Position.y + h * i + h / 2f)))
+				{
+					// Detach		
+					n.Childs[i] = null;
+					lookingChildNode = n;
+					lookingChildSlot = i;
+				}
+		}
+	}
+
+	void drawLines(Sequence sequence)
+	{
+		loopCheck.Clear();
 
 		// Draw the main nodes in green
 		drawLines(new Rect(0, 0, 0, position.height), sequence.Root, 
 			Color.green, 
 			new Color(Color.green.r, Color.green.g, Color.green.b, .2f));
 
-        // Draw the rest of the lines in red
-        foreach (var n in sequence.Nodes)
+		// Draw the rest of the lines in red
+		foreach (var n in sequence.Nodes)
 		{
 			drawLines(new Rect(-1,-1,-1,-1), n, 
 				Color.red, 
 				new Color(Color.red.r, Color.red.g, Color.red.b, .2f));
-        }
-    }
+		}
+	}
 
 
 	void drawLines(Rect from, SequenceNode to, Color c, Color notHoveringColor, bool parentHovered = false)
@@ -320,16 +399,12 @@ public class SequenceWindow : EditorWindow
 
 	}
 
-    /**
-     *  Rectangle backup code calculation
-     **/
-
-    void createWindows(Sequence sequence)
-    {
-        foreach (var node in sequence.Nodes)
-        {
-            nodes.Add(node.GetInstanceID(), node);
-            var finalPosition = GUILayout.Window(node.GetInstanceID(), node.Position, nodeWindow, node.Name);
+	void createWindows(Sequence sequence)
+	{
+		foreach (var node in sequence.Nodes)
+		{
+			nodes.Add(node.GetInstanceID(), node);
+			var finalPosition = GUILayout.Window(node.GetInstanceID(), node.Position, NodeWindow, node.Name);
 			var diff = finalPosition.position - node.Position.position;
 
 			// If the window has been moved, lets move the others too
@@ -340,204 +415,259 @@ public class SequenceWindow : EditorWindow
 						if(n != node) {
 							n.Position = new Rect(n.Position.position + diff, n.Position.size);
 							// Redo the window
-							GUILayout.Window(n.GetInstanceID(), n.Position, nodeWindow, n.Name);
+							GUILayout.Window(n.GetInstanceID(), n.Position, NodeWindow, n.Name);
 						}
 					});
 				}
 			}
 			node.Position = finalPosition;
-        }
+		}
+	}
+
+    void curveFromTo(Rect wr, Rect wr2, Color color)
+    {
+        Vector2 start = new Vector2(wr.x + wr.width, wr.y + 3 + wr.height / 2),
+            startTangent = new Vector2(wr.x + wr.width + Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr.y + 3 + wr.height / 2),
+            end = new Vector2(wr2.x, wr2.y + 3 + wr2.height / 2),
+            endTangent = new Vector2(wr2.x - Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr2.y + 3 + wr2.height / 2);
+
+        Handles.BeginGUI();
+        Handles.color = color;
+        Handles.DrawBezier(start, end, startTangent, endTangent, color, null, 3);
+        Handles.EndGUI();
     }
 
-    /*Color s = new Color(0.4f, 0.4f, 0.5f),
-        l = new Color(0.3f, 0.7f, 0.4f),
-        r = new Color(0.8f, 0.2f, 0.2f);*/
-
-	List<SequenceNode> selection = new List<SequenceNode>();
-	Vector2 startPoint;
-
-    void OnGUI()
+    private Rect sumRect(Rect r1, Rect r2)
     {
-        if (sequence == null)
-            this.Close();
+        return new Rect(r1.x + r2.x, r1.y + r2.y, r1.width + r2.width, r1.height + r2.height);
+    }
 
-		Sequence.current = sequence;
+    bool drawSlot(Vector2 center)
+    {
+        return GUI.Button(new Rect(center.x - 10, center.y - 10, 20, 20), "");
+    }
 
-        this.wantsMouseMove = true;
+	/**********************
+	 * Node windows
+	 *********************/
 
-        if (closeStyle == null)
-        {
-            closeStyle = new GUIStyle(GUI.skin.button);
-            closeStyle.padding = new RectOffset(0, 0, 0, 0);
-            closeStyle.margin = new RectOffset(0, 5, 2, 0);
-            closeStyle.normal.textColor = Color.red;
-            closeStyle.focused.textColor = Color.red;
-            closeStyle.active.textColor = Color.red;
-            closeStyle.hover.textColor = Color.red;
-        }
+	void NodeWindow(int id)
+	{
+		SequenceNode myNode = nodes[id];
 
-        if (collapseStyle == null)
-        {
-            collapseStyle = new GUIStyle(GUI.skin.button);
-            collapseStyle.padding = new RectOffset(0, 0, 0, 0);
-            collapseStyle.margin = new RectOffset(0, 5, 2, 0);
-            collapseStyle.normal.textColor = Color.blue;
-            collapseStyle.focused.textColor = Color.blue;
-            collapseStyle.active.textColor = Color.blue;
-            collapseStyle.hover.textColor = Color.blue;
-        }
+		// Editor selection
 
-		if (selectedStyle == null) {
-			selectedStyle = Resources.Load<GUISkin> ("resplandor").box;
-		}
+		DoContentEditor (id);
 
-        GUILayout.BeginVertical(GUILayout.Height(17));
-        GUILayout.BeginHorizontal("toolbar");
+		switch (Event.current.type)
+		{
+		case EventType.MouseMove:
 
-        using (new EditorGUI.DisabledScope())
-        {
-            if (GUILayout.Button("Globals", "toolbarButton", GUILayout.Width(100)))
-            {
-                var o = SwitchesMenu.ShowAtPosition(GUILayoutUtility.GetLastRect().Move(new Vector2(5,16)));
-                if (o) GUIUtility.ExitGUI();
-            }
-            if (GUILayout.Button("Locals", "toolbarButton", GUILayout.Width(100)))
-            {
-                var o = SwitchesMenu.ShowAtPosition(GUILayoutUtility.GetLastRect().Move(new Vector2(105, 16)), sequence.LocalVariables);
-                if (o) GUIUtility.ExitGUI();
-            }
-        }
-
-        GUILayout.Space(5);
-
-        if (GUILayout.Button("New Node", "toolbarButton"))
-        {
-            var node = sequence.CreateNode();
-            node.Position = new Rect(scroll + position.size / 2 - node.Position.size / 2, node.Position.size);
-            node.Position = new Rect(new Vector2((int)node.Position.x, (int)node.Position.y), node.Position.size);
-        }
-        if (GUILayout.Button("Set Root", "toolbarButton"))
-        {
-            if (nodes.ContainsKey(focusing))
-            {
-                sequence.Root = nodes[focusing];
-            }
-        }
-
-        GUILayout.EndHorizontal();
-        GUILayout.EndVertical();
-        var lastRect = GUILayoutUtility.GetLastRect();
-
-        var rect = new Rect(0, lastRect.y + lastRect.height, position.width, position.height - lastRect.height);
-
-        float maxX = rect.width, maxY = rect.height;
-        foreach (var node in sequence.Nodes)
-        {
-            var px = node.Position.x + node.Position.width + 50;
-            var py = node.Position.y + node.Position.height + 50;
-            maxX = Mathf.Max(maxX, px);
-            maxY = Mathf.Max(maxY, py);
-        }
-        scrollRect = new Rect(0, 0, maxX, maxY);
-
-        scroll = GUI.BeginScrollView(rect, scroll, scrollRect);
-        // Clear mouse hover
-		if (Event.current.type == EventType.MouseMove) { hovering = -1; hoveringNode = null; }
-        GUI.Box(scrollRect, "", "preBackground");
-		
-        BeginWindows();
-        {
-            nodes.Clear();
-            createWindows(sequence);
-
-			if(Event.current.type == EventType.Repaint)
-				foreach (var n in selection)
-					GUI.Box (new Rect(
-						n.Position.position - new Vector2(0,0), 
-						n.Position.size + new Vector2(0	,0)), 
-						"", selectedStyle);
-				
-            drawSlots(sequence);
-
-            if (Event.current.type == EventType.Repaint)
-            {
-                drawLines(sequence);
-            }
-        }
-        EndWindows();	
-
-        if (Event.current.type == EventType.MouseDrag && EditorGUIUtility.hotControl == 0)
-        {
-            scroll -= Event.current.delta;
-        }
-
-		switch (Event.current.type) {
-			case EventType.MouseDown: 
-				{
-					if (Event.current.button == 0) {
-						// Selecting
-						if (GUIUtility.hotControl == 0) {
-							// Start selecting
-							GUIUtility.hotControl = this.GetHashCode();
-							startPoint = Event.current.mousePosition;
-							selection.Clear ();
-							Event.current.Use ();
-						}
-					} 
+			if (new Rect (0, 0, myNode.Position.width, myNode.Position.height).Contains (Event.current.mousePosition)) {
+				if (hovering != id) {
+					this.Repaint ();
 				}
-				break;
-			case EventType.MouseUp:
-				{
-					if (Event.current.button == 0) {
-						if (GUIUtility.hotControl == this.GetHashCode()) {
-							GUIUtility.hotControl = 0;
 
-							UpdateSelection ();
-							Event.current.Use ();
-						}
-
-					} else if (Event.current.button == 1) {
-						// Right click
-
-						var menu = new GenericMenu();
-						var mousePos = Event.current.mousePosition;
-						int i = 0;
-						foreach (var a in GetPossibleCreations())
-						{
-
-							menu.AddItem(new GUIContent("Create/" + a.Key), false, (t) => {
-								var kv = (KeyValuePair < string, Type>)t;
-								var newObject = CreateInstance(kv.Value);
-								var child = sequence.CreateNode(newObject);
-								child.Position = new Rect(mousePos, child.Position.size);
-							}, a);
-							i++;
-						}
-
-						menu.ShowAsContext();
-					}
-				}
-				break;
-		case EventType.Repaint: 
-			// Draw selection rect 
-			if (GUIUtility.hotControl == GetHashCode ()) {
-				UpdateSelection ();
-				Handles.BeginGUI();
-				Handles.color = Color.white;
-				Handles.DrawSolidRectangleWithOutline (
-					Rect.MinMaxRect (startPoint.x, startPoint.y, Event.current.mousePosition.x, Event.current.mousePosition.y), 
-					new Color (.3f, .3f, .3f, .3f),
-					Color.gray);
-				Handles.EndGUI ();
+				hovering = id;
+				hoveringNode = myNode;
 			}
 			break;
 		}
 
-        GUI.EndScrollView();
+		DoChildSelector (id);
+		DoEditorSelection (id);
+		DoResizeEditorWindow (id);
+		GUI.DragWindow();
 
-		Sequence.current = null;
-    }
+	}
 
+	void DoContentEditor(int id){
+
+		var myNode = nodes[id];
+		// Top toolbar
+		GUILayout.BeginHorizontal();
+
+		// Check if the editors are being changed
+		EditorGUI.BeginChangeCheck();
+
+		//
+		if (!editors.ContainsKey(myNode) || EditorGUI.EndChangeCheck())
+		{
+			var editor = NodeEditorFactory.Intance.createNodeEditorFor(
+				NodeEditorFactory.Intance.CurrentNodeEditors[
+					NodeEditorFactory.Intance.NodeEditorIndex(myNode)
+				]);
+			
+			//vinculating the node to the editor
+			editor.useNode(myNode);
+
+			// Cache the editor
+			if (!editors.ContainsKey(myNode)) editors.Add(myNode, editor);
+			else
+			{
+				ScriptableObject.DestroyImmediate(editors[myNode] as ScriptableObject);
+				editors[myNode] = editor;
+			}
+		}
+			
+		// Collapsed nodes
+		if (myNode.Collapsed)
+		{
+			if (GUILayout.Button(myNode.ShortDescription))
+				myNode.Collapsed = false;
+		}
+		else
+		{
+			GUILayout.FlexibleSpace();
+		}
+
+		// Buttons for collapse and delete
+		if (GUILayout.Button(myNode.Collapsed ? "+" : "-", collapseStyle, GUILayout.Width(15), GUILayout.Height(15)))
+			myNode.Collapsed = !myNode.Collapsed;
+		if (GUILayout.Button("X", closeStyle, GUILayout.Width(15), GUILayout.Height(15)))
+		{
+			sequence.RemoveNode(myNode);
+			return;
+		}
+
+		GUILayout.EndHorizontal();
+
+		// Node drawing
+		if (!myNode.Collapsed)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.BeginVertical();
+			editors[myNode].draw();
+			GUILayout.EndVertical();
+			GUILayout.EndHorizontal();
+
+			nodes[id] = editors[myNode].Result;
+		}
+
+		// Update the window size according to editor
+		if (Event.current.type != EventType.layout)
+		{
+			Rect lastRect = GUILayoutUtility.GetLastRect();
+			Rect myRect = myNode.Position;
+			myRect.height = lastRect.y + lastRect.height;
+			myNode.Position = myRect;
+			//this.Repaint();
+		}
+	}
+
+	void DoChildSelector(int id){
+
+		var myNode = nodes[id];
+
+		switch (Event.current.type) {
+		case EventType.MouseDown:
+
+			// Right Button
+			if (Event.current.button == 1) {
+				var menu = new GenericMenu ();
+				var i = 0;
+				string text = string.Empty;
+				menu.AddItem (new GUIContent ("Set sequence root"), false, (node) => sequence.Root = node as SequenceNode, myNode);
+				foreach (var a in editors[myNode].ChildNames) {
+					text = (a == "") ? (i + "") : a;
+					menu.AddItem (new GUIContent ("Set node for " + text), false, (t) => {
+						// Detach		
+						myNode.Childs [(int)t] = null;
+						lookingChildNode = myNode;
+						lookingChildSlot = (int)t;
+					}, i);
+					i++;
+				}
+
+				menu.ShowAsContext ();
+			}
+
+			break;
+		}
+
+	}
+
+	void DoResizeEditorWindow(int id){
+
+		var myNode = nodes[id];
+		var resizeRect = new Rect(new Vector2(myNode.Position.width - 10, 0), new Vector2(10, myNode.Position.height));
+		EditorGUIUtility.AddCursorRect(resizeRect,MouseCursor.ResizeHorizontal, myNode.GetHashCode());
+		if (EditorGUIUtility.hotControl == 0 
+			&& Event.current.type == EventType.MouseDown 
+			&& Event.current.button == 0 
+			&& resizeRect.Contains(Event.current.mousePosition))
+		{
+			EditorGUIUtility.hotControl = myNode.GetHashCode();
+			Event.current.Use();
+		}
+
+
+		if(GUIUtility.hotControl == myNode.GetHashCode())
+		{
+			//Debug.Log("hotcontrol");
+			myNode.Position = new Rect(myNode.Position.x, myNode.Position.y, Event.current.mousePosition.x + 5, myNode.Position.height);
+			this.Repaint();
+			//Event.current.Use();
+			if (Event.current.type == EventType.MouseUp)
+				EditorGUIUtility.hotControl = 0;
+			//if(Event.current.type != EventType.layout)*/
+		}
+
+	}
+
+	void DoEditorSelection(int id){
+
+		var myNode = nodes[id];
+
+		switch (Event.current.type)
+		{
+		case EventType.MouseDown:
+
+			// Left button
+			if (Event.current.button == 0)
+			{
+				if (hovering == id) {
+					toSelect = false;
+					focusing = hovering;
+					if (Event.current.control) {
+						if (selection.Contains (myNode))
+							selection.Remove (myNode);
+						else
+							selection.Add (myNode);
+					} else {
+						toSelect = true;
+						if (!selection.Contains (myNode)) {
+							selection.Clear ();
+							selection.Add (myNode);
+						}
+					}
+				}
+				if (lookingChildNode != null)
+				{
+					// link creation between nodes
+					lookingChildNode.Childs[lookingChildSlot] = myNode;
+					// finishing search
+					lookingChildNode = null;
+				}
+				if(myNode.Content is UnityEngine.Object)
+					Selection.activeObject = myNode.Content as UnityEngine.Object;
+			}
+
+			break;
+
+		case EventType.MouseDrag:
+			toSelect = false;
+			break;
+		case EventType.MouseUp:
+			{
+				if(toSelect) {
+					selection.Clear ();
+					selection.Add (myNode);
+				}
+			}
+			break;
+		}
+	}
 
 	/*************************
 	 *  Selection
