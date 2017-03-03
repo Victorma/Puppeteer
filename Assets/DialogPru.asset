@@ -131,17 +131,17 @@ MonoBehaviour:
   m_Name: Switches/Formula setter
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 114000014281599264}
+  - {fileID: 0}
   isUnityObject: 1
   objectContent: {fileID: 114000010563539838}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 987
-    y: 312
+    x: 1195
+    y: 246
     width: 342
     height: 53
-  collapsed: 0
+  collapsed: 1
 --- !u!114 &114000011813288620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +158,10 @@ MonoBehaviour:
     msg: 'Hola $variable
 
       <$ if(variable == ''Toni'',''Hey'',''Boo'') $>'
+    character: 
+    parameter: 
+  - name: 
+    msg: 
     character: 
     parameter: 
 --- !u!114 &114000011870338772
@@ -194,15 +198,15 @@ MonoBehaviour:
   m_Name: Switches/Formula setter
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 114000012589575538}
+  - {fileID: 114000011740078296}
   isUnityObject: 1
   objectContent: {fileID: 114000010033736600}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1230
-    y: 96
-    width: 187
+    x: 931
+    y: 160
+    width: 189
     height: 53
   collapsed: 0
 --- !u!114 &114000012359762636
@@ -236,10 +240,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 170
-    y: 337
-    width: 317
-    height: 186
+    x: 201
+    y: 192
+    width: 287
+    height: 256
   collapsed: 0
 --- !u!114 &114000012607037362
 MonoBehaviour:
@@ -280,8 +284,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 598
-    y: 240
+    x: 590
+    y: 259
     width: 262
     height: 136
   collapsed: 0
@@ -396,8 +400,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1381
-    y: 412
+    x: 934
+    y: 592
     width: 233
     height: 107
   collapsed: 0

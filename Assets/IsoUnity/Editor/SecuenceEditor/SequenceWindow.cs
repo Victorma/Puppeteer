@@ -188,7 +188,7 @@ public class SequenceWindow : EditorWindow
 			hoveringNode = null; 
 		}
 		GUI.Box(scrollRect, "", "preBackground");
-		drawBackground (rect);
+		drawBackground (scrollRect);
 
 		BeginWindows();
 		{
@@ -211,12 +211,22 @@ public class SequenceWindow : EditorWindow
 		}
 		EndWindows();	
 
-		if (Event.current.type == EventType.MouseDrag && EditorGUIUtility.hotControl == 0)
-		{
-			scroll -= Event.current.delta;
-		}
 
-		switch (Event.current.type) {
+		switch (Event.current.type) {		
+		case EventType.MouseMove:
+			if (lookingChildNode != null) {
+				this.Repaint ();
+				Event.current.Use ();
+			}
+		break;
+		case EventType.MouseDrag: 
+			{
+				if (EditorGUIUtility.hotControl == 0) {
+					scroll -= Event.current.delta;
+					Repaint ();
+				}
+			}
+			break;
 		case EventType.MouseDown: 
 			{
 				if (Event.current.button == 0) {
@@ -294,16 +304,16 @@ public class SequenceWindow : EditorWindow
 
 		Handles.BeginGUI ();
 
-		Handles.DrawSolidRectangleWithOutline (rect, new Color(.1f,.1f,.1f,1f), new Color(.1f,.1f,.1f,1f));
+		Handles.DrawSolidRectangleWithOutline (rect, new Color(.2f,.2f,.2f,1f), new Color(.2f,.2f,.2f,1f));
 
 		while (pos < max) {
 
-			Handles.color = new Color(.2f,.2f,.2f,1f);
+			Handles.color = new Color(.1f,.1f,.1f,1f);
 
 			// Horizontal
-			Handles.DrawLine (new Vector2 (0,pos), new Vector2 (rect.width, pos));
+			Handles.DrawAAPolyLine (1f, new Vector3[] { new Vector2 (0,pos), new Vector2 (rect.width, pos)});
 			// Vertical
-			Handles.DrawLine (new Vector2 (pos,0), new Vector2 (pos, rect.height));
+			Handles.DrawAAPolyLine (1f, new Vector3[] { new Vector2 (pos,0), new Vector2 (pos, rect.height)});
 
 			i++;	
 			pos += increment;
@@ -313,12 +323,12 @@ public class SequenceWindow : EditorWindow
 		pos = 0;
 		while (pos < max) {
 
-			Handles.color = new Color(.3f,.3f,.3f,1f);
+			Handles.color = new Color(.05f,.05f,.05f,1f);
 
 			// Horizontal
-			Handles.DrawLine (new Vector2 (0,pos), new Vector2 (rect.width, pos));
+			Handles.DrawAAPolyLine (1f, new Vector3[] { new Vector2 (0,pos), new Vector2 (rect.width, pos)});
 			// Vertical
-			Handles.DrawLine (new Vector2 (pos,0), new Vector2 (pos, rect.height));
+			Handles.DrawAAPolyLine (1f, new Vector3[] { new Vector2 (pos,0), new Vector2 (pos, rect.height)});
 
 			i+=10;
 			pos += increment*10;
@@ -355,15 +365,15 @@ public class SequenceWindow : EditorWindow
 
 		// Draw the main nodes in green
 		drawLines(new Rect(0, 0, 0, position.height), sequence.Root, 
-			Color.green, 
-			new Color(Color.green.r, Color.green.g, Color.green.b, .2f));
+			new Color(.4f, .8f, .4f, 1f), 
+			new Color(.4f, .8f, .4f, .2f));
 
 		// Draw the rest of the lines in red
 		foreach (var n in sequence.Nodes)
 		{
 			drawLines(new Rect(-1,-1,-1,-1), n, 
-				Color.red, 
-				new Color(Color.red.r, Color.red.g, Color.red.b, .2f));
+				new Color(.8f, .2f, .2f, 1f), 
+				new Color(.8f, .2f, .2f, .2f));
 		}
 	}
 
@@ -425,16 +435,115 @@ public class SequenceWindow : EditorWindow
 	}
 
     void curveFromTo(Rect wr, Rect wr2, Color color)
-    {
-        Vector2 start = new Vector2(wr.x + wr.width, wr.y + 3 + wr.height / 2),
-            startTangent = new Vector2(wr.x + wr.width + Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr.y + 3 + wr.height / 2),
-            end = new Vector2(wr2.x, wr2.y + 3 + wr2.height / 2),
-            endTangent = new Vector2(wr2.x - Mathf.Abs(wr2.x - (wr.x + wr.width)) / 2, wr2.y + 3 + wr2.height / 2);
+	{
 
-        Handles.BeginGUI();
-        Handles.color = color;
-        Handles.DrawBezier(start, end, startTangent, endTangent, color, null, 3);
-        Handles.EndGUI();
+		Vector2 start = new Vector2 (wr.x + wr.width, wr.y + 3 + wr.height / 2),
+			startTangent = new Vector2 (wr.x + wr.width + Mathf.Abs (wr2.x - (wr.x + wr.width)) / 2, wr.y + 3 + wr.height / 2),
+			end = new Vector2 (wr2.x, wr2.y + 3 + wr2.height / 2),
+			endTangent = new Vector2 (wr2.x - Mathf.Abs (wr2.x - (wr.x + wr.width)) / 2, wr2.y + 3 + wr2.height / 2);
+
+		Handles.BeginGUI();
+		Handles.color = color;
+		if (start.x > end.x) {
+			var sep = 30f;
+			var upDown = start.y > end.y ? 1 : -1;
+			/*
+
+			var startMax = (startTangent - start).magnitude;
+			var endMax = (endTangent - end).magnitude;
+			var x = (start.y - end.y);
+
+
+			var startVector = new Vector2 (0, upDown * ((x*(2*startMax - 2) + 3*startMax) / x)); 
+			var endVector = new Vector2 (0, -upDown * ((x*(2*endMax - 2) + 3*endMax) / x)); 
+*/
+			startTangent = start + new Vector2(1,0) * 50;
+			endTangent =  end + new Vector2(-1,0) * 50;
+
+			/*Vector2 staCornerClose = new Vector2 (wr.xMax + sep, wr.yMin - sep);
+			Vector2 staCornerFar   = new Vector2 (wr.xMin - sep, wr.yMin - sep);
+			Vector2 endCornerFar   = new Vector2 (wr2.xMax + sep, wr2.yMax + sep);
+
+			Vector2 mid = (staCornerFar + endCornerFar) / 2f;
+
+			Vector2 endCornerClose = new Vector2 (wr2.xMin - sep, wr2.yMax + sep);
+
+			Vector2 FarFar = (wr2.center - wr.center);
+			FarFar = FarFar* 50 / FarFar.magnitude ;
+			Vector2 RFarFar = Vector2.Reflect (FarFar, new Vector2 (-1, 0));
+
+			Vector2 staCornerCloseT1 = staCornerClose + new Vector2 (1, 1)*50;
+			Vector2 staCornerCloseT2 = staCornerClose + new Vector2 (-1, -1)*50;
+			Vector2 staCornerFarT1 = staCornerFar + new Vector2 (1, -1)*50;
+			Vector2 staCornerFarT2 = staCornerFar + new Vector2 (-1, 1)*50;
+			Vector2 endCornerFarT1 = endCornerFar + new Vector2 (1, -1)*50;
+			Vector2 endCornerFarT2 = endCornerFar + new Vector2 (-1, 1)*50;
+			Vector2 endCornerCloseT1 = endCornerClose + new Vector2 (1, 1)*50;
+			Vector2 endCornerCloseT2 = endCornerClose + new Vector2 (-1, -1)*50;
+
+			//staCornerCloseT1 = staCornerClose + RFarFar;
+			//staCornerCloseT2 = staCornerClose - RFarFar;
+			staCornerFarT1 = staCornerFar - FarFar;
+			staCornerFarT2 = staCornerFar + FarFar;
+			endCornerFarT1 = endCornerFar - FarFar;
+			endCornerFarT2 = endCornerFar + FarFar;
+
+			Vector2 midT1 = mid - FarFar;
+			Vector2 midT2 = mid + FarFar;
+			//endCornerCloseT1 = endCornerClose + RFarFar;
+			//endCornerCloseT2 = endCornerClose - RFarFar;
+
+			Handles.DrawBezier(start, staCornerClose, startTangent, staCornerCloseT1, Color.yellow, null, 3);
+			Handles.DrawBezier(staCornerClose, mid, staCornerCloseT2, staCornerFarT1, Color.blue, null, 3);
+			//Handles.DrawBezier(staCornerFar, endCornerFar, staCornerFarT2, endCornerFarT1, Color.red, null, 3);
+			Handles.DrawBezier(mid, endCornerClose, endCornerFarT2, endCornerCloseT1, Color.green, null, 3);
+			Handles.DrawBezier(endCornerClose, end, endCornerCloseT2, endTangent, Color.magenta, null, 3);*/
+
+
+			Vector2 staCorner   = new Vector2 ( wr.center.x, upDown < 0 ?  wr.yMax :  wr.yMin);
+			Vector2 endCorner   = new Vector2 (wr2.center.x, upDown < 0 ? wr2.yMin : wr2.yMax);
+			sep = Mathf.Clamp((staCorner - endCorner).magnitude, 0, sep);
+			staCorner += new Vector2 (0, upDown * -sep);
+			endCorner += new Vector2 (0, upDown * sep);
+
+			var superacionHorizontal = Mathf.Clamp (endCorner.x - staCorner.x, 0, 100) / 100;
+				
+			Vector2 midCorner   = (staCorner + endCorner) / 2f;
+			midCorner = Vector2.Lerp (midCorner, (start + end) / 2f, superacionHorizontal);
+
+			Vector2 staCornerT1 = staCorner + new Vector2( 1, 0) *  wr.width /1.5f;
+			Vector2 staCornerT2 = staCorner + new Vector2(-1, 0) *  wr.width /1.5f;
+			Vector2 endCornerT1 = endCorner + new Vector2( 1, 0) * wr2.width /1.5f;
+			Vector2 endCornerT2 = endCorner + new Vector2(-1, 0) * wr2.width /1.5f;
+
+			var aux = staCorner;
+			var fus = Mathf.Clamp01 (Mathf.Max( upDown* (staCorner.y - endCorner.y) + 2*sep , 100 + 2*sep - (staCorner.x - endCorner.x))/100);
+
+
+			staCorner = Vector2.Lerp (staCorner, midCorner, fus);
+			endCorner = Vector2.Lerp (endCorner, midCorner, fus);
+
+				
+			Vector2 midCornerT1 = new Vector2(staCornerT1.x, staCorner.y);
+			Vector2 midCornerT2 = new Vector2(endCornerT2.x, endCorner.y);
+
+			var ds = Mathf.Lerp (Math.Min (wr.width / 1.5f, Math.Abs (staCorner.x - endCorner.x) / 2f), 0, fus);
+			var de = Mathf.Lerp (Math.Min (wr2.width /1.5f, Math.Abs (staCorner.x - endCorner.x)/2f), 0, fus);
+
+			staCornerT2 = staCorner + new Vector2(-1, 0) * Mathf.Lerp (ds, (ds+de) / 2f, fus);
+			endCornerT1 = endCorner + new Vector2( 1, 0) * Mathf.Lerp (de, (ds+de) / 2f, fus);
+
+			Handles.DrawBezier(start, staCorner, startTangent, midCornerT1, color /*Color.yellow*/, null, 3);
+			if(fus < 1)
+				Handles.DrawBezier(staCorner, endCorner, staCornerT2, endCornerT1, color /*Color.blue*/, null, 3);
+			Handles.DrawBezier(endCorner, end, midCornerT2, endTangent, color /*Color.red*/, null, 3);
+
+		} else {
+			
+			Handles.DrawBezier(start, end, startTangent, endTangent, color, null, 3);
+
+		}
+		Handles.EndGUI();
     }
 
     private Rect sumRect(Rect r1, Rect r2)
@@ -475,7 +584,7 @@ public class SequenceWindow : EditorWindow
 		}
 
 		DoChildSelector (id);
-		DoEditorSelection (id);
+		DoNodeWindowEditorSelection (id);
 		DoResizeEditorWindow (id);
 		GUI.DragWindow();
 
@@ -560,6 +669,7 @@ public class SequenceWindow : EditorWindow
 		var myNode = nodes[id];
 
 		switch (Event.current.type) {
+
 		case EventType.MouseDown:
 
 			// Right Button
@@ -615,7 +725,7 @@ public class SequenceWindow : EditorWindow
 
 	}
 
-	void DoEditorSelection(int id){
+	void DoNodeWindowEditorSelection(int id){
 
 		var myNode = nodes[id];
 
