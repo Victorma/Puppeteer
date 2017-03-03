@@ -36,7 +36,9 @@ public class FormulaSetterEditor : Editor {
             menu.ShowAsContext();
         }
 
-        if (!string.IsNullOrEmpty(fs.iswitch) && isoSwitches.containsSwitch(fs.iswitch))
+		if (!string.IsNullOrEmpty(fs.iswitch) 
+			&& (Sequence.current.ContainsVariable (fs.iswitch) 
+				|| isoSwitches.containsSwitch(fs.iswitch)))
         {
             fs.Formula = EditorGUILayout.TextField(fs.Formula);
             EditorGUILayout.EndHorizontal();
