@@ -64,18 +64,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forks: []
---- !u!114 &114000011155009090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forks: []
 --- !u!114 &114000011221332398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,18 +205,6 @@ MonoBehaviour:
     width: 189
     height: 53
   collapsed: 0
---- !u!114 &114000012049434844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a203c3b480741994ca61ad42153a6f16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  formula: 
 --- !u!114 &114000012068916692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,19 +218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forks:
   - {fileID: 0}
---- !u!114 &114000012188871434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forks:
-  - {fileID: 114000012049434844}
 --- !u!114 &114000012359762636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,8 +293,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 581
-    y: 167
+    x: 583
+    y: 171
     width: 262
     height: 195
   collapsed: 0
@@ -393,8 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forks:
-  - {fileID: 114000012188871434}
+  forks: []
 --- !u!114 &114000013541750138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,8 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f2e9457b5219e4190168f539aba5bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forks:
-  - {fileID: 114000011155009090}
+  forks: []
 --- !u!114 &114000014281599264
 MonoBehaviour:
   m_ObjectHideFlags: 0

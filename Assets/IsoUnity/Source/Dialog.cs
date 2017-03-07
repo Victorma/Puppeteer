@@ -48,13 +48,13 @@ public class Dialog : ScriptableObject
 public class Fragment : ICloneable
 {
     [SerializeField]
-    private string name;
+    private string name = string.Empty;
     [SerializeField]
-    private string msg;
+    private string msg = string.Empty;
     [SerializeField]
-    private string character;
+    private string character = string.Empty;
     [SerializeField]
-    private string parameter;
+    private string parameter = string.Empty;
 
     public string Name
     {

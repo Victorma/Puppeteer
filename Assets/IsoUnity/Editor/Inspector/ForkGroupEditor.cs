@@ -41,6 +41,7 @@ public class ForkGroupEditor : Editor
         forkList.onRemoveCallback += (list) =>
         {
             forkGroup.RemoveFork(forkGroup.List[list.index]);
+            DestroyImmediate(editor);
         };
 
         forkList.onSelectCallback += (list) =>

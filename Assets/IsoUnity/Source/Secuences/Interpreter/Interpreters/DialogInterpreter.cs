@@ -130,6 +130,9 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 
     private string ParseFormulas(string toParse)
     {
+        if (toParse == null || toParse == string.Empty)
+            return toParse;
+
         toParse = Regex.Replace(toParse, @"\<\$(.+)\$\>", m => {
             var formula = new SequenceFormula(m.Groups[1].Value);
             return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;

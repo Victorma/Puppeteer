@@ -60,6 +60,7 @@ public abstract class ForkGroup : Checkable {
             {
                 // Capture it inside me
                 ScriptableObject.DestroyImmediate(fork, true);
+                UnityEditor.AssetDatabase.SaveAssets();
             }
         }
 #endif

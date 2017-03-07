@@ -77,9 +77,9 @@ public class Option
     [SerializeField]
     private Checkable fork;
     [SerializeField]
-    private string text;
+    private string text = string.Empty;
     [SerializeField]
-    private string parameter;
+    private string parameter = string.Empty;
 
     public Option(string text = "", string parameter = "", Checkable fork = null)
     {
