@@ -29,8 +29,8 @@ public abstract class ForkGroup : Checkable {
         if(Application.isEditor && !Application.isPlaying)
         {
             // If this is an asset and the condition isnt
-            if((UnityEditor.AssetDatabase.IsMainAsset(condition) 
-                || UnityEditor.AssetDatabase.IsSubAsset(condition)) 
+            if((UnityEditor.AssetDatabase.IsMainAsset(this) 
+                || UnityEditor.AssetDatabase.IsSubAsset(this)) 
                 && !UnityEditor.AssetDatabase.IsMainAsset(condition) 
                 && !UnityEditor.AssetDatabase.IsSubAsset(condition))
             {
@@ -42,6 +42,7 @@ public abstract class ForkGroup : Checkable {
                 {
                     // Capture it inside me
                     UnityEditor.AssetDatabase.AddObjectToAsset(condition, this);
+                    UnityEditor.AssetDatabase.SaveAssets();
                 }
             }
         }

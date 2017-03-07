@@ -120,6 +120,8 @@ public class SequenceFormula {
                 }
 
                 break;
+
+            case "varObject":
             case "objectVar":
                 {
                     object o = Sequence.current.GetObject((string)args.Parameters[0].Evaluate());

@@ -73,14 +73,11 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
                     // Launch next fragment event
                     var nextFragment = fragments.Dequeue().Clone();
 
-                    nextFragment.Msg = Regex.Replace(nextFragment.Msg, @"\<\$(.+)\$\>", m => {
-                        var formula = new SequenceFormula(m.Groups[1].Value);
-                        return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
-                    }, RegexOptions.Multiline);
-                    nextFragment.Msg = Regex.Replace(nextFragment.Msg, @"\$(\w+)", m => {
-                        var formula = new SequenceFormula(m.Groups[1].Value);
-                        return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
-                    }, RegexOptions.Multiline);
+                    // Parse the formulas
+                    nextFragment.Name = ParseFormulas(nextFragment.Name);
+                    nextFragment.Parameter = ParseFormulas(nextFragment.Parameter);
+                    nextFragment.Character = ParseFormulas(nextFragment.Character);
+                    nextFragment.Msg = ParseFormulas(nextFragment.Msg);
 
                     var ge = new GameEvent();
                     ge.name = "show dialog fragment";
@@ -107,6 +104,12 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
                 ge.name = "show dialog options";
                 optionsList = options.Values;
                 launchedOptionsList = optionsList.FindAll(o => o.Fork == null || o.Fork.check());
+
+                // Parse the formulas
+                options.Question = ParseFormulas(options.Question);
+                launchedOptionsList.ForEach(o => o.Parameter = ParseFormulas(o.Parameter));
+                launchedOptionsList.ForEach(o => o.Text = ParseFormulas(o.Text));
+
                 ge.setParameter("options", launchedOptionsList);
                 ge.setParameter("message", options.Question);
                 ge.setParameter("launcher", this);
@@ -124,6 +127,20 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 			chosen = -1;
 		}
 	}
+
+    private string ParseFormulas(string toParse)
+    {
+        toParse = Regex.Replace(toParse, @"\<\$(.+)\$\>", m => {
+            var formula = new SequenceFormula(m.Groups[1].Value);
+            return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
+        }, RegexOptions.Multiline);
+        toParse = Regex.Replace(toParse, @"\$(\w+)", m => {
+            var formula = new SequenceFormula(m.Groups[1].Value);
+            return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
+        }, RegexOptions.Multiline);
+
+        return toParse;
+    }
 
 	public ISequenceInterpreter Clone(){
 		return ScriptableObject.CreateInstance<DialogInterpreter>();
