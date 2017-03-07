@@ -2,15 +2,18 @@
 using UnityEditor;
 using UnityEditorInternal;
 using System.Collections;
+using System;
 
 [CustomEditor(typeof(ForkGroup), true)]
-public class ForkGroupEditor : Editor
+public class ForkGroupEditor : NodeContentEditor
 {
     private ReorderableList forkList;
     private ForkGroup forkGroup;
 
-    void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         if (!target)
             return;
 
@@ -54,7 +57,7 @@ public class ForkGroupEditor : Editor
     }
 
     private Editor editor;
-    public override void OnInspectorGUI()
+    protected override void NodeContentInspectorGUI()
     {
         forkList.DoLayoutList();
         if (editor != null)

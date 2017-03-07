@@ -4,10 +4,10 @@ using UnityEditor;
 using System.Linq;
 
 [CustomEditor(typeof(FormulaSetter))]
-public class FormulaSetterEditor : Editor {
+public class FormulaSetterEditor : NodeContentEditor
+{
     
-
-    public override void OnInspectorGUI()
+    protected override void NodeContentInspectorGUI()
     {
         var isoSwitches = IsoSwitchesManager.getInstance().getIsoSwitches();
         var fs = target as FormulaSetter;
@@ -18,7 +18,8 @@ public class FormulaSetterEditor : Editor {
         {
             var menu = new GenericMenu();
 			var switches = new List<ISwitch> ();
-			switches.AddRange (Sequence.current.LocalVariables.getList ());
+            if(Sequence.current)
+                switches.AddRange (Sequence.current.LocalVariables.getList ());
 			switches.AddRange (isoSwitches.getList ());
 
 			var possibles = switches.ConvertAll (s => s.id);
@@ -37,7 +38,7 @@ public class FormulaSetterEditor : Editor {
         }
 
 		if (!string.IsNullOrEmpty(fs.iswitch) 
-			&& (Sequence.current.ContainsVariable (fs.iswitch) 
+			&& (Sequence.current && Sequence.current.ContainsVariable (fs.iswitch) 
 				|| isoSwitches.containsSwitch(fs.iswitch)))
         {
             fs.Formula = EditorGUILayout.TextField(fs.Formula);
@@ -52,7 +53,5 @@ public class FormulaSetterEditor : Editor {
             EditorGUILayout.LabelField("Variable is not a valid Switch");
             EditorGUILayout.EndHorizontal();
         }
-
-
     }
 }

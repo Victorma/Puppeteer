@@ -1,19 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
 [CustomEditor(typeof(Options))]
-public class OptionsEditor : Editor {
+public class OptionsEditor : NodeContentEditor {
 
     private static Texture2D conditionsTex, noConditionsTex;
 
     private ReorderableList optionsReorderableList;
     private Editor forkEditor;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         if (!conditionsTex) conditionsTex = (Texture2D)Resources.Load("isometra/img/icons/conditions-16x16", typeof(Texture2D));
         if (!noConditionsTex) noConditionsTex = (Texture2D)Resources.Load("isometra/img/icons/no-conditions-16x16", typeof(Texture2D));
 
@@ -32,7 +35,7 @@ public class OptionsEditor : Editor {
 
 
     private Options options;
-    public override void OnInspectorGUI()
+    protected override void NodeContentInspectorGUI()
     {
         options = target as Options;
 
@@ -58,27 +61,36 @@ public class OptionsEditor : Editor {
 
     private void DrawOption(Rect rect, int index, bool active, bool focused)
     {
+        EditorGUI.BeginChangeCheck();
+
         Option opt = (Option)optionsReorderableList.list[index];
         
         opt.Text = EditorGUI.TextField(new Rect(rect.position + new Vector2(0,1), new Vector2(rect.width-20, rect.height-4)), opt.Text);
         GUI.DrawTexture(new Rect(rect.position + new Vector2(rect.width - 17,0), new Vector2(16, 16)), (opt.Fork as ForkGroup).List.Count > 0 ? conditionsTex : noConditionsTex);
-        
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            EditorUtility.SetDirty(options);
+        }
     }
 
     private void AddOption(ReorderableList list)
     {
         options.AddOption();
+        EditorUtility.SetDirty(options);
     }
 
     private void RemoveOption(ReorderableList list)
     {
         options.removeOption(options.Values[list.index]);
+        EditorUtility.SetDirty(options);
     }
 
     private void ReorderOptions(ReorderableList list)
     {
         List<Option> l = (List<Option>)optionsReorderableList.list;
         options.Values = l;
+        EditorUtility.SetDirty(options);
     }
 
     /**

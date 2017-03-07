@@ -3,10 +3,10 @@ using UnityEditor;
 using System.Collections;
 
 [CustomEditor(typeof(ISwitchFork))]
-public class ISwitchForkEditor : Editor {
-    
+public class ISwitchForkEditor : NodeContentEditor {
 
-	public override void OnInspectorGUI()
+
+    protected override void NodeContentInspectorGUI()
     {
         var isf = target as ISwitchFork;
         isf.id = EditorGUILayout.TextField("ID", isf.id);

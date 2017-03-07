@@ -4,18 +4,20 @@ using UnityEditorInternal;
 using System.Collections;
 
 [CustomEditor(typeof(MultiFork))]
-public class MultiForkEditor : Editor {
+public class MultiForkEditor : NodeContentEditor {
     
     private MultiFork multifork;
     
-    void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         multifork = target as MultiFork;
         editor = CreateEditor(multifork.ForkGroup);
     }
 
     private Editor editor;
-    public override void OnInspectorGUI()
+    protected override void NodeContentInspectorGUI()
     {
         EditorGUILayout.HelpBox("Each fork in the list result in a different branch", MessageType.Info);
         if(editor != null)

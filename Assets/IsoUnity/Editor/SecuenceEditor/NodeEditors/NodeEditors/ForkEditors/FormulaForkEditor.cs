@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using UnityEditor;
 using NCalc;
+using System.Linq;
 
 [CustomEditor(typeof(FormulaFork))]
-public class FormulaForkEditor : Editor {
+public class FormulaForkEditor : NodeContentEditor {
     
     private object lastValue;
 
     public string Name { get; set; }
 
-    void OnEnable()
-    {
-    }
-
-    public override void OnInspectorGUI()
+    protected override void NodeContentInspectorGUI()
     {
         var f = target as FormulaFork;
 

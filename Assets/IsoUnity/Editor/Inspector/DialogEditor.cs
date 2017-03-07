@@ -5,10 +5,12 @@ using UnityEditor;
 using UnityEditorInternal;
 
 [CustomEditor(typeof(Dialog))]
-public class DialogEditor : Editor {
+public class DialogEditor : NodeContentEditor {
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+
+        base.OnEnable();
         // Add listeners to draw events
 
         fragmentsReorderableList = new ReorderableList(new ArrayList(), typeof(Fragment), true, true, true, true);
@@ -23,7 +25,7 @@ public class DialogEditor : Editor {
     private Dialog dialog;
     private Vector2 scroll = Vector2.zero;
 
-    public override void OnInspectorGUI()
+    protected override void NodeContentInspectorGUI()
     {
         dialog = target as Dialog;
 
@@ -76,6 +78,8 @@ public class DialogEditor : Editor {
 
     private void DrawFragment(Rect rect, int index, bool active, bool focused)
     {
+        EditorGUI.BeginChangeCheck();
+
         Fragment frg = (Fragment)fragmentsReorderableList.list[index];
 
 		Rect characterRect = new Rect(0, 2, rect.width * .5f, 15);
@@ -91,23 +95,32 @@ public class DialogEditor : Editor {
         // If you are using a custom PropertyDrawer, this is probably better
         // EditorGUI.PropertyField(rect, serializedObject.FindProperty("list").GetArrayElementAtIndex(index));
         // Although it is probably smart to cach the list as a private variable ;)
+
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            EditorUtility.SetDirty(dialog);
+        }
     }
 
     private void AddFragment(ReorderableList list)
     {
         dialog.AddFragment();
+        EditorUtility.SetDirty(dialog);
     }
 
     private void RemoveFragment(ReorderableList list)
     {
         dialog.RemoveFragment(dialog.Fragments[list.index]);
-
+        EditorUtility.SetDirty(dialog);
     }
 
     private void ReorderFragments(ReorderableList list)
     {
         List<Fragment> l = (List<Fragment>)fragmentsReorderableList.list;
         dialog.Fragments = l;
+
+        EditorUtility.SetDirty(dialog);
     }
 
 }

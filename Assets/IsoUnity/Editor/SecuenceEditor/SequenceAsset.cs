@@ -66,4 +66,25 @@ public class SequenceAsset : Sequence {
             AssetDatabase.SaveAssets();
         return r;
     }
+
+    public static Sequence FindSequenceOf(Object content)
+    {
+        Sequence r = null;
+        var sequences = AssetDatabase.FindAssets("t:Sequence").ToList().ConvertAll(o => AssetDatabase.GUIDToAssetPath(o));
+
+        foreach (var s in sequences)
+        {
+            Object[] assets = AssetDatabase.LoadAllAssetsAtPath(s);
+            for (int i = 0; i < assets.Length; i++)
+            {
+                Object asset = assets[i];
+                if (asset == content)
+                {
+                    return AssetDatabase.LoadAssetAtPath(s, typeof(Sequence)) as Sequence;
+                }
+            }
+        }
+
+        return r;
+    }
 }

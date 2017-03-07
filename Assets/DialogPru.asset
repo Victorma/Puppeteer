@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dceab41990a77394aa0aede67dc01b11, type: 3}
   m_Name: '''Toni'''
   m_EditorClassIdentifier: 
-  iswitch: variable
+  iswitch: Gato
   formula: '''Toni'''
 --- !u!114 &114000010653563014
 MonoBehaviour:
@@ -77,10 +77,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   options:
   - fork: {fileID: 114000013539576794}
-    text: Perro
+    text: Perro <$ var('asd','asd','asd') $>
     parameter: 
   - fork: {fileID: 114000013679181118}
-    text: Toni
+    text: Toni <$ varObject('asd','asd','asd') $>
     parameter: 
   - fork: {fileID: 114000010653563014}
     text: Salir
@@ -137,10 +137,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 960
-    y: 230
-    width: 191
-    height: 53
+    x: 976
+    y: 292
+    width: 219
+    height: 58
   collapsed: 0
 --- !u!114 &114000011813288620
 MonoBehaviour:
@@ -200,10 +200,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 979
-    y: 63
+    x: 995
+    y: 116
     width: 189
-    height: 53
+    height: 58
   collapsed: 0
 --- !u!114 &114000012068916692
 MonoBehaviour:
@@ -249,10 +249,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 189
-    y: 198
-    width: 287
-    height: 186
+    x: 161
+    y: 199
+    width: 223
+    height: 191
   collapsed: 0
 --- !u!114 &114000012607037362
 MonoBehaviour:
@@ -293,10 +293,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 583
-    y: 171
+    x: 490
+    y: 194
     width: 262
-    height: 195
+    height: 200
   collapsed: 0
 --- !u!114 &114000013352237486
 MonoBehaviour:
@@ -421,8 +421,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1183
-    y: 344
+    x: 1074
+    y: 483
     width: 233
-    height: 107
+    height: 112
   collapsed: 0

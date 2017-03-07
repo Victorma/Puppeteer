@@ -4,7 +4,8 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 [NodeContent("Options")]
-public class Options : ScriptableObject, NodeContent {
+public class Options : ScriptableObject, NodeContent, System.ICloneable
+{
     
     public string[] ChildNames { get { return options.ConvertAll(o => o.Text).ToArray(); } }
     public int ChildSlots { get { return options.Count; } }
@@ -67,12 +68,22 @@ public class Options : ScriptableObject, NodeContent {
         ScriptableObject.DestroyImmediate(option.Conditions);
 #endif
     }
+    
+    public object Clone()
+    {
+        var r = this.MemberwiseClone() as Options;
+        
+        r.Question = this.Question;
+        r.options = options.ConvertAll(o => o.Clone() as Option);
+
+        return r;
+    }
 }
 
 
 [System.Serializable]
 [StructLayout(LayoutKind.Sequential)]
-public class Option
+public class Option : System.ICloneable
 {
     [SerializeField]
     private Checkable fork;
@@ -91,4 +102,10 @@ public class Option
     public string Text { get { return text; } set { this.text = value; } }
     public string Parameter { get { return parameter; } set { this.parameter = value; } }
     public Checkable Fork { get { return fork; } }
+
+
+    public object Clone()
+    {
+        return this.MemberwiseClone() as Option;
+    }
 }

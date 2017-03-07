@@ -97,7 +97,7 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
             if (!launched)
             {
                 chosen = -1;
-                Options options = node.Content as Options;
+                Options options = (node.Content as Options).Clone() as Options;
 
                 // Launch options event
                 var ge = new GameEvent();
@@ -132,7 +132,8 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
     {
         if (toParse == null || toParse == string.Empty)
             return toParse;
-
+        try
+        {
         toParse = Regex.Replace(toParse, @"\<\$(.+)\$\>", m => {
             var formula = new SequenceFormula(m.Groups[1].Value);
             return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
@@ -142,6 +143,10 @@ public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
             return formula.IsValidExpression ? formula.Evaluate().ToString() : formula.Error;
         }, RegexOptions.Multiline);
 
+        }catch(FormulaException fe)
+        {
+            Debug.LogError("Error parsing: " + toParse + " \n " + fe.Message);
+        }
         return toParse;
     }
 

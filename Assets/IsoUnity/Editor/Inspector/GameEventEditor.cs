@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(SerializableGameEvent))]
-public class GameEventEditor : Editor {
+public class GameEventEditor : NodeContentEditor {
     
     private EventEditor currentEditor;
 
-    public override void OnInspectorGUI()
+    protected override void NodeContentInspectorGUI()
     { 
         SerializableGameEvent ge = (SerializableGameEvent)target;
         string[] editors = EventEditorFactory.Intance.CurrentEventEditors;

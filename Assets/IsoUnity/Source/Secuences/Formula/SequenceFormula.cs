@@ -7,6 +7,7 @@ public class SequenceFormula {
     private Expression expression;
     private string formula;
     private string paramError;
+    private string functionError;
     private object expresionResult;
 
     public SequenceFormula() : this(string.Empty) { }
@@ -62,7 +63,7 @@ public class SequenceFormula {
     {
         get
         {
-            return !string.IsNullOrEmpty(formula.Trim()) && string.IsNullOrEmpty(paramError) && !expression.HasErrors() && (desiredReturnType == null || expresionResult != null && expresionResult.GetType().Equals(desiredReturnType));
+            return !string.IsNullOrEmpty(formula.Trim()) && string.IsNullOrEmpty(paramError) && string.IsNullOrEmpty(functionError) && !expression.HasErrors() && (desiredReturnType == null || expresionResult != null && expresionResult.GetType().Equals(desiredReturnType));
         }
     }
 
@@ -72,13 +73,15 @@ public class SequenceFormula {
         get
         {
             return
-              string.IsNullOrEmpty(formula.Trim())
-              ? "The formula can't be empty"
-              : !string.IsNullOrEmpty(paramError)
-                  ? paramError
-                  : desiredReturnType != null && !(expresionResult.GetType().Equals(desiredReturnType))
-                      ? "The formula doesn't result in a " + desiredReturnType.ToString() + " value."
-                      : expression.Error;
+                string.IsNullOrEmpty(formula.Trim())
+                    ? "The formula can't be empty"
+                    : !string.IsNullOrEmpty(paramError)
+                        ? paramError
+                        : !string.IsNullOrEmpty(functionError)
+                            ? functionError
+                            : desiredReturnType != null && !(expresionResult.GetType().Equals(desiredReturnType))
+                                ? "The formula doesn't result in a " + desiredReturnType.ToString() + " value."
+                                : expression.Error;
         }
     }
 
@@ -103,20 +106,59 @@ public class SequenceFormula {
 
     private void EvaluateFunction(string name, FunctionArgs args)
     {
+        functionError = "";
+
         switch (name)
         {
             case "var":
                 {
-                    GameObject go = GameObject.Find((string)args.Parameters[0].Evaluate());
-                    Component co = null;
-                    PropertyInfo p = null;
+                    if (args.Parameters.Length < 3)
+                    {
+                        functionError = "Function 'var' requires 3 arguments.";
+                        return;
+                    }
 
-                    if (go) co = go.GetComponent((string)args.Parameters[1].Evaluate());
-                    if (co) p = co.GetType().GetProperty((string)args.Parameters[2].Evaluate());
+                    var gameObject = (string)args.Parameters[0].Evaluate();
+                    if (!(gameObject is string))
+                    {
+                        functionError = "Function 'var' 1st parameter is not string.";
+                        return;
+                    }
+                    var component = (string)args.Parameters[1].Evaluate();
+                    if (!(component is string))
+                    {
+                        functionError = "Function 'var' 2nd parameter is not string.";
+                        return;
+                    }
+                    var property = (string)args.Parameters[2].Evaluate();
+                    if (!(property is string))
+                    {
+                        functionError = "Function 'var' 3rd parameter is not string.";
+                        return;
+                    }
 
-                    // Result
-                    args.HasResult = go != null && co != null && p != null;
-                    if (args.HasResult) args.Result = p.GetValue(co, null);
+                    if (Application.isPlaying) // Only real check runtime
+                    {
+                        GameObject go = GameObject.Find(gameObject);
+                        Component co = null;
+                        PropertyInfo p = null;
+
+                        if (go) co = go.GetComponent(component);
+                        if (co) p = co.GetType().GetProperty(property);
+
+                        // Result
+                        args.HasResult = go != null && co != null && p != null;
+                        if (args.HasResult) args.Result = p.GetValue(co, null);
+                        else
+                        {
+                            if (go == null)
+                                functionError = "Formula '" + name + "' function error: GameObject \"" + gameObject + "\" not found in scene.";
+                            else if (co == null)
+                                functionError = "Formula '" + name + "' function error: Component \"" + component + "\" not found in \"" + gameObject + "\" gameObject.";
+                            else if (p == null)
+                                functionError = "Formula '" + name + "' function error: Property \"" + property + "\" not found in \"" + component + "\" component.";
+                        }
+                    }
                 }
 
                 break;
@@ -124,15 +166,48 @@ public class SequenceFormula {
             case "varObject":
             case "objectVar":
                 {
-                    object o = Sequence.current.GetObject((string)args.Parameters[0].Evaluate());
-                    PropertyInfo p = null;
+                    if (args.Parameters.Length < 2)
+                    {
+                        functionError = "Function '" + name + "' requires 2 arguments.";
+                        return;
+                    } 
 
-                    if (o != null) p = o.GetType().GetProperty((string)args.Parameters[1].Evaluate());
+                    var objectName = (string)args.Parameters[0].Evaluate();
+                    if (!(objectName is string))
+                    {
+                        functionError = "Function '" + name + "' 1st parameter is not string.";
+                        return;
+                    }
+                    var property = (string)args.Parameters[1].Evaluate();
+                    if (!(property is string))
+                    {
+                        functionError = "Function '" + name + "' 2nd parameter is not string.";
+                        return;
+                    }
 
-                    args.HasResult = o != null && p != null;
-                    if (args.HasResult) args.Result = p.GetValue(o, null);
+                    if (Application.isPlaying) // Only real check runtime
+                    {
+                        object o = Sequence.current ? Sequence.current.GetObject(objectName) : null;
+                        PropertyInfo p = null;
+
+                        if (o != null) p = o.GetType().GetProperty(property);
+
+                        args.HasResult = o != null && p != null;
+                        if (args.HasResult) args.Result = p.GetValue(o, null);
+                        else
+                        {
+                            if (o == null)
+                                functionError = "Formula '" + name + "' function error: Object \"" + objectName + "\" not found in the current sequence.";
+                            else if (p == null)
+                                functionError = "Formula '" + name + "' function error: Property \"" + property + "\" not found in \"" + objectName + "\" scene object.";
+
+                        }
+                    }
                 }
                 break;
+            /*default:
+                functionError = "Missing function \"" + name + "\"";
+                break;*/
         }
     }
 
@@ -140,4 +215,13 @@ public class SequenceFormula {
     {
         return expression.Evaluate();
     }
+}
+
+public class FormulaException : System.Exception
+{
+
+    public FormulaException(string message) : base(message)
+    {
+    }
+
 }
