@@ -17,10 +17,12 @@ MonoBehaviour:
   - {fileID: 114000010921572678}
   - {fileID: 114000010969561206}
   - {fileID: 114000011871493274}
+  - {fileID: 114851534133444354}
   ids:
   - -35662
   - -42858
   - -43620
+  - -2866
   assetinited: 1
 --- !u!114 &114000010152494080
 MonoBehaviour:
@@ -101,8 +103,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 188
-    y: 276
+    x: 183
+    y: 350
     width: 282
     height: 53
   collapsed: 0
@@ -118,14 +120,14 @@ MonoBehaviour:
   m_Name: Dialog
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 0}
+  - {fileID: 114851534133444354}
   isUnityObject: 1
   objectContent: {fileID: 114000010190610708}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 818
-    y: 82
+    x: 579
+    y: 147
     width: 300
     height: 186
   collapsed: 0
@@ -207,14 +209,14 @@ MonoBehaviour:
   m_Name: Dialog
   m_EditorClassIdentifier: 
   childs:
-  - {fileID: 0}
+  - {fileID: 114000010969561206}
   isUnityObject: 1
   objectContent: {fileID: 114000012366196612}
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 798
-    y: 348
+    x: 577
+    y: 453
     width: 300
     height: 186
   collapsed: 0
@@ -417,3 +419,37 @@ MonoBehaviour:
   b: 0
   c: 0
   whatIs: 
+--- !u!114 &114030993147462730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 986074b62c14ea9478e480b10c421f0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  options: []
+--- !u!114 &114851534133444354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fbd0b6e627da04c86fdd3bf4b7fffb, type: 3}
+  m_Name: Options
+  m_EditorClassIdentifier: 
+  childs: []
+  isUnityObject: 1
+  objectContent: {fileID: 114030993147462730}
+  secuence: {fileID: 11400000}
+  position:
+    serializedVersion: 2
+    x: 1001
+    y: 110
+    width: 300
+    height: 94
+  collapsed: 0

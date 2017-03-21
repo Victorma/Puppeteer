@@ -2,51 +2,53 @@
 using NCalc;
 using System.Reflection;
 
-[NodeContent("Fork/Single/Formula fork", 2)]
-public class FormulaFork : Checkable {
+namespace Isometra.Sequences {
+	[NodeContent("Fork/Single/Formula fork", 2)]
+	public class FormulaFork : Checkable {
 
-    public static FormulaFork Create(string formula)
-    {
-        var r = ScriptableObject.CreateInstance<FormulaFork>();
-        r.Formula = formula;
-        return r;
-    }
+	    public static FormulaFork Create(string formula)
+	    {
+	        var r = ScriptableObject.CreateInstance<FormulaFork>();
+	        r.Formula = formula;
+	        return r;
+	    }
 
-    [SerializeField]
-    private string formula = "";
-    public string Formula
-    {
-        get { return formula; }
-        set
-        {
-            name = value;
-            formula = value;
-            SequenceFormula.Formula = formula;
-        }
-    }
+	    [SerializeField]
+	    private string formula = "";
+	    public string Formula
+	    {
+	        get { return formula; }
+	        set
+	        {
+	            name = value;
+	            formula = value;
+	            SequenceFormula.Formula = formula;
+	        }
+	    }
 
-    public SequenceFormula SequenceFormula { get; private set; }
+	    public SequenceFormula SequenceFormula { get; private set; }
 
-    void Awake()
-    {
-        SequenceFormula = new SequenceFormula();
-    }
+	    void Awake()
+	    {
+	        SequenceFormula = new SequenceFormula();
+	    }
 
-    void OnEnable()
-    {
-        SequenceFormula = new SequenceFormula();
-        SequenceFormula.Formula = formula;
-    }
+	    void OnEnable()
+	    {
+	        SequenceFormula = new SequenceFormula();
+	        SequenceFormula.Formula = formula;
+	    }
 
 
-    public override bool check()
-    {
-        var r = SequenceFormula.Evaluate();
-        return r is bool ? (bool)r : false;
-    }
+	    public override bool check()
+	    {
+	        var r = SequenceFormula.Evaluate();
+	        return r is bool ? (bool)r : false;
+	    }
 
-    public override string ToString()
-    {
-        return this.formula;
-    }
+	    public override string ToString()
+	    {
+	        return this.formula;
+	    }
+	}
 }

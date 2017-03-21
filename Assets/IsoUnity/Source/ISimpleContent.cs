@@ -1,4 +1,7 @@
-﻿public interface ISimpleContent
-{
-    int Execute();
+﻿
+namespace Isometra.Sequences {
+	public interface ISimpleContent
+	{
+	    int Execute();
+	}
 }

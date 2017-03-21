@@ -137,10 +137,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 976
-    y: 292
+    x: 1088
+    y: 297
     width: 219
-    height: 58
+    height: 53
   collapsed: 0
 --- !u!114 &114000011813288620
 MonoBehaviour:
@@ -200,10 +200,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 995
-    y: 116
+    x: 1088
+    y: 136
     width: 189
-    height: 58
+    height: 53
   collapsed: 0
 --- !u!114 &114000012068916692
 MonoBehaviour:
@@ -252,7 +252,7 @@ MonoBehaviour:
     x: 161
     y: 199
     width: 223
-    height: 191
+    height: 186
   collapsed: 0
 --- !u!114 &114000012607037362
 MonoBehaviour:
@@ -293,10 +293,10 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 490
-    y: 194
+    x: 638
+    y: 217
     width: 262
-    height: 200
+    height: 136
   collapsed: 0
 --- !u!114 &114000013352237486
 MonoBehaviour:
@@ -421,8 +421,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1074
-    y: 483
+    x: 1181
+    y: 440
     width: 233
-    height: 112
+    height: 107
   collapsed: 0

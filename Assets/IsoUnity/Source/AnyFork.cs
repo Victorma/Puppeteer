@@ -2,16 +2,18 @@
 using System.Collections;
 using System;
 
-[NodeContent("Fork/Group/Any", 2)]
-public class AnyFork : ForkGroup {
+namespace Isometra.Sequences {
+	[NodeContent("Fork/Group/Any", 2)]
+	public class AnyFork : ForkGroup {
 
-    public override bool check()
-    {
-        return forks.Count == 0 || forks.Exists(f => f.check());
-    }
+	    public override bool check()
+	    {
+	        return forks.Count == 0 || forks.Exists(f => f.check());
+	    }
 
-    public override string ToString()
-    {
-        return string.Join(" || ", forks.ConvertAll(f => "( " + f.ToString() + " )").ToArray());
-    }
+	    public override string ToString()
+	    {
+	        return string.Join(" || ", forks.ConvertAll(f => "( " + f.ToString() + " )").ToArray());
+	    }
+	}
 }

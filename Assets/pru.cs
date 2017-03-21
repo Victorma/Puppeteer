@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Isometra;
+using Isometra.Sequences;
 
 public class pru : MonoBehaviour {
     public Sequence s;
