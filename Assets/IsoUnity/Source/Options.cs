@@ -65,7 +65,7 @@ public class Options : ScriptableObject, NodeContent, System.ICloneable
             ScriptableObject.DestroyImmediate(option.Fork);
         }
 #else
-        ScriptableObject.DestroyImmediate(option.Conditions);
+		ScriptableObject.DestroyImmediate(option.Fork);
 #endif
     }
     
