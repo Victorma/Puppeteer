@@ -16,7 +16,8 @@ namespace Isometra {
 			ISwitch iss = ScriptableObject.CreateInstance<ISwitch>();
 	        this.switches.Add(iss);
 	#if UNITY_EDITOR
-	        if (Application.isEditor && !Application.isPlaying)
+	        if (Application.isEditor && !Application.isPlaying 
+                && (UnityEditor.AssetDatabase.IsMainAsset(this) || UnityEditor.AssetDatabase.IsSubAsset(this)))
 	        {
 	            UnityEditor.AssetDatabase.AddObjectToAsset(iss, this);
 	            iss.Persist();
@@ -31,8 +32,9 @@ namespace Isometra {
 			   this.switches.Remove (swt);
 
 	#if UNITY_EDITOR
-	        if (Application.isEditor && !Application.isPlaying)
-	        {
+	        if (Application.isEditor && !Application.isPlaying
+                && (UnityEditor.AssetDatabase.IsMainAsset(this) || UnityEditor.AssetDatabase.IsSubAsset(this)))
+            {
 	            ScriptableObject.DestroyImmediate(swt, true);
 	            UnityEditor.AssetDatabase.SaveAssets();
 	        }
