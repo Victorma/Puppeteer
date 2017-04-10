@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dceab41990a77394aa0aede67dc01b11, type: 3}
   m_Name: '''Toni'''
   m_EditorClassIdentifier: 
-  iswitch: Gato
+  iswitch: variable
   formula: '''Toni'''
 --- !u!114 &114000010653563014
 MonoBehaviour:
@@ -137,9 +137,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1088
-    y: 297
-    width: 219
+    x: 1158
+    y: 288
+    width: 342
     height: 53
   collapsed: 0
 --- !u!114 &114000011813288620
@@ -157,7 +157,12 @@ MonoBehaviour:
   - name: $variable el toli
     msg: 'Hola $variable
 
-      <$ if(variable == ''Toni'',''Hey'',''Boo'') $>'
+      <$ if(variable == ''Toni'',''Hey'',''Boo'') $>
+
+      Ya ves que cosas pasan a veces...
+
+
+      cositas que tiene la vida'
     character: 
     parameter: 
 --- !u!114 &114000011870338772
@@ -200,8 +205,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1088
-    y: 136
+    x: 1232
+    y: 133
     width: 189
     height: 53
   collapsed: 0
@@ -249,9 +254,9 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 161
-    y: 199
-    width: 223
+    x: 292
+    y: 205
+    width: 324
     height: 186
   collapsed: 0
 --- !u!114 &114000012607037362
@@ -293,8 +298,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 638
-    y: 217
+    x: 688
+    y: 182
     width: 262
     height: 136
   collapsed: 0
@@ -421,8 +426,8 @@ MonoBehaviour:
   secuence: {fileID: 11400000}
   position:
     serializedVersion: 2
-    x: 1181
-    y: 440
+    x: 1280
+    y: 463
     width: 233
     height: 107
   collapsed: 0

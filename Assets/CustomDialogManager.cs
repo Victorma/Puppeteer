@@ -23,6 +23,9 @@ public class CustomDialogManager : DialogEventManager {
     public CanvasGroup optionsGroup;
     public LayoutGroup optionsHolder;
     public GameObject optionPrefab;
+    public Scrollbar scroll;
+    public float scrollSpeed = 10f;
+    public float scrollTime = .2f;
 
     // Private variables
     private State state = State.Idle;
@@ -34,6 +37,7 @@ public class CustomDialogManager : DialogEventManager {
     private string msg = "";
     private CanvasGroup managingGroup;
     private Option optionSelected;
+    private float scrollWantsToBe;
 
 
     void Start()
@@ -51,6 +55,8 @@ public class CustomDialogManager : DialogEventManager {
         msg = frg.Msg;
         nameText.text = frg.Name;
         charactersShown = 0;
+        UpdateText();
+        scroll.value = 1;
         state = State.Opening;
         managingGroup = dialogGroup;
         managingGroup.gameObject.SetActive(true);
@@ -92,7 +98,8 @@ public class CustomDialogManager : DialogEventManager {
     // -----------------------------------
     // State management during update
     // -----------------------------------
-	
+
+    private Vector2 speed = Vector2.zero;
 	void Update () {
         switch (state)
         {
@@ -121,9 +128,14 @@ public class CustomDialogManager : DialogEventManager {
                     accumulated += Time.deltaTime;
                     while (accumulated > timePerCharacter)
                     {
+                        accumulated -= timePerCharacter;
                         charactersShown = Mathf.Clamp(charactersShown + 1, 0, msg.Length);
                         UpdateText();
                     }
+
+                    var scrollpos = new Vector2(scroll.value, 0);
+                    scrollpos = Vector2.SmoothDamp(scrollpos, new Vector2(scrollWantsToBe, 0), ref speed, scrollTime, scrollSpeed, Time.deltaTime);
+                    scroll.value = scrollpos.x;
                 }
                 else if (managingGroup == optionsGroup)
                 {
@@ -140,7 +152,9 @@ public class CustomDialogManager : DialogEventManager {
                     interactionBlocker.SetActive(false);
                     state = State.Idle;
                     textHolder.text = "";
+                    textHolder.rectTransform.anchoredPosition = Vector2.zero;
                     frg = null;
+                    speed = Vector2.zero;
                     foreach (var io in instancedOptions)
                         GameObject.DestroyImmediate(io);
                 }
@@ -150,10 +164,28 @@ public class CustomDialogManager : DialogEventManager {
         }
     }
 
-
     private void UpdateText()
     {
-        accumulated -= timePerCharacter;
         textHolder.text = msg.Substring(0, charactersShown) + "<color=#00000000>" + msg.Substring(charactersShown) + "</color>";
+
+        var lineCount = textHolder.cachedTextGenerator.lineCount;
+        if (lineCount <= 1)
+        {
+            scrollWantsToBe = 1;
+        }
+        else
+        {
+            var lineOfCurrentChar = 0;
+            for (int i = 0; i < lineCount; i++)
+            {
+                var line = textHolder.cachedTextGenerator.lines[i];
+                if (line.startCharIdx < charactersShown)
+                {
+                    lineOfCurrentChar = i;
+                }
+            }
+            
+            scrollWantsToBe = 1f - (((float)lineOfCurrentChar) / (lineCount - 1f));
+        }
     }
 }
