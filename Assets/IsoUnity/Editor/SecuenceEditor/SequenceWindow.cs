@@ -167,9 +167,12 @@ namespace Isometra.Sequences {
 		 * ******************/
 		void DoGraph(Rect rect){
 
+            float scale = .8f;
 
-			float maxX = rect.width, maxY = rect.height;
-			foreach (var node in sequence.Nodes)
+            var rectScaled = new Rect(rect.x, rect.y, rect.width / scale, rect.height / scale);
+            float maxX = rectScaled.width, maxY = rectScaled.height;
+
+            foreach (var node in sequence.Nodes)
 			{
 				var px = node.Position.x + node.Position.width + 50;
 				var py = node.Position.y + node.Position.height + 50;
@@ -178,7 +181,19 @@ namespace Isometra.Sequences {
 			}
 
 			scrollRect = new Rect(0, 0, maxX, maxY);
-			scroll = GUI.BeginScrollView(rect, scroll, scrollRect);
+            var matrix = GUI.matrix;
+
+            // Removed window parent clip
+            GUI.EndClip();
+
+
+            GUI.matrix = Matrix4x4.TRS(rect.position + new Vector2(0, 22 * scale), Quaternion.Euler(0, 0, 0), Vector3.one *scale);
+            scroll = GUI.BeginScrollView(rectScaled, scroll, scrollRect);
+            //GUI.BeginClip(rect, Vector2.zero, new Vector2(-500, -500), false);
+
+            GUI.Box(scrollRect, "", "preBackground");
+            drawBackground(scrollRect);
+
 
 			// Clear mouse hover
 			if (Event.current.type == EventType.MouseMove) { 
@@ -188,13 +203,11 @@ namespace Isometra.Sequences {
 				hovering = -1; 
 				hoveringNode = null; 
 			}
-			GUI.Box(scrollRect, "", "preBackground");
-			drawBackground (scrollRect);
 
 			BeginWindows();
 			{
 				nodes.Clear();
-				createWindows(sequence);
+                createWindows(sequence);
 
 				if(Event.current.type == EventType.Repaint)
 					foreach (var n in selection)
@@ -289,8 +302,12 @@ namespace Isometra.Sequences {
 				break;
 			}
 
-			GUI.EndScrollView();
-		}
+            GUI.matrix = matrix;
+            GUI.EndScrollView();
+
+            // Reinstated parent window clip
+            GUI.BeginClip(new Rect(0, 0, position.width, position.height));
+        }
 
 
 		// AUX GRAPH FUNCTIONS
