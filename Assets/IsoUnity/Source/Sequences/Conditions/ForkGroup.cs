@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public abstract class ForkGroup : Checkable {
 
 	    public static T Create<T>(params Checkable[] forks) where T : ForkGroup

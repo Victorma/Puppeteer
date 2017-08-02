@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public interface IAssetSerializable {
 
 	    void SerializeInside(Object assetObject);

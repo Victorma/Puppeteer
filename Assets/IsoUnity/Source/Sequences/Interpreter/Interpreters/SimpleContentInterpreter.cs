@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using IsoUnity.Events;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class SimpleContentInterpreter : ISequenceInterpreter {
 
 	    SequenceNode node;

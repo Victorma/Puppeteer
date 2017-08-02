@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Linq;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[CustomEditor(typeof(FormulaSetter))]
 	public class FormulaSetterEditor : NodeContentEditor
 	{

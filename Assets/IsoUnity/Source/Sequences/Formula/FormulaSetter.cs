@@ -2,7 +2,7 @@
 using NCalc;
 using System;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[NodeContent("Switches/Formula setter")]
 	public class FormulaSetter : ScriptableObject, ISimpleContent {
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
 	public class NodeContentAttribute : Attribute {
 

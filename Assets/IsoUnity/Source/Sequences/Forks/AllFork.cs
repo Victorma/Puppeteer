@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[NodeContent("Fork/Group/All", 2)]
 	public class AllFork : ForkGroup
 	{

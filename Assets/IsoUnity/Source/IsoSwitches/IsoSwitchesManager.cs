@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Isometra {
+namespace IsoUnity {
 	public abstract class IsoSwitchesManager
 	{
 		private static IsoSwitchesManagerInstance instance;

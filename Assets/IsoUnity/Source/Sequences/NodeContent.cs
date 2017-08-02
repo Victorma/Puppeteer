@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public interface NodeContent {
 	    
 	    string[] ChildNames { get; }

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[CustomEditor(typeof(Options))]
 	public class OptionsEditor : NodeContentEditor {
 

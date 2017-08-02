@@ -1,8 +1,7 @@
+using IsoUnity.Events;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public abstract class DialogEventManager : EventManager {
 	    
 	    

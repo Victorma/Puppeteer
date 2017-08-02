@@ -2,7 +2,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Isometra {
+namespace IsoUnity
+{
 	[System.Serializable]
 	public class IsoSwitches : ScriptableObject
 	{

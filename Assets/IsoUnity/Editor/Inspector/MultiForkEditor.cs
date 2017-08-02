@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using System.Collections;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[CustomEditor(typeof(MultiFork))]
 	public class MultiForkEditor : NodeContentEditor {
 	    
@@ -14,7 +14,8 @@ namespace Isometra.Sequences {
 	        base.OnEnable();
 
 	        multifork = target as MultiFork;
-	        editor = CreateEditor(multifork.ForkGroup);
+            if(target != null)
+                editor = CreateEditor(multifork.ForkGroup);
 	    }
 
 	    private Editor editor;

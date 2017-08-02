@@ -2,7 +2,7 @@
 using NCalc;
 using System.Reflection;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[NodeContent("Fork/Single/Formula fork", 2)]
 	public class FormulaFork : Checkable {
 

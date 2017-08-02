@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace Isometra {
+namespace IsoUnity {
 	[CustomEditor(typeof(IsoSwitches))]
 	public class IsoSwitchesEditor : Editor{
 

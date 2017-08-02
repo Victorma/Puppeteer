@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public abstract class SequenceInterpreterFactory {
 		
 		private static SequenceInterpreterFactory instance;

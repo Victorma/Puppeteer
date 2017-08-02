@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[System.Serializable]
 	public class Sequence : ScriptableObject, ISerializationCallbackReceiver {
 
-	    [SerializeField]
+        /// <summary>
+        /// Sequence current is used to know what is the current executing Sequence
+        /// </summary>
+        public static Sequence current;
+
+        [SerializeField]
 	    protected SequenceNode root;
 
 	    [SerializeField]
@@ -17,8 +22,6 @@ namespace Isometra.Sequences {
 
 	    void Awake()
 	    {
-	        if (this.nodes == null)
-	            this.nodes = new List<SequenceNode>();
 	        if (this.ids == null)
 	            this.ids = new List<string>();
 	        if (this.nodeDict == null)
@@ -35,7 +38,7 @@ namespace Isometra.Sequences {
 
 	    public SequenceNode[] Nodes
 	    {
-	        get { return nodes.ToArray() as SequenceNode[]; }
+	        get { return nodeDict.Values.ToArray() as SequenceNode[]; }
 	    }
 
 	    public SequenceNode this[string node]
@@ -49,7 +52,6 @@ namespace Isometra.Sequences {
 			{
 				if (!nodeDict.ContainsKey (node)) {
 					nodeDict.Add (node, value);
-					nodes.Add (value);
 				} else {
 					nodeDict [node] = value;
 				}
@@ -161,7 +163,7 @@ namespace Isometra.Sequences {
 
 			// Clone the nodes
 			var clonedNodes = new Dictionary<SequenceNode, SequenceNode> ();
-			foreach (var n in nodes)
+			foreach (var n in Nodes)
 				clonedNodes.Add (n, n.Clone ());
 
 			// Assign the childs
@@ -171,12 +173,12 @@ namespace Isometra.Sequences {
 						kv.Value.Childs [i] = clonedNodes [kv.Value.Childs [i]];
 
 			// Fill up the sequence
-			clone.nodes = nodes.ConvertAll(n => clonedNodes[n]);
 			clone.nodeDict = new Dictionary<string, SequenceNode> ();
 			foreach (var kv in nodeDict)
 				clone.nodeDict.Add (kv.Key, clonedNodes [kv.Value]);
 
-			clone.Root = clonedNodes [Root];
+            if(Root)
+                clone.Root = clonedNodes [Root];
 
 			// Clone the objects
 			clone.objectPool = new Dictionary<string, object>();
@@ -214,7 +216,6 @@ namespace Isometra.Sequences {
 	    private List<SequenceNode> nodes;
 	    [SerializeField]
 	    private List<string> ids;
-	    public static Sequence current;
 
 	    public virtual void OnBeforeSerialize()
 	    {

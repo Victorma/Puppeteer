@@ -4,7 +4,7 @@ using UnityEditorInternal;
 using System.Collections;
 using System;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[CustomEditor(typeof(ForkGroup), true)]
 	public class ForkGroupEditor : NodeContentEditor
 	{

@@ -1,172 +1,184 @@
 using UnityEngine;
 using System.Collections.Generic;
+using IsoUnity.Events;
 
-namespace Isometra {
-	public class Game : MonoBehaviour {
+namespace IsoUnity
+{
+    [RequireComponent(typeof(IsoSwitchesEventManager))]
+    public class Game : MonoBehaviour
+    {
 
-	    public string Test { get { return "test"; } }
+        /**
+         * This var allows new Game instances load destroy the previous one and replace it.
+         * This can have unexpected behaviours, we recommend to use only one Game class along
+         * all the game execution.
+         */
+        public bool shouldReplacePreviousGame = false;
 
-		/**
-		 * This var allows new Game instances load destroy the previous one and replace it.
-		 * This can have unexpected behaviours, we recommend to use only one Game class along
-		 * all the game execution.
-		 */
-		public bool shouldReplacePreviousGame = false;
+        Queue<IGameEvent> events;
+        
+        /*
+         * Event Manager Things
+         * Use this list to create the managers at the start of the game.
+         * (By default Animation, Secuence and IsoSwitches Managers are created).
+         */
+        private List<IEventManager> eventManagers;
+        
+        /*
+         * Screen controls default controller.
+         */
+        public bool onScreenControls;
 
-		Queue<IGameEvent> events;
+        /*
+         * Static main game instance
+         */
+        private static Game m;
+        public static Game main
+        {
+            get
+            {
+                if (m == null)
+                {
+                    m = FindObjectOfType<Game>();
+                    if(m!=null) m.Awake();
+                }
+                return m;
+            }
+        }
 
-	    /*
-	     * Event Manager Things
-	     * Use this list to create the managers at the start of the game.
-	     * (By default Animation, Secuence and IsoSwitches Managers are created).
-	     */
-		private List<EventManager> eventManagers;
+        /*
+         * Game initialization
+         */
+        private bool awakened = false;
+        void Start ()
+        {
+        }
+
+        void Awake()
+        {
+            if (awakened)
+                return;
+            awakened = true;
+
+            if (Game.main != this)
+            {
+                if (shouldReplacePreviousGame)
+                {
+                    GameObject.DestroyImmediate(Game.main.gameObject);
+                }
+                else
+                {
+                    if (Game.main != null)
+                    {
+                        GameObject.DestroyImmediate(this.gameObject);
+                        return;
+                    }
+                }
+            }
 
 
-	    /*
-	     * Screen controls default controller.
-	     */
-		public bool onScreenControls;
+            Game.m = this;
+            if (Application.isPlaying)
+                GameObject.DontDestroyOnLoad(this.gameObject);
 
-	    /*
-	     * Static main game instance
-	     */
-		private static Game m;
-		public static Game main {
-			get{
-				if (m == null) {
-					m = FindObjectOfType<Game> ();
-	                if (!m && !quitting)
-	                {
-	                    var g = new GameObject();
-	                    m = g.AddComponent<Game>();
-	                }
-	                if(!quitting)
-	                    m.Awake();
-	            }
-				return m;
-			}
-		}
+            // Event Queue
+            events = new Queue<IGameEvent>();
 
-	    /*
-	     * Game initialization
-	     */
-		private bool awakened = false;
-		void Awake () {
-			if (awakened)
-				return;
-			awakened = true;
+            // Main Managers initialization
+            // TODO Make they event managers as the rest
+            IsoSwitchesManager.getInstance().getIsoSwitches();
 
-			if (Game.main != this) {
-				if (shouldReplacePreviousGame) {
-					GameObject.DestroyImmediate (Game.main.gameObject);
-				} else {
-					if (Game.main != null) {
-						GameObject.DestroyImmediate (this.gameObject);
-						return;
-					}
-				}
-			}
+            // Event Managers Creation
+            eventManagers = new List<IEventManager>();
+        }
+        void Update()
+        {
+            this.tick();
+        }
 
-			Game.m = this;
-			if(Application.isPlaying)
-				GameObject.DontDestroyOnLoad (this.gameObject);
+        /*
+         * Event methods
+         */
 
-	        // Event Queue
-			events = new Queue<IGameEvent>();
-	        
-			IsoSwitchesManager.getInstance().getIsoSwitches();
+        public void enqueueEvent(IGameEvent ge)
+        {
+            if (ge == null)
+                return;
+            this.events.Enqueue(ge);
+        }
 
-	        // Event Managers Creation
-			eventManagers = new List<EventManager> ();
-	        
-		}
-		
-		void Update () {
-			this.tick();
-		}
+        public void eventFinished(IGameEvent ge, Dictionary<string, object> extraParameters = null)
+        {
+            object sync = ge.getParameter("synchronous");
+            if (sync != null && ((bool)sync))
+            {
+                GameEvent f = new GameEvent();
+                f.Name = "event finished";
+                f.setParameter("event", ge);
+                // Put the extra parameters
+                if (extraParameters != null) foreach (var kv in extraParameters) f.setParameter(kv.Key, kv.Value);
+                this.enqueueEvent(f);
+            }
+        }
 
-	    /*
-	     * Event methods
-	     */
+        // Private method used to broadcast the events in main tick
+        private void broadcastEvent(IGameEvent ge)
+        {
+            foreach (IEventManager manager in eventManagers)
+                manager.ReceiveEvent(ge);
+        }
 
-		public void enqueueEvent(IGameEvent ge){
-			if(ge == null)
-				return;
-	        Debug.Log(ge.Name);
-			this.events.Enqueue(ge);
-		}
-	    
-		public void eventFinished(IGameEvent ge, Dictionary<string, object> extraParameters = null){
-			object sync = ge.getParameter("synchronous");
-			if(sync!=null && ((bool)sync)){
-				GameEvent f = new GameEvent();
-				f.Name = "event finished";
-				f.setParameter("event", ge);
-	            // Put the extra parameters
-	            if (extraParameters != null) foreach (var kv in extraParameters) f.setParameter(kv.Key, kv.Value);
-				this.enqueueEvent(f);
-			}
-		}
+        /*
+         * As the player input isnt so frecuent, it's only checked each ms to improve performance
+         */
+      //  private float timeToController = 100 / 1000;
+        //private float currentTimeToController = 0;
 
-	    // Private method used to broadcast the events in main tick
-	    private void broadcastEvent(IGameEvent ge){
-	        foreach (EventManager manager in eventManagers)
-	            manager.ReceiveEvent(ge);
-	    }
+        public void tick()
+        {
+            // Events launch
+            while (events.Count > 0)
+            {
+                IGameEvent ge = events.Dequeue();
+                broadcastEvent(ge);
+            }
 
-	    /*
-	     * As the player input isnt so frecuent, it's only checked each ms to improve performance
-	     */
-	    //private float timeToController = 100 / 1000;
-	    //private float currentTimeToController = 0;
+            // EventManagers ticks
+            foreach (var manager in eventManagers)
+                manager.Tick();
 
-		public void tick(){
+            FlushRegistrations();
+        }
 
-	        // Main Tick
+        /**
+         * EventManager management
+         **/
+        List<IEventManager> toRegister = new List<IEventManager>();
+        public void RegisterEventManager(IEventManager em)
+        {
+            if (!this.eventManagers.Contains(em))
+            {
+                toRegister.Add(em);
+            }
+        }
 
-	        // Events launch
-			while(events.Count > 0)
-			{
-				IGameEvent ge = events.Dequeue();
-				broadcastEvent(ge);
-			}
+        List<IEventManager> toDeregister = new List<IEventManager>();
+        public void DeRegisterEventManager(IEventManager em)
+        {
+            if (this.eventManagers.Contains(em))
+                toDeregister.Add(em);
+        }
 
-	        // EventManagers ticks
-			foreach(EventManager manager in eventManagers)
-				manager.Tick();
-		}
+        void FlushRegistrations()
+        {
+            foreach (var em in toRegister)
+                eventManagers.Add(em);
+            toRegister.Clear();
 
-		/**
-		 * EventManager management
-		 **/
+            foreach (var em in toDeregister)
+                eventManagers.Remove(em);
+            toDeregister.Clear();
+        }
 
-		public void RegisterEventManager(EventManager em){
-	        if (em == null)
-	            return;
-
-			if(!this.eventManagers.Contains(em))
-				this.eventManagers.Add (em);
-		}
-
-		public void DeRegisterEventManager(EventManager em){
-	        if (em == null)
-	            return;
-
-	        if (this.eventManagers.Contains(em))
-				this.eventManagers.Remove (em);
-		}
-
-	    static bool quitting = false;
-	    void OnApplicationQuit()
-	    {
-	        quitting = true;
-	    }
-
-	    void OnDestroy()
-	    {
-
-	    }
-
-	}
+    }
 }

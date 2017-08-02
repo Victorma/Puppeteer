@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class SequenceAsset : Sequence {
 
 	    [SerializeField]
 	    private bool assetinited = false;
 
-	    void OnEnable()
+	    /*void OnEnable()
 	    {
 	        if (!assetinited)
 	        {
 	            InitAsset();
 	        }
-	    }
+	    }*/
 
 	    public void InitAsset()
 	    {

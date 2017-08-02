@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
+using IsoUnity.Types;
 
-namespace Isometra {
+namespace IsoUnity
+{
 	[System.Serializable]
 	public class ISwitch : ScriptableObject {
 

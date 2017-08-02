@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	internal class SequenceNodeAsset : SequenceNode {
 
 	    public override object Content

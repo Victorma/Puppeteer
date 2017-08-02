@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using IsoUnity.Events;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public interface ISequenceInterpreter {
 
 		bool CanHandle(SequenceNode node);

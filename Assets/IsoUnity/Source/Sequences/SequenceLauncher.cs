@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+using IsoUnity.Events;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class SequenceLauncher : EventManager {
 
 		[SerializeField]
@@ -26,7 +26,9 @@ namespace Isometra.Sequences {
 		[HideInInspector]
 	    private Sequence localSequence;
 
-	    public Sequence Sequence {
+        private bool abort = false;
+
+        public Sequence Sequence {
 	        get
 	        {
 	            return localSequence;
@@ -37,6 +39,14 @@ namespace Isometra.Sequences {
 				localSequence = sharedSequence == null ? null : sharedSequence.Clone();
 	        }
 	    }
+
+        public bool Running
+        {
+            get
+            {
+                return interpreter != null || ge != null;
+            }
+        }
 
 		void OnTriggerEnter(){
 			if (launchOnTriggerEnter) {
@@ -65,7 +75,7 @@ namespace Isometra.Sequences {
 				interpreter.Tick ();
 				if (interpreter.SequenceFinished) {
 					interpreter = null;
-					if (loop) {
+					if (loop && !abort) {
 						Launch ();
 					}
 				}
@@ -73,11 +83,12 @@ namespace Isometra.Sequences {
 		}
 
 
-		private void Launch(){
+		public void Launch(){
 			if (interpreter != null || localSequence == null)
 				return;
 
 			if (localExecution) {
+                abort = false;
 				if (interpreter == null)
 					interpreter = new SequenceInterpreter (localSequence);
 			} else {
@@ -89,6 +100,14 @@ namespace Isometra.Sequences {
 				Game.main.enqueueEvent (ge);
 			}
 		}
+        public void Abort(bool instant)
+        {
+            if (localExecution)
+            {
+                abort = true;
+                interpreter.Abort(instant);
+            }
+        }
 
 		IGameEvent ge;
 		public override void ReceiveEvent (IGameEvent ev)

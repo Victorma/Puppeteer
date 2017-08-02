@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using IsoUnity.Events;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class DialogInterpreter : ScriptableObject, ISequenceInterpreter
 	{
 
@@ -11,7 +12,7 @@ namespace Isometra.Sequences {
 		private SequenceNode node;
 		private SequenceNode nextNode;
 		private Queue<Fragment> fragments;
-	    private List<Option> optionsList, launchedOptionsList;
+        private List<Option> optionsList, launchedOptionsList;
 		private int chosen;
 		private bool next;
 	    
@@ -61,8 +62,8 @@ namespace Isometra.Sequences {
 	        {
 	            Dialog dialog = node.Content as Dialog;
 	            if (!launched)
-	            {
-	                fragments = new Queue<Fragment>(dialog.Fragments);
+                {
+                    fragments = new Queue<Fragment>(dialog.Fragments);
 	                launched = true;
 	                next = true;
 	                chosen = -1;
@@ -70,14 +71,12 @@ namespace Isometra.Sequences {
 	            if (next)
 	            {
 	                if (fragments.Count > 0)
-	                {
-	                    // Launch next fragment event
-	                    var nextFragment = fragments.Dequeue().Clone();
+                    {
+                        // Launch next fragment event
+                        var nextFragment = fragments.Dequeue().Clone();
 
 	                    // Parse the formulas
 	                    nextFragment.Name = ParseFormulas(nextFragment.Name);
-	                    nextFragment.Parameter = ParseFormulas(nextFragment.Parameter);
-	                    nextFragment.Character = ParseFormulas(nextFragment.Character);
 	                    nextFragment.Msg = ParseFormulas(nextFragment.Msg);
 
 	                    var ge = new GameEvent();
@@ -100,8 +99,8 @@ namespace Isometra.Sequences {
 	                chosen = -1;
 	                Options options = (node.Content as Options).Clone() as Options;
 
-	                // Launch options event
-	                var ge = new GameEvent();
+                    // Launch options event
+                    var ge = new GameEvent();
 	                ge.name = "show dialog options";
 	                optionsList = options.Values;
 	                launchedOptionsList = optionsList.FindAll(o => o.Fork == null || o.Fork.check());
@@ -123,7 +122,7 @@ namespace Isometra.Sequences {
 
 			if(chosen != -1){
 				finished = true;
-	            if (node.Childs.Length > chosen)
+                if (node.Childs.Length > chosen)
 	                nextNode = node.Childs[chosen];
 				chosen = -1;
 			}

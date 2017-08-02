@@ -3,7 +3,8 @@ using UnityEditor;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace Isometra {
+namespace IsoUnity.Events
+{
 	public class GameEventTests {
 
 		[Test]

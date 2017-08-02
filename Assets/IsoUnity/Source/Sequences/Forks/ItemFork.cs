@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Isometra.Sequences {
+using IsoUnity.Entities;
+using IsoUnity.Events;
+
+namespace IsoUnity.Sequences {
 	[NodeContent("Fork/Single/Item Fork", 2)]
 	public class ItemFork : Checkable {
 

@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class SequenceMenu {
 
 	    [MenuItem("Assets/Create/Sequence")]

@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-namespace Isometra {
+namespace IsoUnity {
 	public class IsoAssetsManager  {
 
 	    public static T CreateAssetOf<T>(string ruta) where T : ScriptableObject
@@ -26,7 +26,8 @@ namespace Isometra {
 		public static ScriptableObject CreateAssetInCurrentPathOf(string name){
 			
 			ScriptableObject so = ScriptableObject.CreateInstance (name);
-			ProjectWindowUtil.CreateAsset(so, name+".asset");
+            AssetDatabase.CreateAsset(so,"Assets/" + name+".asset");
+            AssetDatabase.SaveAssets();
 			Selection.activeObject = so;  
 			
 			return so;

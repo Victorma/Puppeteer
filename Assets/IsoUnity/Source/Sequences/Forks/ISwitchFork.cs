@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using IsoUnity.Types;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[NodeContent("Fork/Single/Switch Fork", 2)]
 	public class ISwitchFork : Checkable, IAssetSerializable
 	{

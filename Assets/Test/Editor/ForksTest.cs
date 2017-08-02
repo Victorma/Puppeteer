@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
-using Isometra;
-using Isometra.Sequences;
-using System.Collections.Generic;
+using IsoUnity;
+using IsoUnity.Sequences;
 
 public class ForksTest {
     

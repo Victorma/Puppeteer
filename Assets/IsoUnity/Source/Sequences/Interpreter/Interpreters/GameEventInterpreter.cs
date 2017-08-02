@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+using IsoUnity.Events;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class GameEventInterpreter : ISequenceInterpreter
 	{
 
@@ -33,8 +33,8 @@ namespace Isometra.Sequences {
 		{
 			Debug.Log ("Something happened: " + ge.Name);
 			if(waitTillEventFinished)
-				if(ge.Name.ToLower() == "event finished")
-				waitTillEventFinished =  GameEvent.CompareEvents(ge, ge.getParameter("event") as IGameEvent);
+				if(ge.Name.ToLower() == "event finished" && ((IGameEvent)ge.getParameter("event")) == this.ge)
+				    waitTillEventFinished = false;
 		}
 
 		private IGameEvent ge;

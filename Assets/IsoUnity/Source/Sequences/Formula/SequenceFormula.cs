@@ -2,7 +2,7 @@
 using NCalc;
 using System.Reflection;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class SequenceFormula {
 
 	    private Expression expression;
@@ -64,7 +64,7 @@ namespace Isometra.Sequences {
 	    {
 	        get
 	        {
-	            return !string.IsNullOrEmpty(formula.Trim()) && string.IsNullOrEmpty(paramError) && string.IsNullOrEmpty(functionError) && !expression.HasErrors() && (desiredReturnType == null || expresionResult != null && expresionResult.GetType().Equals(desiredReturnType));
+	            return !string.IsNullOrEmpty(formula) && string.IsNullOrEmpty(paramError) && string.IsNullOrEmpty(functionError) && !expression.HasErrors() && (desiredReturnType == null || expresionResult != null && expresionResult.GetType().Equals(desiredReturnType));
 	        }
 	    }
 
@@ -74,7 +74,7 @@ namespace Isometra.Sequences {
 	        get
 	        {
 	            return
-	                string.IsNullOrEmpty(formula.Trim())
+	                string.IsNullOrEmpty(formula)
 	                    ? "The formula can't be empty"
 	                    : !string.IsNullOrEmpty(paramError)
 	                        ? paramError

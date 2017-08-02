@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[NodeContent("Options")]
 	public class Options : ScriptableObject, NodeContent, System.ICloneable
 	{
@@ -43,8 +43,9 @@ namespace Isometra.Sequences {
 	    public void AddOption(string option = "", string parameter = "")
 	    {
 	        var conditions = ScriptableObject.CreateInstance<AnyFork>();
-	#if UNITY_EDITOR
-	        if (Application.isEditor && !Application.isPlaying)
+#if UNITY_EDITOR
+	        if (Application.isEditor && !Application.isPlaying 
+                && (UnityEditor.AssetDatabase.IsMainAsset(this) || UnityEditor.AssetDatabase.IsSubAsset(this)))
 	        {
 	            UnityEditor.AssetDatabase.AddObjectToAsset(conditions, this);
 	        }
@@ -57,8 +58,9 @@ namespace Isometra.Sequences {
 	        this.Values.Remove(option);
 
 	#if UNITY_EDITOR
-	        if (Application.isEditor && !Application.isPlaying)
-	        {
+	        if (Application.isEditor && !Application.isPlaying
+                && (UnityEditor.AssetDatabase.IsMainAsset(this) || UnityEditor.AssetDatabase.IsSubAsset(this)))
+            {
 	            ScriptableObject.DestroyImmediate(option.Fork, true);
 	        }
 	        else

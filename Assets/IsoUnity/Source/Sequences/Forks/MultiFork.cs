@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	[NodeContent("Fork/MultiFork")]
 	public class MultiFork : ScriptableObject, NodeContent, IAssetSerializable, ISimpleContent {
 

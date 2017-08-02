@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace Isometra.Sequences {
+namespace IsoUnity.Sequences {
 	public class CheckableWrapper : Checkable {
 
 	    private IFork fork;
