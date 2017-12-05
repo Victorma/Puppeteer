@@ -58,7 +58,7 @@ namespace IsoUnity.Sequences {
 			}
 	    }
 
-	    public IsoSwitches LocalVariables
+	    public virtual IsoSwitches LocalVariables
 	    {
 	        get
 	        {
